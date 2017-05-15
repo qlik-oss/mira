@@ -1,0 +1,50 @@
+version: 2
+jobs: 
+  build:
+    docker:
+      - image: node:7
+    working_directory: ~/mira
+    environment:
+      DOCKER_REPO: qlik/mira
+      ARTIFACTORY_URL: https://qliktech.artifactoryonline.com/qliktech
+    steps:
+      - checkout
+      - run:
+          name: Update version tag
+          command: |
+            set -e
+            VER=$(node -e "console.log(require('./package.json').version.replace(/-[0-9]+/, '-$CIRCLE_BUILD_NUM'))")
+            echo "$VER" > ./version.txt
+            if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
+              npm version $VER --no-git-tag-version
+            fi
+      - run:
+          name: Get settings for Artifactory
+          command: 
+            curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASS $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
+      - run:
+          name: Install dependencies
+          command: 
+            npm install --quiet
+      - run:
+          name: Run ESLint
+          command:
+            npm run lint
+      - setup_remote_docker
+      - run:
+          name: Install Docker client
+          command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
+      - run:
+          name: Build Docker image
+          command: |
+            VER=$(cat ./version.txt)
+            ./scripts/build-docker-image.sh -t $VER $DOCKER_REPO
+      - deploy:
+          name: Push image to Docker Hub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              VER=$(cat ./version.txt)
+              docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
+            fi
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+            docker push $DOCKER_REPO

@@ -1,0 +1,25 @@
+version: "3.1"
+
+services:
+  mira:
+    image: qlik/mira
+    container_name: mira
+    ports:
+      - "9100:9100"
+    command: --mode local
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  engine1:
+    image: qlik/engine
+    container_name: engine1
+    command: -S TrafficLogVerbosity=5 DocumentDirectory=/doc
+    ports:
+      - "9176:9076"
+
+  engine2:
+    image: qlik/engine
+    container_name: engine2
+    command: -S TrafficLogVerbosity=5 DocumentDirectory=/doc
+    ports:
+      - "9276:9076"
