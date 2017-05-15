@@ -5,7 +5,7 @@ jobs:
       - image: node:7
     working_directory: ~/mira
     environment:
-      DOCKER_REPO: qlik/mira
+      DOCKER_REPO: qlikea/mira
       ARTIFACTORY_URL: https://qliktech.artifactoryonline.com/qliktech
     steps:
       - checkout
