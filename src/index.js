@@ -16,7 +16,7 @@ const healthEndpoint = 'health';
 const listEndpoint = 'list';
 const queryEndpoint = 'query';
 
-const commandLineOptions = commandLineArgs([{ name: 'mode', type: String }]);
+const commandLineOptions = commandLineArgs([{ name: 'mode', type: String }], { partial: true });
 Config.init(commandLineOptions);
 
 const app = new Koa();
@@ -29,13 +29,13 @@ router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
 router.get(`/${listEndpoint}`, async (ctx) => {
   const result = await engineDiscovery.list();
-  ctx.body = JSON.stringify(result, undefined, '   ');
+  ctx.body = result;
 });
 
 router.get(`/${queryEndpoint}`, async (ctx) => {
   const requirements = JSON.parse(ctx.query.properties);
   const matches = await engineDiscovery.query(requirements);
-  ctx.body = JSON.stringify(matches, undefined, '   ');
+  ctx.body = matches;
 });
 
 app
