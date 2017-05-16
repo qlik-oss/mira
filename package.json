@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/qlik-trial/mira.git"
+    "url": "https://github.com/qlik-ea/mira.git"
   },
   "author": "QlikTech International AB",
   "private": true,
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/qlik-trial/mira/issues"
+    "url": "https://github.com/qlik-ea/mira/issues"
   },
-  "homepage": "https://github.com/qlik-trial/mira#readme",
+  "homepage": "https://github.com/qlik-ea/mira#readme",
   "dependencies": {
     "command-line-args": "4.0.4",
     "containerized": "1.0.2",
