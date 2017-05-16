@@ -55,6 +55,7 @@ process.on('SIGTERM', () => {
 
 process.on('unhandledRejection', (reason) => {
   logger.error('Process got unhandled rejection', reason);
+  process.exit(1);
 });
 
 logger.info(`Listening on port ${Config.port}`);
