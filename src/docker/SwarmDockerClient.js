@@ -27,6 +27,7 @@ function getIpAddress(task) {
       }
     }
   }
+  logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
   return undefined;
 }
 
@@ -40,6 +41,8 @@ function getNetworks(task) {
         addresses: network.Addresses
       });
     }
+  } else {
+    logger.warn('Encountered task with no network attachments (when getting networks)', task);
   }
   return networks;
 }
@@ -51,7 +54,6 @@ function getPublicPort(serviceSpec) {
   return undefined;
 }
 
-
 function getServiceMap() {
   return new Promise((resolve, reject) => {
     docker.listServices({}, (err, services) => {
@@ -62,7 +64,7 @@ function getServiceMap() {
         }
         resolve(serviceMap);
       } else {
-        logger.error(err);
+        logger.error('Error when listing Docker Swarm services', err);
         reject(err);
       }
     });
@@ -75,7 +77,7 @@ function getTasks() {
       if (!err) {
         resolve(tasks);
       } else {
-        logger.error(err);
+        logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);
       }
     });
@@ -93,13 +95,6 @@ class SwarmDockerClient {
   static async listEngines(engineImageName) {
     const serviceMap = await getServiceMap();
     const tasks = await getTasks();
-        {},
-        (err, services) => {
-          if (!err) {
-            const serviceMap = {};
-            for (let i = 0; i < services.length; i += 1) {
-              serviceMap[services[i].ID] = services[i];
-            }
     const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
@@ -117,11 +112,6 @@ class SwarmDockerClient {
       };
     });
     return engineInfoEntries;
-                  reject(err2);
-                }
-              });
-          } else {
-            logger.error('Failed to list Docker Swarm engine tasks', err);
   }
 }
 
