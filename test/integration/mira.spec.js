@@ -5,10 +5,10 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
 
-const MIRA_ENDPOINT = 'http://localhost:9100';
-const DEBUG_MODE = true;
+const miraEndpoint = 'http://localhost:9100';
+const debugMode = false;
 
-if (DEBUG_MODE) {
+if (debugMode) {
 // eslint-disable-next-line global-require
   require('../../src/index');
 } else {
@@ -32,7 +32,7 @@ describe('mira', () => {
 
   describe('Listing when no engines are available', () => {
     it('should return an empty array', async () => {
-      const res = await chai.request(MIRA_ENDPOINT).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/list');
       expect(res).to.be.json;
       expect(res.body.length).to.equal(0);
     });
@@ -44,8 +44,8 @@ describe('mira', () => {
       return dockerSetup.startService();
     });
 
-    it('should return an empty array', async () => {
-      const res = await chai.request(MIRA_ENDPOINT).get('/v1/list');
+    it('should return an empty array or an unhealthy engine', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/list');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -60,7 +60,7 @@ describe('mira', () => {
     });
 
     it('should return the engine service task with properties from health etc', async () => {
-      const res = await chai.request(MIRA_ENDPOINT).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/list');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -78,7 +78,7 @@ describe('mira', () => {
     });
 
     it('should return an empty array', async () => {
-      const res = await chai.request(MIRA_ENDPOINT).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/list');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;

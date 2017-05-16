@@ -51,6 +51,37 @@ function getPublicPort(serviceSpec) {
   return undefined;
 }
 
+
+function getServiceMap() {
+  return new Promise((resolve, reject) => {
+    docker.listServices({}, (err, services) => {
+      if (!err) {
+        const serviceMap = {};
+        for (let i = 0; i < services.length; i += 1) {
+          serviceMap[services[i].ID] = services[i];
+        }
+        resolve(serviceMap);
+      } else {
+        logger.error(err);
+        reject(err);
+      }
+    });
+  });
+}
+
+function getTasks() {
+  return new Promise((resolve, reject) => {
+    docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
+      if (!err) {
+        resolve(tasks);
+      } else {
+        logger.error(err);
+        reject(err);
+      }
+    });
+  });
+}
+
 /**
  * Provides the ability to query the docker environment for available engines
  */
@@ -60,47 +91,25 @@ class SwarmDockerClient {
    * @returns {Promise<Engine>}
    */
   static async listEngines(engineImageName) {
-    return new Promise((resolve, reject) => {
-      docker.listServices(
-        {},
-        (err, services) => {
-          if (!err) {
-            const serviceMap = {};
-            for (let i = 0; i < services.length; i += 1) {
-              serviceMap[services[i].ID] = services[i];
-            }
-            docker.listTasks(
-              { filters: '{ "desired-state": ["running"] }' },
-              (err2, tasks) => {
-                if (!err2) {
-                  const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
-                  const engineInfoEntries = engineTasks.map((task) => {
-                    const properties = getProperties(task);
-                    const ipAddress = getIpAddress(task);
-                    const port = Config.enginePort;
-                    const serviceSpec = serviceMap[task.ServiceID];
-                    const publicPort = getPublicPort(serviceSpec);
-                    const networks = getNetworks(task);
-                    return {
-                      properties,
-                      ipAddress,
-                      port,
-                      publicPort,
-                      networks
-                    };
-                  });
-                  resolve(Promise.all(engineInfoEntries));
-                } else {
-                  logger.error(err2);
-                  reject(err2);
-                }
-              });
-          } else {
-            logger.error(err);
-            reject(err);
-          }
-        });
+    const serviceMap = await getServiceMap();
+    const tasks = await getTasks();
+    const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
+    const engineInfoEntries = engineTasks.map((task) => {
+      const properties = getProperties(task);
+      const ipAddress = getIpAddress(task);
+      const port = Config.enginePort;
+      const serviceSpec = serviceMap[task.ServiceID];
+      const publicPort = getPublicPort(serviceSpec);
+      const networks = getNetworks(task);
+      return {
+        properties,
+        ipAddress,
+        port,
+        publicPort,
+        networks
+      };
     });
+    return engineInfoEntries;
   }
 }
 

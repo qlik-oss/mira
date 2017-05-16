@@ -10,10 +10,10 @@ class EngineHealthFetcher {
       const port = containerized() ? engine.port : engine.publicPort;
       const host = containerized() ? engine.ipAddress : 'localhost';
       if (!port) {
-        reject('NO_IP_ADDRESS_DEFINED');
+        reject('No IP address defiend');
       }
       if (!port) {
-        reject('NO_PORT_DEFINED');
+        reject('No port defined');
       }
       http.get({
         host,
@@ -38,7 +38,7 @@ class EngineHealthFetcher {
         });
       }).on('error', (d) => {
         logger.error(`Engine health check got HTTP error response: ${d}`);
-        reject('NO_CONNECTION_TO_ENGINE');
+        reject('No connection to engine');
       });
     });
   }
