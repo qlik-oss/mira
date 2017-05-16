@@ -58,4 +58,9 @@ process.on('unhandledRejection', (reason) => {
   process.exit(1);
 });
 
+process.on('uncaughtException', (err) => {
+  logger.error('Process got uncaught exception', err);
+  process.exit(1);
+});
+
 logger.info(`Listening on port ${Config.port}`);
