@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   mira:
-    image: qlik/mira
+    image: qlikea/mira
     ports:
       - "9100:9100"
     command: --mode swarm
