@@ -16,13 +16,15 @@ function getImageNameOfTask(task) {
 }
 
 function getIpAddress(task) {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const network of task.NetworksAttachments) {
-    if (!network.Network.Spec.Ingress) {
-      const fullIpAddr = network.Addresses[0];
-      const slashPos = fullIpAddr.indexOf('/');
-      const ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
-      return ipAddr;
+  if (task.NetworksAttachments) { // This might not be available during startup of a service
+                                  // eslint-disable-next-line no-restricted-syntax
+    for (const network of task.NetworksAttachments) {
+      if (!network.Network.Spec.Ingress) {
+        const fullIpAddr = network.Addresses[0];
+        const slashPos = fullIpAddr.indexOf('/');
+        const ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
+        return ipAddr;
+      }
     }
   }
   return undefined;
@@ -30,14 +32,54 @@ function getIpAddress(task) {
 
 function getNetworks(task) {
   const networks = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const network of task.NetworksAttachments) {
-    networks.push({
-      name: network.Network.Spec.Name,
-      addresses: network.Addresses
-    });
+  if (task.NetworksAttachments) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const network of task.NetworksAttachments) {
+      networks.push({
+        name: network.Network.Spec.Name,
+        addresses: network.Addresses
+      });
+    }
   }
   return networks;
+}
+
+function getPublicPort(serviceSpec) {
+  if (serviceSpec.Endpoint.Ports) { // Might not be available during startup
+    return serviceSpec.Endpoint.Ports[0].PublishedPort;
+  }
+  return undefined;
+}
+
+
+function getServiceMap() {
+  return new Promise((resolve, reject) => {
+    docker.listServices({}, (err, services) => {
+      if (!err) {
+        const serviceMap = {};
+        for (let i = 0; i < services.length; i += 1) {
+          serviceMap[services[i].ID] = services[i];
+        }
+        resolve(serviceMap);
+      } else {
+        logger.error(err);
+        reject(err);
+      }
+    });
+  });
+}
+
+function getTasks() {
+  return new Promise((resolve, reject) => {
+    docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
+      if (!err) {
+        resolve(tasks);
+      } else {
+        logger.error(err);
+        reject(err);
+      }
+    });
+  });
 }
 
 /**
@@ -49,31 +91,25 @@ class SwarmDockerClient {
    * @returns {Promise<Engine>}
    */
   static async listEngines(engineImageName) {
-    return new Promise((resolve, reject) => {
-      docker.listTasks(
-        { filters: '{ "desired-state": ["running"] }' },
-        (err, tasks) => {
-          if (!err) {
-            const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
-            const engineInfoEntries = engineTasks.map((task) => {
-              const properties = getProperties(task);
-              const ipAddress = getIpAddress(task);
-              const port = Config.enginePort;
-              const networks = getNetworks(task);
-              return {
-                properties,
-                ipAddress,
-                port,
-                networks
-              };
-            });
-            resolve(Promise.all(engineInfoEntries));
-          } else {
-            logger.error(err);
-            reject(err);
-          }
-        });
+    const serviceMap = await getServiceMap();
+    const tasks = await getTasks();
+    const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
+    const engineInfoEntries = engineTasks.map((task) => {
+      const properties = getProperties(task);
+      const ipAddress = getIpAddress(task);
+      const port = Config.enginePort;
+      const serviceSpec = serviceMap[task.ServiceID];
+      const publicPort = getPublicPort(serviceSpec);
+      const networks = getNetworks(task);
+      return {
+        properties,
+        ipAddress,
+        port,
+        publicPort,
+        networks
+      };
     });
+    return engineInfoEntries;
   }
 }
 

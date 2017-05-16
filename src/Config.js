@@ -21,7 +21,7 @@ class Config {
       Config.enginePort = defaultQixEnginePort;
     }
 
-    Config.mode = options.mode;
+    Config.mode = options.mode || 'swarm'; // swarm is the default value
     if (Config.mode !== 'local' && Config.mode !== 'swarm') {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
