@@ -1,6 +1,6 @@
 const Docker = require('dockerode');
-const logger = require('winston');
 const containerized = require('containerized');
+const logger = require('../logger/Logger').get();
 
 const localhostIp = '127.0.0.1';
 const docker = new Docker();
@@ -64,7 +64,7 @@ class LocalDockerClient {
           });
           resolve(Promise.all(engineInfoEntries));
         } else {
-          logger.error(err);
+          logger.error('Failed to list engine containers', err);
           reject(err);
         }
       });

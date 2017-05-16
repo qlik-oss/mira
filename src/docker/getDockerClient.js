@@ -1,4 +1,4 @@
-const logger = require('winston');
+const logger = require('../logger/Logger').get();
 const LocalDockerClient = require('./LocalDockerClient');
 const SwarmDockerClient = require('./SwarmDockerClient');
 

@@ -1,5 +1,5 @@
 const Docker = require('dockerode');
-const logger = require('winston');
+const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
 const docker = new Docker();
@@ -69,7 +69,7 @@ class SwarmDockerClient {
             });
             resolve(Promise.all(engineInfoEntries));
           } else {
-            logger.error(err);
+            logger.error('Failed to list Docker Swarm engine tasks', err);
             reject(err);
           }
         });

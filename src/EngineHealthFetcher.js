@@ -1,5 +1,5 @@
 const http = require('http');
-const logger = require('winston');
+const logger = require('./logger/Logger').get();
 
 const engineHealthEndpoint = '/healthcheck';
 

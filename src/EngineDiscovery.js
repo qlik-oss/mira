@@ -1,4 +1,4 @@
-const logger = require('winston');
+const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 
 function flattenStructureIntoProperties(object, prefix, output) {
@@ -64,7 +64,7 @@ class EngineDiscovery {
       } catch (err) {
         // eslint-disable-next-line no-param-reassign
         engine.properties.healthy = false;
-        logger.warn(`Healthcheck failed for engine: ${JSON.stringify(engine)} - ${err}`);
+        logger.warn('Healthcheck failed for engine', engine, err);
       }
       return engine;
     }));
