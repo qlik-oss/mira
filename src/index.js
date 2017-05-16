@@ -53,13 +53,12 @@ process.on('SIGTERM', () => {
   });
 });
 
-function unhandledException(reason) {
-  logger.error('Process encountered an unhandled rejection', err);
+function unhandledError(msg, err) {
+  logger.error('Process encountered an unhandled error', err);
   process.exit(1);
 }
-process.on('uncaughtException', unhandledException);
-process.on('unhandledRejection', unhandledException);
 
-  process.exit(1);
+process.on('uncaughtException', unhandledError);
+process.on('unhandledRejection', unhandledError);
 
 logger.info(`Listening on port ${Config.port}`);
