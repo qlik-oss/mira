@@ -1,5 +1,5 @@
 const Docker = require('dockerode');
-const logger = require('winston');
+const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
 const docker = new Docker();
@@ -27,6 +27,7 @@ function getIpAddress(task) {
       }
     }
   }
+  logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
   return undefined;
 }
 
@@ -40,6 +41,8 @@ function getNetworks(task) {
         addresses: network.Addresses
       });
     }
+  } else {
+    logger.warn('Encountered task with no network attachments (when getting networks)', task);
   }
   return networks;
 }
@@ -51,7 +54,6 @@ function getPublicPort(serviceSpec) {
   return undefined;
 }
 
-
 function getServiceMap() {
   return new Promise((resolve, reject) => {
     docker.listServices({}, (err, services) => {
@@ -62,7 +64,7 @@ function getServiceMap() {
         }
         resolve(serviceMap);
       } else {
-        logger.error(err);
+        logger.error('Error when listing Docker Swarm services', err);
         reject(err);
       }
     });
@@ -75,7 +77,7 @@ function getTasks() {
       if (!err) {
         resolve(tasks);
       } else {
-        logger.error(err);
+        logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);
       }
     });
