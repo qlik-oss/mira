@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/qlik-ea/mira.git"
+    "url": "https://github.com/qlik-trial/mira.git"
   },
   "author": "QlikTech International AB",
   "private": true,
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/qlik-ea/mira/issues"
+    "url": "https://github.com/qlik-trial/mira/issues"
   },
-  "homepage": "https://github.com/qlik-ea/mira#readme",
+  "homepage": "https://github.com/qlik-trial/mira#readme",
   "dependencies": {
     "command-line-args": "4.0.4",
     "containerized": "1.0.2",
@@ -33,11 +33,15 @@
     "swagger2-koa": "0.0.36"
   },
   "devDependencies": {
+    "after-work.js": "2.0.0",
+    "chai-http": "3.0.0",
+    "chai-subset": "1.5.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb-base": "11.1.3",
     "eslint-plugin-import": "2.2.0",
-    "after-work.js": "2.0.0",
-    "sinon-as-promised": "4.0.3"
+    "nock": "9.0.13",
+    "sinon-as-promised": "4.0.3",
+    "superagent": "3.5.2"
   },
   "engines": {
     "node": ">=7.8.x"

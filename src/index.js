@@ -16,7 +16,7 @@ const healthEndpoint = 'health';
 const listEndpoint = 'list';
 const queryEndpoint = 'query';
 
-const options = commandLineArgs([{ name: 'mode', type: String }]);
+const options = commandLineArgs([{ name: 'mode', type: String }], { partial: true });
 Config.init(options);
 
 const app = new Koa();
@@ -29,13 +29,13 @@ router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
 router.get(`/${listEndpoint}`, async (ctx) => {
   const result = await engineDiscovery.list();
-  ctx.body = JSON.stringify(result, undefined, '   ');
+  ctx.body = result;
 });
 
 router.get(`/${queryEndpoint}`, async (ctx) => {
   const requirements = JSON.parse(ctx.query.properties);
   const matches = await engineDiscovery.query(requirements);
-  ctx.body = JSON.stringify(matches, undefined, '   ');
+  ctx.body = matches;
 });
 
 app
@@ -51,9 +51,14 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-
+process.on('uncaughtException', (reason) => {
+  logger.error(reason);
+  process.exit(1);
+});
 process.on('unhandledRejection', (reason) => {
   logger.error(reason);
+  process.exit(1);
 });
+
 
 logger.info(`Listening on port ${Config.port}`);
