@@ -4,17 +4,23 @@ const containerized = require('containerized');
 
 const engineHealthEndpoint = '/healthcheck';
 
+/**
+ * Class providing the ability to check health status of an engine.
+ */
 class EngineHealthFetcher {
+  /**
+   * Fetches health for the provided engine.
+   * @param {Object} engine - The engine to fetch health status from.
+   * @returns {Promise<Object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
+   */
   static fetch(engine) {
     return new Promise((resolve, reject) => {
       const port = containerized() ? engine.port : engine.publicPort;
       const host = containerized() ? engine.ipAddress : 'localhost';
-      if (!port) {
-        reject('No IP address defiend');
-      }
-      if (!port) {
-        reject('No port defined');
-      }
+
+      if (!host) { reject('No IP address defined'); }
+      if (!port) { reject('No port defined'); }
+
       http.get({
         host,
         port,

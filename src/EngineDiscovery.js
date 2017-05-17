@@ -46,13 +46,25 @@ function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   });
 }
 
+/**
+ * Class providing engine discovery operations such as to list available engine instances and
+ * query for engine instances with certain properties.
+ */
 class EngineDiscovery {
-
+  /**
+   * Creates new object.
+   * @param {Object} DockerClient - The Docker client implementation used to list engines.
+   * @param {Object} EngineHealthFetcher - Engine health fetcher implementation used to determine engine health status.
+   */
   constructor(DockerClient, EngineHealthFetcher) {
     this.DockerClient = DockerClient;
     this.EngineHealthFetcher = EngineHealthFetcher;
   }
 
+  /**
+   * Lists available engine instances.
+   * @returns {Promise<Object[]>} Promise to an array of engine entries.
+   */
   async list() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const completeEngines = await Promise.all(engines.map(async (engine) => {
@@ -71,6 +83,11 @@ class EngineDiscovery {
     return completeEngines;
   }
 
+  /**
+   * Queries available engine instances fullfilling the provided set of properties.
+   * @param {Object} properties - The properties a returned engine must have.
+   * @returns {Promise<Object[]>} Promise to an array of engine entries that have the required properties.
+   */
   async query(properties) {
     // Allow both single properties object and array
     if (!Array.isArray(properties)) {

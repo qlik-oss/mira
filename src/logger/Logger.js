@@ -6,7 +6,7 @@ const winston = require('winston');
 class Logger {
   /**
    * Gets the shared logger instance.
-   * @returns {Object} - The logger object.
+   * @returns {Object} The logger object, winston API.
    */
   static get() {
     if (!Logger.logger) {

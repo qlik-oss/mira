@@ -2,6 +2,11 @@ const logger = require('../logger/Logger').get();
 const LocalDockerClient = require('./LocalDockerClient');
 const SwarmDockerClient = require('./SwarmDockerClient');
 
+/**
+ * Gets a Docker Client implementation for the provided operation mode.
+ * @param {string} mode - Service operation mode.
+ * @returns {Object} The Docker Client implementatin.
+ */
 function getDockerClient(mode) {
   switch (mode) {
     case 'local':
