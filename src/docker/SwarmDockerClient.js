@@ -92,7 +92,7 @@ class SwarmDockerClient {
   /**
    * Lists engines.
    * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
-   * @returns {Promise<Object[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
    */
   static async listEngines(engineImageName) {
     const serviceMap = await getServiceMap();
