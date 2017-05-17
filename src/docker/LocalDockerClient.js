@@ -64,7 +64,7 @@ class LocalDockerClient {
               networks
             };
           });
-          resolve(Promise.all(engineInfoEntries));
+          resolve(engineInfoEntries);
         } else {
           logger.error('Failed to list engine containers', err);
           reject(err);
