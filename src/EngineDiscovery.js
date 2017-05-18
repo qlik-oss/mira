@@ -1,6 +1,23 @@
 const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 
+/**
+ * Engine entry class definition.
+ * @typedef {object} EngineEntry
+ * @prop {object} properties - Properties of the engine instance.
+ * @prop {string} ipAddress - The IP address of the engine.
+ * @prop {number} port - The port of the engine.
+ * @prop {number} [publicPort] - The public port, if the engine is reachable on it.
+ * @prop {Network[]} networks - Array of networks the engine is attached to.
+ */
+
+/**
+ * Network class definition.
+ * @typedef {object} Network
+ * @prop {string} name - Network name.
+ * @prop {string[]} addresses - Array of IP addresses.
+ */
+
 function flattenStructureIntoProperties(object, prefix, output) {
   // eslint-disable-next-line no-restricted-syntax
   for (const key in object) {
@@ -46,13 +63,25 @@ function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   });
 }
 
+/**
+ * Class providing engine discovery operations such as to list available engine instances and
+ * query for engine instances with certain properties.
+ */
 class EngineDiscovery {
-
+  /**
+   * Creates new {@link EngineDiscovery} object.
+   * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
+   * @param {EngineHealthFetcher} EngineHealthFetcher - Engine health fetcher implementation used to determine engine health status.
+   */
   constructor(DockerClient, EngineHealthFetcher) {
     this.DockerClient = DockerClient;
     this.EngineHealthFetcher = EngineHealthFetcher;
   }
 
+  /**
+   * Lists available engine instances.
+   * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries.
+   */
   async list() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const completeEngines = await Promise.all(engines.map(async (engine) => {
@@ -71,6 +100,11 @@ class EngineDiscovery {
     return completeEngines;
   }
 
+  /**
+   * Queries available engine instances fullfilling the provided set of properties.
+   * @param {object} properties - The properties a returned engine must have.
+   * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries that have the required properties.
+   */
   async query(properties) {
     // Allow both single properties object and array
     if (!Array.isArray(properties)) {

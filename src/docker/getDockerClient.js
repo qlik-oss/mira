@@ -2,6 +2,18 @@ const logger = require('../logger/Logger').get();
 const LocalDockerClient = require('./LocalDockerClient');
 const SwarmDockerClient = require('./SwarmDockerClient');
 
+
+/**
+ * Docker client class definition.
+ * @typedef {object} DockerClient
+ * @prop {function} listEngines - Lists QIX Engine instances as an array of {@link EngineEntry} objects.
+ */
+
+/**
+ * Gets a Docker client implementation for the provided operation mode.
+ * @param {string} mode - Service operation mode.
+ * @returns {DockerClient} The Docker client implementation.
+ */
 function getDockerClient(mode) {
   switch (mode) {
     case 'local':

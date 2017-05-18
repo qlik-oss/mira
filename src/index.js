@@ -25,6 +25,15 @@ const DockerClient = getDockerClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(DockerClient, EngineHealthFetcher);
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
+function onUnhandledError(err) {
+  logger.error('Process encountered an unhandled error', err);
+  process.exit(1);
+}
+
+/*
+ * Service bootstrapping
+ */
+
 router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
 router.get(`/${listEndpoint}`, async (ctx) => {
@@ -52,11 +61,6 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-
-function onUnhandledError(err) {
-  logger.error('Process encountered an unhandled error', err);
-  process.exit(1);
-}
 
 process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
