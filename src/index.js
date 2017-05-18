@@ -34,6 +34,16 @@ function onUnhandledError(err) {
  * Service bootstrapping
  */
 
+process.on('SIGTERM', () => {
+  app.close(() => {
+    logger.info('Process exiting on SIGTERM');
+    process.exit(0);
+  });
+});
+
+process.on('uncaughtException', onUnhandledError);
+process.on('unhandledRejection', onUnhandledError);
+
 router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
 router.get(`/${listEndpoint}`, async (ctx) => {
@@ -53,16 +63,6 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(Config.port);
+app.listen(Config.miraPort);
 
-process.on('SIGTERM', () => {
-  app.close(() => {
-    logger.info('Process exiting on SIGTERM');
-    process.exit(0);
-  });
-});
-
-process.on('uncaughtException', onUnhandledError);
-process.on('unhandledRejection', onUnhandledError);
-
-logger.info(`Listening on port ${Config.port}`);
+logger.info(`Listening on port ${Config.miraPort}`);
