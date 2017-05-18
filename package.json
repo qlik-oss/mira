@@ -4,7 +4,7 @@
   "description": "QIX Engine Discovery Service",
   "main": "src/index.js",
   "scripts": {
-    "start": "node ./src/index.js --mode local",
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:unit": "aw-test-runner ./test/unit",
     "lint": "eslint .",
