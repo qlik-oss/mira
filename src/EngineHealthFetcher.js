@@ -10,8 +10,8 @@ const engineHealthEndpoint = '/healthcheck';
 class EngineHealthFetcher {
   /**
    * Fetches health for the provided engine.
-   * @param {Object} engine - The engine to fetch health status from.
-   * @returns {Promise<Object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
+   * @param {object} engine - The engine to fetch health status from.
+   * @returns {Promise<object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
    */
   static fetch(engine) {
     return new Promise((resolve, reject) => {

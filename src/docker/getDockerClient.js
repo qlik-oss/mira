@@ -5,8 +5,8 @@ const SwarmDockerClient = require('./SwarmDockerClient');
 
 /**
  * Docker client class definition.
- * @typedef {Object} DockerClient
- * @prop {Function} listEngines - Lists QIX Engine instances as an array of {@link EngineEntry} objects.
+ * @typedef {object} DockerClient
+ * @prop {function} listEngines - Lists QIX Engine instances as an array of {@link EngineEntry} objects.
  */
 
 /**

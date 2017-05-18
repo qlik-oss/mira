@@ -3,8 +3,8 @@ const Config = require('./Config');
 
 /**
  * Engine entry class definition.
- * @typedef {Object} EngineEntry
- * @prop {Object} properties - Properties of the engine instance.
+ * @typedef {object} EngineEntry
+ * @prop {object} properties - Properties of the engine instance.
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
  * @prop {number} [publicPort] - The public port, if the engine is reachable on it.
@@ -13,7 +13,7 @@ const Config = require('./Config');
 
 /**
  * Network class definition.
- * @typedef {Object} Network
+ * @typedef {object} Network
  * @prop {string} name - Network name.
  * @prop {string[]} addresses - Array of IP addresses.
  */
@@ -102,7 +102,7 @@ class EngineDiscovery {
 
   /**
    * Queries available engine instances fullfilling the provided set of properties.
-   * @param {Object} properties - The properties a returned engine must have.
+   * @param {object} properties - The properties a returned engine must have.
    * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries that have the required properties.
    */
   async query(properties) {
