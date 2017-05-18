@@ -15,27 +15,42 @@ Mira is distributed as a Docker image built from source in this repository and i
 ## API
 TODO: Link to API spec and API usage.
 
-## Running
-TODO
-
-### Environment Variables
-TODO
-
-## Operation Modes
+## Running and Operation Modes
 Mira supports different operation modes. The operation mode determines what operations Mira uses to discover QIX Engine instances. This depends on two different things
 1. The deployment environment in which QIX Engine instances are running. This operation mode must be explicitly provided when starting Mira. Currently `local` and `swarm` deployment environments are supported.
 2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Local Mode
-In _local_ mode, Mira assumes that all engine instances run as Docker containers the `localhost` Docker Engine. Local mode is set by providing the `--mode local` command line argument when starting the Docker container or starting the Node.js process.
+In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
+
+The recommended way to start Mira in _local_ mode is through `docker-compose`
+```sh
+$ docker-compose -f docker-compose.yml up -d
+```
+The file [docker-compose.yml](./docker-compose.yml) shows an example of this TODO
 
 ### Swarm Mode
+In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker service.
+
+The recommended way to start Mira in _swarm_ mode is through `docker stack`
+```sh
+$ docker stack deploy
+```
+
+
+### Example docker-compose files
+- [docker-compose-local.yml](docker-compose.yml) - ...
+- [docker-compose-swarm.yml](docker-compose-swarm.yml) - ...
+
+### Environment Variables
 TODO
+
+
 
 ## Development
 
-### Contribution
-TODO: Link to Elastic CLA?
+### Contributing
+See [CONTRIBUTING.md](doc/CONTRIBUTING.md).
 
 ### Editor/IDE configuration
 TODO
