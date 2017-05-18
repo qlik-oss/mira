@@ -16,7 +16,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine:12.15.0
+    image: qlikea/engine:12.21.0
     ports:
       - "9176:9076"
     deploy:
@@ -25,7 +25,7 @@ services:
         constraints: [node.role == manager]
 
   engine2:
-    image: qlikea/engine:12.15.0
+    image: qlikea/engine:12.21.0
     ports:
       - "9276:9076"
     deploy:

@@ -12,11 +12,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine
+    image: qlikea/engine:12.21.0
     ports:
       - "9176:9076"
 
   engine2:
-    image: qlikea/engine
+    image: qlikea/engine:12.21.0
     ports:
       - "9276:9076"
