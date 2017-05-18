@@ -16,7 +16,7 @@ const defaultQixEngineImageName = 'qlik/engine';
 class Config {
   /**
    * Initializes the configuration.
-   * @param {Object} commandLineOptions - Options passed as command line arguments when starting the service.
+   * @param {object} commandLineOptions - Options passed as command line arguments when starting the service.
    */
   static init(commandLineOptions) {
     Config.port = parseInt(process.env.PORT, 10);
