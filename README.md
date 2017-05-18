@@ -21,13 +21,11 @@ Mira supports different operation modes. The operation mode determines what oper
 2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Environment Variables
-A number of environment variables can optionally be set for Mira. If not set, Mira uses default values, given below.
+The following environment variable can optionally be set for Mira
 
 | Name                  | Default value | Description |
 |-----------------------|---------------|-------------|
-| PORT                  | 9100          | Mira REST API port |
-| QIX_ENGINE_IMAGE_NAME | qlik/engine   | QIX Engine image name used to discover engines |
-| QIX_ENGINE_PORT       | 9076          | QIX Engine port |
+| QIX_ENGINE_IMAGE_NAME | qlikea/engine | QIX Engine image name used to discover engines |
 
 ### Local Mode
 In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
@@ -59,11 +57,17 @@ $ docker stack deploy -c docker-compose-swarm.yml --with-registry-auth mira-stac
 
 The file [docker-compose-swarm.yml](./docker-compose-swarm.yml) shows an example of this. It assumed that a Docker Swarm cluster is already created with at least one manager, and that the Docker CLI client is configured to issue commands towards the manager node. All Swarm services in the example file are configured to run on manager nodes.
 
+To remove the stack, run
+
+```sh
+$ docker stack rm mira-stack
+```
+
 ### Non-Dockerized Node.js process
 For convenience and development purposes, Mira can be started as a non-Dockerized Node.js process. The _local_ and _swarm_ modes described above, still apply.
 
 ```sh
-$ QIX_ENGINE_IMAGE_NAME=qlikea/engine npm start -- --mode local
+$ npm start -- --mode local
 ```
 
 ## Development
@@ -92,7 +96,7 @@ This builds the Docker image locally. By default, the build image is tagged as `
 _This section remains to be written._
 
 ### Coding Guidelines
-JavaScript code shall be developed accoring the [Airbnb JavaScript Style Guide() {](https://github.com/airbnb/javascript)
+JavaScript code shall be developed according the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 
 The repo root contains the [eslintrc.json](./eslintrc.json) file which incorporates these rules with minor modifications.
 
