@@ -85,12 +85,14 @@ function getTasks() {
 }
 
 /**
- * Provides the ability to query the docker environment for available engines
+ * Class providing a Docker client implementation that collects information on engines that
+ * run in Docker Swarm mode.
  */
 class SwarmDockerClient {
   /**
-   * Returns a promise of a list of engines
-   * @returns {Promise<Engine>}
+   * Lists engines.
+   * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
+   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
    */
   static async listEngines(engineImageName) {
     const serviceMap = await getServiceMap();
