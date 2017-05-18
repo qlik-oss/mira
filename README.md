@@ -22,6 +22,7 @@ Mira supports different operation modes. The operation mode determines what oper
 
 ### Environment Variables
 A number of environment variables can optionally be set for Mira. If not set, Mira uses default values, given below.
+
 | Name                  | Default value | Description |
 |-----------------------|---------------|-------------|
 | PORT                  | 9100          | Mira REST API port |
