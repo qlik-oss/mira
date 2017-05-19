@@ -7,23 +7,56 @@ describe('Config', () => {
   });
 
   describe('#miraPort', () => {
-    it('should have correct value', () => {
+    afterEach(() => {
+      delete process.env.PORT;
+    });
+
+    it('should have correct default value', () => {
       const expectedMiraPort = 9100;
       expect(Config.miraPort).to.equal(expectedMiraPort);
+    });
+
+    it('should have value as set by PORT env var', () => {
+      const miraPort = 9111;
+      process.env.PORT = miraPort.toString();
+      Config.init();
+      expect(Config.miraPort).to.equal(miraPort);
     });
   });
 
   describe('#enginePort', () => {
-    it('should have correct value', () => {
+    afterEach(() => {
+      delete process.env.QIX_ENGINE_PORT;
+    });
+
+    it('should have correct default value', () => {
       const expectedEnginePort = 9076;
       expect(Config.enginePort).to.equal(expectedEnginePort);
+    });
+
+    it('should have value as set by QIX_ENGINE_PORT env var', () => {
+      const qixEnginePort = 9777;
+      process.env.QIX_ENGINE_PORT = qixEnginePort.toString();
+      Config.init();
+      expect(Config.enginePort).to.equal(qixEnginePort);
     });
   });
 
   describe('#engineImageName', () => {
+    afterEach(() => {
+      delete process.env.QIX_ENGINE_IMAGE_NAME;
+    });
+
     it('should have correct value', () => {
       const expectedEngineImageName = 'qlikea/engine';
       expect(Config.engineImageName).to.equal(expectedEngineImageName);
+    });
+
+    it('should have value as set by QIX_ENGINE_IMAGE_NAME env var', () => {
+      const qixEngineImageName = 'dummy/engineimagename';
+      process.env.QIX_ENGINE_IMAGE_NAME = qixEngineImageName;
+      Config.init();
+      expect(Config.engineImageName).to.equal(qixEngineImageName);
     });
   });
 
