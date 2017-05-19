@@ -25,6 +25,8 @@ The following environment variable can optionally be set for Mira
 
 | Name                  | Default value | Description |
 |-----------------------|---------------|-------------|
+| PORT                  | 9100          | Port on which Mira will expose its REST API |
+| QIX_ENGINE_PORT       | 9076          | Port that Mira will use for QIX Engine communication |
 | QIX_ENGINE_IMAGE_NAME | qlikea/engine | QIX Engine image name used to discover engines |
 
 ### Local Mode

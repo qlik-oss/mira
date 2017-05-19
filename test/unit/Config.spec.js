@@ -3,6 +3,10 @@ const Config = require('../../src/Config');
 const chai = require('chai');
 
 describe('Config', () => {
+  before(() => {
+    Config.init();
+  });
+
   describe('#miraPort', () => {
     it('should have correct value', () => {
       const expectedMiraPort = 9100;
@@ -25,9 +29,6 @@ describe('Config', () => {
   });
 
   describe('#mode', () => {
-    it('should be undefined when not initialized', () => {
-      chai.expect(Config.mode).to.be.undefined;
-    });
     it('should return correct default value after initialization', () => {
       Config.init();
       chai.expect(Config.mode).to.equal('swarm');
