@@ -17,7 +17,7 @@ function getImageNameOfTask(task) {
 
 function getIpAddress(task) {
   if (task.NetworksAttachments) { // This might not be available during startup of a service
-                                  // eslint-disable-next-line no-restricted-syntax
+    // eslint-disable-next-line no-restricted-syntax
     for (const network of task.NetworksAttachments) {
       if (!network.Network.Spec.Ingress) {
         const fullIpAddr = network.Addresses[0];

@@ -25,6 +25,8 @@ The following environment variable can optionally be set for Mira
 
 | Name                  | Default value | Description |
 |-----------------------|---------------|-------------|
+| PORT                  | 9100          | Port on which Mira will expose its REST API |
+| QIX_ENGINE_PORT       | 9076          | Port that Mira will use for QIX Engine communication |
 | QIX_ENGINE_IMAGE_NAME | qlikea/engine | QIX Engine image name used to discover engines |
 
 ### Local Mode
@@ -93,6 +95,14 @@ $ ./scripts/build-docker-image.sh qlikea/mira
 This builds the Docker image locally. By default, the build image is tagged as `latest` but the script provides options to specify which image tag to set (see script usage). Building locally does _not_ push any images to Docker Hub.
 
 ### Testing
+#### Running Unit Tests
+Unit tests run as part of the Circle CI build. To run unit tests locally
+ 
+```sh
+$ npm run test:unit
+```
+
+#### Component and Integration Tests
 _This section remains to be written._
 
 ### Coding Guidelines
