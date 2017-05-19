@@ -47,8 +47,8 @@ echo "Using Docker image tag: $DOCKER_TAG"
 echo "Using Dockerfile in directory: $DOCKERFILE_DIR"
 echo "========================================"
 
-cd $DOCKERFILE_DIR
 echo "Creating Node package tarball."
+cd $DOCKERFILE_DIR
 rm -rf docker_build
 mkdir docker_build
 cp package.json docker_build
