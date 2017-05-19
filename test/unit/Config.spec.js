@@ -67,11 +67,12 @@ describe('Config', () => {
       Config.init({});
       expect(Config.mode).to.equal('swarm');
     });
+
     it('should return same value as provided in initialization', () => {
       Config.init({ mode: 'local' });
-      chai.expect(Config.mode).to.equal('local');
+      expect(Config.mode).to.equal('local');
       Config.init({ mode: 'swarm' });
-      chai.expect(Config.mode).to.equal('swarm');
+      expect(Config.mode).to.equal('swarm');
     });
   });
 });
