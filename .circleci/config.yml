@@ -37,7 +37,7 @@ jobs:
           name: Build Docker image
           command: |
             VER=$(cat ./version.txt)
-            ./scripts/build-docker-image.sh -t $VER $DOCKER_REPO
+            docker build -t $DOCKER_REPO:$VER .
       - deploy:
           name: Push image to Docker Hub
           command: |
