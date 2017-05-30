@@ -1,6 +1,6 @@
 FROM node:7-alpine
-RUN mkdir -p /app/qlik/mira/
-WORKDIR /app/qlik/mira/
+RUN mkdir -p /app/
+WORKDIR /app/
 COPY package.json ./
 COPY src src/
 COPY doc/api-doc.yml doc/
