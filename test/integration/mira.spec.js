@@ -32,7 +32,7 @@ describe('mira', () => {
 
   describe('Listing when no engines are available', () => {
     it('should return an empty array', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       expect(res).to.be.json;
       expect(res.body.length).to.equal(0);
     });
@@ -45,7 +45,7 @@ describe('mira', () => {
     });
 
     it('should return an empty array or an unhealthy engine', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -60,7 +60,7 @@ describe('mira', () => {
     });
 
     it('should return the engine service task with properties from health etc', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -78,7 +78,7 @@ describe('mira', () => {
     });
 
     it('should return an empty array', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
