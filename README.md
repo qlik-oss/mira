@@ -41,7 +41,7 @@ $ docker-compose -f docker-compose.yml up -d
 The file [docker-compose.yml](./docker-compose.yml) shows an example of this. It starts one Mira container and two engine containers. To verify that Mira discovers the engines, do
 
 ```sh
-$ curl http://localhost:9100/v1/list
+$ curl http://localhost:9100/v1/engines
 ```
 
 which shall list the discovery of the two engine containers and return information in JSON format.

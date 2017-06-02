@@ -16,6 +16,8 @@ produces:
 consumes:
   - "application/json"
 tags:
+  - name: "engines"
+    description: "List available QIX Engines"
   - name: "list"
     description: "List all QIX Engines"
   - name: "query"
@@ -23,8 +25,33 @@ tags:
   - name: "health"
     description: "Health status of the service"
 paths:
+  /engines:
+    get:
+      tags:
+        - "engines"
+      summary: "List available QIX Engines"
+      description: >
+        Lists available QIX Engines. In plain form, without any parameter provided, all available engines are returned.
+        If the `properties` parameter is passed, only QIX Engines with matching properties are returned.
+      produces:
+        - "application/json"
+      parameters:
+        - name: "properties"
+          in: query
+          type: object
+          required: false
+          schema:
+            $ref: "#/definitions/engineProperties"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/engineInfo"
+
   /list:
-   get:
+    get:
       tags:
         - "list"
       summary: "List the available QIX Engines"
@@ -49,9 +76,9 @@ paths:
           - "application/json"
       parameters:
         - name: "properties"
-          in: "query"
-          required: "true"
-          type: "object"
+          in: query
+          required: true
+          type: object
           schema:
             $ref: "#/definitions/engineProperties"
       responses:
