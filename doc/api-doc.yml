@@ -18,10 +18,6 @@ consumes:
 tags:
   - name: "engines"
     description: "List available QIX Engines"
-  - name: "list"
-    description: "List all QIX Engines"
-  - name: "query"
-    description: "Filter the QIX Engine list"
   - name: "health"
     description: "Health status of the service"
 paths:
@@ -46,45 +42,6 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/engineInfo"
-
-  /list:
-    get:
-      tags:
-        - "list"
-      summary: "List the available QIX Engines"
-      description: ""
-      produces: 
-        - "application/json"
-      responses:
-        "200":
-          description: "successful operation"
-          schema: 
-            type: array
-            items:
-              $ref: "#/definitions/engineInfo"
-            
-  /query:
-    get:
-      tags:
-        - "query"
-      summary: "Filter to get a subset of QIX Engines"
-      description: ""
-      produces: 
-          - "application/json"
-      parameters:
-        - name: "properties"
-          in: query
-          required: true
-          type: object
-          schema:
-            $ref: "#/definitions/engineProperties"
-      responses:
-        "200":
-          description: "OK"
-          schema: 
             type: array
             items:
               $ref: "#/definitions/engineInfo"
