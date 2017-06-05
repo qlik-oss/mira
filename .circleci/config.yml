@@ -1,5 +1,5 @@
 version: 2
-jobs: 
+jobs:
   build:
     docker:
       - image: node:7
@@ -19,7 +19,7 @@ jobs:
             fi
       - run:
           name: Install dependencies
-          command: 
+          command:
             npm install --quiet
       - run:
           name: Run ESLint
@@ -34,6 +34,27 @@ jobs:
           name: Install Docker client
           command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
       - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+      - run:
+          name: Run integration tests on a local setup
+          command: |
+            # Spin up a local setup
+            docker-compose -f ./test/integration/docker-compose-integration-local.yml up -d
+            # Find IP address of gateway
+            CONTAINER_ID=$(docker ps -aqf "name=integration_mira_1")
+            TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
+            # Build docker image for test
+            docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
+            # Execute tests
+            docker run --rm test/test-integration
+      - run:
           name: Build Docker image
           command: |
             VER=$(cat ./version.txt)
@@ -45,5 +66,4 @@ jobs:
               VER=$(cat ./version.txt)
               docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
             fi
-            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker push $DOCKER_REPO

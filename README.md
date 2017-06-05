@@ -95,13 +95,21 @@ $ docker build -t qlikea/mira:mytag .
 ### Testing
 #### Running Unit Tests
 Unit tests run as part of the Circle CI build. To run unit tests locally
- 
+
 ```sh
 $ npm run test:unit
 ```
 
-#### Component and Integration Tests
+#### Component Tests
 _This section remains to be written._
+
+#### Integration Tests
+Integration tests on a local setup of Mira is part of the Circle CI build pipeline. To run the test cases locally:
+
+```bash
+$ docker-compose -f ./test/integration/docker-compose-integration-local.yml up -d
+$ npm run test:integration
+```
 
 ### Coding Guidelines
 JavaScript code shall be developed according the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
