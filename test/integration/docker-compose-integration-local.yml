@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   mira:
-    image: qlikea/mira
+    build: ../../
     ports:
       - "9100:9100"
     command: --mode local
