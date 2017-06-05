@@ -14,8 +14,6 @@ const EngineHealthFetcher = require('./EngineHealthFetcher');
 const apiVersion = 'v1';
 const healthEndpoint = 'health';
 const enginesEndpoint = 'engines';
-const listEndpoint = 'list';
-const queryEndpoint = 'query';
 const commandLineOptions = commandLineArgs([{ name: 'mode', type: String }], { partial: true });
 
 Config.init(commandLineOptions);
@@ -54,17 +52,6 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
   } else {
     ctx.body = await engineDiscovery.list();
   }
-});
-
-router.get(`/${listEndpoint}`, async (ctx) => {
-  const result = await engineDiscovery.list();
-  ctx.body = result;
-});
-
-router.get(`/${queryEndpoint}`, async (ctx) => {
-  const properties = JSON.parse(ctx.query.properties);
-  const matches = await engineDiscovery.query(properties);
-  ctx.body = matches;
 });
 
 app
