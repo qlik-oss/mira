@@ -41,7 +41,7 @@ $ docker-compose -f docker-compose.yml up -d
 The file [docker-compose.yml](./docker-compose.yml) shows an example of this. It starts one Mira container and two engine containers. To verify that Mira discovers the engines, do
 
 ```sh
-$ curl http://localhost:9100/v1/list
+$ curl http://localhost:9100/v1/engines
 ```
 
 which shall list the discovery of the two engine containers and return information in JSON format.
@@ -86,13 +86,11 @@ No particular editor or IDE is assumed. The repo root contains an [.editorconfig
 Circle CI is configured to build a new Docker image from all pushed commits on all branches of Mira. As part of this, the built Docker image is pushed to Docker Hub. If pushing to a feature branch (different from `master`), the Docker image is tagged with `<version>-<build-number>`, where `<version>` is fetched from [`package.json`](./package.json), and `<build-number>` is the automatically increased Circle CI build number given to each build. If pushing to `master` the image is also tagged with `latest`.
 
 #### Local machine
-If the repo is cloned locally to dev machine, the image can be built using [scripts/build-docker-image.sh](./scripts/build-docker-image.sh)
+If the repo is cloned locally to a dev machine, build the image using the provided [Dockerfile](./Dockerfile), e.g.
 
 ```sh
-$ ./scripts/build-docker-image.sh qlikea/mira
+$ docker build -t qlikea/mira:mytag .
 ```
-
-This builds the Docker image locally. By default, the build image is tagged as `latest` but the script provides options to specify which image tag to set (see script usage). Building locally does _not_ push any images to Docker Hub.
 
 ### Testing
 #### Running Unit Tests
