@@ -1,0 +1,22 @@
+version: "3.1"
+
+services:
+  mira:
+    build: ../../
+    ports:
+      - "9100:9100"
+    command: --mode local
+    environment:
+      - QIX_ENGINE_IMAGE_NAME=qlikea/engine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  engine1:
+    image: qlikea/engine:12.21.0
+    ports:
+      - "9176:9076"
+
+  engine2:
+    image: qlikea/engine:12.21.0
+    ports:
+      - "9276:9076"
