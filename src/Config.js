@@ -37,7 +37,7 @@ class Config {
     }
 
     Config.mode = options.mode || 'swarm'; // swarm is the default value
-    if (Config.mode !== 'local' && Config.mode !== 'swarm') {
+    if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes') {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
     }
