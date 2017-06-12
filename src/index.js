@@ -63,5 +63,4 @@ app
 
 app.listen(Config.miraPort);
 
-logger.info('v5');
 logger.info(`Listening on port ${Config.miraPort}`);
