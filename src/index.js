@@ -21,7 +21,8 @@ Config.init(commandLineOptions);
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });
 const DockerClient = getDockerClient(Config.mode);
-const engineDiscovery = new EngineDiscovery(DockerClient, EngineHealthFetcher);
+const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
+const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher);
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
 function onUnhandledError(err) {
@@ -62,5 +63,5 @@ app
 
 app.listen(Config.miraPort);
 
-logger.info('v4');
+logger.info('v5');
 logger.info(`Listening on port ${Config.miraPort}`);

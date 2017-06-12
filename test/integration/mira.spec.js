@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-expressions,no-console,import/no-extraneous-dependencies,func-names */
 
+
 const dockerSetup = require('./docker-setup');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
 
 const miraEndpoint = 'http://localhost:9100';
-const debugMode = false;
+const debugMode = true;
+process.env.DEV_MODE = true; // Force config dev mode to be true
 
 if (debugMode) {
 // eslint-disable-next-line global-require
@@ -14,7 +16,6 @@ if (debugMode) {
 } else {
   console.log('Expecting mira to be running inside docker');
 }
-
 
 chai.use(chaiHttp);
 chai.use(chaiSubset);

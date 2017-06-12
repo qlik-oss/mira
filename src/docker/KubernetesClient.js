@@ -2,7 +2,7 @@
 const http = require('http');
 const logger = require('../logger/Logger').get();
 
-function listEndpoints(namespace) {
+function listEndpoints() {
   return new Promise((resolve, reject) => {
     const host = 'localhost';
     const port = 8001;

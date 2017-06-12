@@ -41,6 +41,12 @@ class Config {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
     }
+
+    /**
+     * If true the process is expected to run outside of docker commmunitcating with engines public ports.
+     * @type {boolean}
+     */
+    Config.devMode = process.env.DEV_MODE;
   }
 }
 
