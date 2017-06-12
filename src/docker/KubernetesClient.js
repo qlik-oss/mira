@@ -45,7 +45,7 @@ class KubernetesClient {
    * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
    */
   static async listEngines() {
-    const endpointsData = await listEndpoints('default');
+    const endpointsData = await listEndpoints();
 
     const result = [];
     for (const endpoint of endpointsData.items) {
