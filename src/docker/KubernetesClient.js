@@ -35,13 +35,11 @@ function listEndpoints() {
 }
 
 /**
- * Class providing a Docker client implementation that collects information on engines that
- * run in Docker Swarm mode.
+ * Class providing a Kubernetes client implementation that collects information on engines.
  */
 class KubernetesClient {
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
    * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
    */
   static async listEngines() {

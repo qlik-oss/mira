@@ -43,7 +43,7 @@ class Config {
     }
 
     /**
-     * If true the process is expected to run outside of docker commmunitcating with engines public ports.
+     * If true the process is expected to run outside of docker communicating with engines public ports.
      * @type {boolean}
      */
     Config.devMode = process.env.DEV_MODE;
