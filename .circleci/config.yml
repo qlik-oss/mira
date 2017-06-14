@@ -18,7 +18,7 @@ jobs:
               npm version $VER --no-git-tag-version
             fi
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "./package.json" }}
       - run:
           name: Install dependencies
           command:
@@ -32,9 +32,9 @@ jobs:
           command:
             npm run test:unit
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "./package.json" }}
           paths:
-            - .node_modules
+            - ./node_modules
       - setup_remote_docker
       - run:
           name: Install Docker client
