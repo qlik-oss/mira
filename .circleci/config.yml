@@ -17,6 +17,8 @@ jobs:
             if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
               npm version $VER --no-git-tag-version
             fi
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
           command:
@@ -29,6 +31,10 @@ jobs:
           name: Run Unit Tests
           command:
             npm run test:unit
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - setup_remote_docker
       - run:
           name: Install Docker client
