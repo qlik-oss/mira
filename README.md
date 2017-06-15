@@ -47,7 +47,7 @@ $ curl http://localhost:9100/v1/engines
 which shall list the discovery of the two engine containers and return information in JSON format.
 
 ### Swarm Mode
-In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker service.
+In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by providing the `--mode swarm` command line argument when starting the Mira Docker service.
 
 Mira _must_ be configured to run on a Swarm manager node, since it needs to communicate to a manager Docker Engine.
 
