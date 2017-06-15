@@ -1,7 +1,7 @@
 const logger = require('../logger/Logger').get();
 const LocalDockerClient = require('./LocalDockerClient');
 const SwarmDockerClient = require('./SwarmDockerClient');
-
+const KubernetesClient = require('./KubernetesClient');
 
 /**
  * Docker client class definition.
@@ -22,6 +22,9 @@ function getDockerClient(mode) {
     case 'swarm':
       logger.info('Swarm Mode Docker Client requested');
       return SwarmDockerClient;
+    case 'kubernetes':
+      logger.info('Kubernetes Client requested');
+      return KubernetesClient;
     default:
       logger.error('Unknown/no Docker Client requested');
       return undefined;

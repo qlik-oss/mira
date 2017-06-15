@@ -13,16 +13,16 @@ const EngineHealthFetcher = require('./EngineHealthFetcher');
 
 const apiVersion = 'v1';
 const healthEndpoint = 'health';
-const listEndpoint = 'list';
-const queryEndpoint = 'query';
-
+const enginesEndpoint = 'engines';
 const commandLineOptions = commandLineArgs([{ name: 'mode', type: String }], { partial: true });
+
 Config.init(commandLineOptions);
 
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });
 const DockerClient = getDockerClient(Config.mode);
-const engineDiscovery = new EngineDiscovery(DockerClient, EngineHealthFetcher);
+const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
+const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher);
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
 function onUnhandledError(err) {
@@ -46,15 +46,13 @@ process.on('unhandledRejection', onUnhandledError);
 
 router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
-router.get(`/${listEndpoint}`, async (ctx) => {
-  const result = await engineDiscovery.list();
-  ctx.body = result;
-});
-
-router.get(`/${queryEndpoint}`, async (ctx) => {
-  const requirements = JSON.parse(ctx.query.properties);
-  const matches = await engineDiscovery.query(requirements);
-  ctx.body = matches;
+router.get(`/${enginesEndpoint}`, async (ctx) => {
+  if (ctx.query.properties) {
+    const properties = JSON.parse(ctx.query.properties);
+    ctx.body = await engineDiscovery.query(properties);
+  } else {
+    ctx.body = await engineDiscovery.list();
+  }
 });
 
 app

@@ -37,10 +37,16 @@ class Config {
     }
 
     Config.mode = options.mode || 'swarm'; // swarm is the default value
-    if (Config.mode !== 'local' && Config.mode !== 'swarm') {
+    if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes') {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
     }
+
+    /**
+     * If true the process is expected to run outside of docker communicating with engines public ports.
+     * @type {boolean}
+     */
+    Config.devMode = process.env.DEV_MODE;
   }
 }
 

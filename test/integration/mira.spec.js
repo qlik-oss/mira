@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-expressions,no-console,import/no-extraneous-dependencies,func-names */
 
+
 const dockerSetup = require('./docker-setup');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
 
 const miraEndpoint = 'http://localhost:9100';
-const debugMode = false;
+const debugMode = true;
+process.env.DEV_MODE = true; // Force config dev mode to be true
 
 if (debugMode) {
 // eslint-disable-next-line global-require
@@ -14,7 +16,6 @@ if (debugMode) {
 } else {
   console.log('Expecting mira to be running inside docker');
 }
-
 
 chai.use(chaiHttp);
 chai.use(chaiSubset);
@@ -32,7 +33,7 @@ describe('mira', () => {
 
   describe('Listing when no engines are available', () => {
     it('should return an empty array', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       expect(res).to.be.json;
       expect(res.body.length).to.equal(0);
     });
@@ -45,7 +46,7 @@ describe('mira', () => {
     });
 
     it('should return an empty array or an unhealthy engine', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -60,7 +61,7 @@ describe('mira', () => {
     });
 
     it('should return the engine service task with properties from health etc', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
@@ -78,7 +79,7 @@ describe('mira', () => {
     });
 
     it('should return an empty array', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/list');
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
       const result = JSON.parse(res.text);
       console.log(JSON.stringify(result, undefined, ' '));
       expect(res).to.be.json;
