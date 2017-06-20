@@ -1,5 +1,6 @@
 const logger = require('./logger/Logger').get();
 const Config = require('./Config');
+const EngineList = require('./EngineList');
 
 /**
  * Engine entry class definition.
@@ -31,38 +32,6 @@ function flattenStructureIntoProperties(object, prefix, output) {
   }
 }
 
-function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
-  return allEngines.filter((engine) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key in requiredProperties) {
-      const actual = engine.properties[key];
-      const expected = requiredProperties[key];
-
-      if (Array.isArray(actual)) {
-        if (actual.indexOf(expected) === -1) {
-          return false;
-        }
-      } else if (typeof actual === 'boolean' || typeof expected === 'boolean') {
-        return actual.toString().toLowerCase() === expected.toString().toLowerCase();
-      } else if (expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual <= expectedNumber) {
-          return false;
-        }
-      } else if (expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual >= expectedNumber) {
-          return false;
-        }
-        // eslint-disable-next-line eqeqeq
-      } else if (expected != actual) {
-        return false;
-      }
-    }
-    return true;
-  });
-}
-
 /**
  * Class providing engine discovery operations such as to list available engine instances and
  * query for engine instances with certain properties.
@@ -76,13 +45,17 @@ class EngineDiscovery {
   constructor(DockerClient, EngineHealthFetcher) {
     this.DockerClient = DockerClient;
     this.EngineHealthFetcher = EngineHealthFetcher;
+    this.engineList = new EngineList();
+
+    // Temporary refresh
+    setInterval(() => this.refresh(), 1000);
   }
 
   /**
    * Lists available engine instances.
    * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries.
    */
-  async list() {
+  async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const completeEngines = await Promise.all(engines.map(async (engine) => {
       try {
@@ -97,7 +70,16 @@ class EngineDiscovery {
       }
       return engine;
     }));
-    return completeEngines;
+
+    completeEngines.forEach((engine) => {
+      if (!this.engineList.exists(engine)) {
+        this.engineList.add(engine);
+      }
+    });
+  }
+
+  async list() {
+    return this.engineList.all();
   }
 
   /**
@@ -105,17 +87,17 @@ class EngineDiscovery {
    * @param {object} properties - The properties a returned engine must have.
    * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries that have the required properties.
    */
-  async query(properties) {
+  async query(properties = []) {
     // Allow both single properties object and array
     if (!Array.isArray(properties)) {
       // eslint-disable-next-line no-param-reassign
       properties = [properties];
     }
-    const allEngines = await this.list();
+
     // eslint-disable-next-line no-restricted-syntax
     for (const i in properties) {
       const requiredProperties = properties[i];
-      const matches = filterEnginesBasedOnProperties(allEngines, requiredProperties);
+      const matches = this.engineList.filter(requiredProperties);
       if (matches.length > 0) {
         return matches;
       }
