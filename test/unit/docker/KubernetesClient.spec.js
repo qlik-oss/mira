@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 const nock = require('nock');
-const KubernetesClient = require('../../src/docker/KubernetesClient');
+const KubernetesClient = require('../../../src/docker/KubernetesClient');
 const specData = require('./KubernetesClient.spec.data.json');
 
 describe('KubernetesClient', () => {

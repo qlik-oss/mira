@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const http = require('http');
 const logger = require('../logger/Logger').get();
+const EngineEntry = require('../EngineEntry');
 
 function listEndpoints() {
   return new Promise((resolve, reject) => {
@@ -44,20 +45,16 @@ class KubernetesClient {
    */
   static async listEngines() {
     const endpointsData = await listEndpoints();
-
     const result = [];
+
     for (const endpoint of endpointsData.items) {
       for (const subset of endpoint.subsets) {
         const qixPorts = subset.ports.filter(item => item.name === 'qix');
         if (qixPorts.length > 0) { // The service has a qix port exposed
           const port = qixPorts[0].port;
           for (const address of subset.addresses) {
-            const item = {
-              properties: endpoint.metadata.labels,
-              ipAddress: address.ip,
-              port
-            };
-            result.push(item);
+            const entry = new EngineEntry(endpoint.metadata.labels, address.ip, port);
+            result.push(entry);
           }
         }
       }

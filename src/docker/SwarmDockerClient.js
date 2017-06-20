@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
 const logger = require('../logger/Logger').get();
 const Config = require('../Config');
+const EngineEntry = require('../EngineEntry');
 
 const docker = new Docker();
 
@@ -105,13 +106,7 @@ class SwarmDockerClient {
       const serviceSpec = serviceMap[task.ServiceID];
       const publicPort = getPublicPort(serviceSpec);
       const networks = getNetworks(task);
-      return {
-        properties,
-        ipAddress,
-        port,
-        publicPort,
-        networks
-      };
+      return new EngineEntry(properties, ipAddress, port, publicPort, networks);
     });
     return engineInfoEntries;
   }

@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
 const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
+const EngineEntry = require('../EngineEntry');
 
 const localhostIp = '127.0.0.1';
 const docker = new Docker();
@@ -24,18 +25,18 @@ function getPort(container) {
   return container.Ports[0].PublicPort;
 }
 
-function getNetworks(container) {
-  const networks = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const networkName in container.NetworkSettings.Networks) {
-    const network = container.NetworkSettings.Networks[networkName];
-    networks.push({
-      name: networkName,
-      addresses: [network.IPAddress]
-    });
-  }
-  return networks;
-}
+// function getNetworks(container) {
+//   const networks = [];
+//   // eslint-disable-next-line no-restricted-syntax
+//   for (const networkName in container.NetworkSettings.Networks) {
+//     const network = container.NetworkSettings.Networks[networkName];
+//     networks.push({
+//       name: networkName,
+//       addresses: [network.IPAddress]
+//     });
+//   }
+//   return networks;
+// }
 
 /**
  * Class providing a Docker client implementation that collects information on engines that
@@ -56,13 +57,8 @@ class LocalDockerClient {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = getPort(container);
-            const networks = getNetworks(container);
-            return {
-              properties,
-              ipAddress,
-              port,
-              networks
-            };
+            // const networks = getNetworks(container);
+            return new EngineEntry(properties, ipAddress, port);
           });
           resolve(engineInfoEntries);
         } else {

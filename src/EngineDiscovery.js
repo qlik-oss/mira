@@ -1,4 +1,4 @@
-const logger = require('./logger/Logger').get();
+// const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 
 /**
@@ -17,19 +17,6 @@ const Config = require('./Config');
  * @prop {string} name - Network name.
  * @prop {string[]} addresses - Array of IP addresses.
  */
-
-function flattenStructureIntoProperties(object, prefix, output) {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key in object) {
-    const value = object[key];
-    if (value instanceof Object && !Array.isArray(value)) {
-      flattenStructureIntoProperties(value, `${key}.`, output);
-    } else {
-      // eslint-disable-next-line no-param-reassign
-      output[prefix + key] = value;
-    }
-  }
-}
 
 function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   return allEngines.filter((engine) => {
@@ -71,11 +58,9 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
-   * @param {EngineHealthFetcher} EngineHealthFetcher - Engine health fetcher implementation used to determine engine health status.
    */
-  constructor(DockerClient, EngineHealthFetcher) {
+  constructor(DockerClient) {
     this.DockerClient = DockerClient;
-    this.EngineHealthFetcher = EngineHealthFetcher;
   }
 
   /**
@@ -84,20 +69,25 @@ class EngineDiscovery {
    */
   async list() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
-    const completeEngines = await Promise.all(engines.map(async (engine) => {
+    const engineList = await Promise.all(engines.map(async (engine) => {
       try {
-        const health = await this.EngineHealthFetcher.fetch(engine);
-        flattenStructureIntoProperties(health, '', engine.properties);
+        // const health = await this.EngineHealthFetcher.fetch(engine);
+        // flattenStructureIntoProperties(health, '', engine.properties);
         // eslint-disable-next-line no-param-reassign
-        engine.properties.healthy = true;
+        // engine.properties.healthy = true;
       } catch (err) {
         // eslint-disable-next-line no-param-reassign
-        engine.properties.healthy = false;
-        logger.warn('Healthcheck failed for engine', engine, err);
+        // engine.properties.healthy = false;
+        // logger.warn('Healthcheck failed for engine', engine, err);
       }
-      return engine;
+      return {
+        properties: engine.properties,
+        ipAddress: engine.ipAddress,
+        port: engine.port,
+        publicPort: engine.publicPort
+      };
     }));
-    return completeEngines;
+    return engineList;
   }
 
   /**
