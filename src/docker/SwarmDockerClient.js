@@ -32,45 +32,45 @@ function getIpAddress(task) {
   return undefined;
 }
 
-function getNetworks(task) {
-  const networks = [];
-  if (task.NetworksAttachments) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const network of task.NetworksAttachments) {
-      networks.push({
-        name: network.Network.Spec.Name,
-        addresses: network.Addresses
-      });
-    }
-  } else {
-    logger.warn('Encountered task with no network attachments (when getting networks)', task);
-  }
-  return networks;
-}
+// function getNetworks(task) {
+//   const networks = [];
+//   if (task.NetworksAttachments) {
+//     // eslint-disable-next-line no-restricted-syntax
+//     for (const network of task.NetworksAttachments) {
+//       networks.push({
+//         name: network.Network.Spec.Name,
+//         addresses: network.Addresses
+//       });
+//     }
+//   } else {
+//     logger.warn('Encountered task with no network attachments (when getting networks)', task);
+//   }
+//   return networks;
+// }
 
-function getPublicPort(serviceSpec) {
-  if (serviceSpec.Endpoint.Ports) { // Might not be available during startup
-    return serviceSpec.Endpoint.Ports[0].PublishedPort;
-  }
-  return undefined;
-}
+// function getPublicPort(serviceSpec) {
+//   if (serviceSpec.Endpoint.Ports) { // Might not be available during startup
+//     return serviceSpec.Endpoint.Ports[0].PublishedPort;
+//   }
+//   return undefined;
+// }
 
-function getServiceMap() {
-  return new Promise((resolve, reject) => {
-    docker.listServices({}, (err, services) => {
-      if (!err) {
-        const serviceMap = {};
-        for (let i = 0; i < services.length; i += 1) {
-          serviceMap[services[i].ID] = services[i];
-        }
-        resolve(serviceMap);
-      } else {
-        logger.error('Error when listing Docker Swarm services', err);
-        reject(err);
-      }
-    });
-  });
-}
+// function getServiceMap() {
+//   return new Promise((resolve, reject) => {
+//     docker.listServices({}, (err, services) => {
+//       if (!err) {
+//         const serviceMap = {};
+//         for (let i = 0; i < services.length; i += 1) {
+//           serviceMap[services[i].ID] = services[i];
+//         }
+//         resolve(serviceMap);
+//       } else {
+//         logger.error('Error when listing Docker Swarm services', err);
+//         reject(err);
+//       }
+//     });
+//   });
+// }
 
 function getTasks() {
   return new Promise((resolve, reject) => {
@@ -96,17 +96,17 @@ class SwarmDockerClient {
    * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
    */
   static async listEngines(engineImageName) {
-    const serviceMap = await getServiceMap();
+    // const serviceMap = await getServiceMap();
     const tasks = await getTasks();
     const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);
       const port = Config.enginePort;
-      const serviceSpec = serviceMap[task.ServiceID];
-      const publicPort = getPublicPort(serviceSpec);
-      const networks = getNetworks(task);
-      return new EngineEntry(properties, ipAddress, port, publicPort, networks);
+      // const serviceSpec = serviceMap[task.ServiceID];
+      // const publicPort = getPublicPort(serviceSpec);
+      // const networks = getNetworks(task);
+      return new EngineEntry(properties, ipAddress, port /* , publicPort, networks */);
     });
     return engineInfoEntries;
   }

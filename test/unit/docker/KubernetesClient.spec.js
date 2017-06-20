@@ -11,16 +11,13 @@ describe('KubernetesClient', () => {
 
   describe('#listEngines', () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {
-      const entries = await KubernetesClient.listEngines('engine');
-      // eslint-disable-next-line
-      const engines = entries.map((entry) => {
-        return {
-          properties: entry.properties,
-          ipAddress: entry.ipAddress,
-          port: entry.port
-        };
-      });
-      expect(engines).to.deep.equal(specData.miraOutput);
+      const engines = await KubernetesClient.listEngines('engine');
+      const rawEngines = engines.map(engine => ({
+        properties: engine.properties,
+        ipAddress: engine.ipAddress,
+        port: engine.port
+      }));
+      expect(rawEngines).to.deep.equal(specData.miraOutput);
     });
   });
 });

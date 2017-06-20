@@ -42,26 +42,7 @@ class EngineDiscovery {
    */
   async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
-    const engineList = await Promise.all(engines.map(async (engine) => {
-      try {
-        // const health = await this.EngineHealthFetcher.fetch(engine);
-        // flattenStructureIntoProperties(health, '', engine.properties);
-        // eslint-disable-next-line no-param-reassign
-        // engine.properties.healthy = true;
-      } catch (err) {
-        // eslint-disable-next-line no-param-reassign
-        // engine.properties.healthy = false;
-        // logger.warn('Healthcheck failed for engine', engine, err);
-      }
-      return {
-        properties: engine.properties,
-        ipAddress: engine.ipAddress,
-        port: engine.port,
-        publicPort: engine.publicPort
-      };
-    }));
-
-    completeEngines.forEach((engine) => {
+    engines.forEach((engine) => {
       if (!this.engineList.exists(engine)) {
         this.engineList.add(engine);
       }
@@ -69,7 +50,12 @@ class EngineDiscovery {
   }
 
   async list() {
-    return this.engineList.all();
+    const engines = this.engineList.all();
+    return engines.map(engine => ({
+      properties: engine.properties,
+      ipAddress: engine.ipAddress,
+      port: engine.port
+    }));
   }
 
   /**

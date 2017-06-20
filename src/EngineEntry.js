@@ -13,8 +13,6 @@ const flattenStructureIntoProperties = require('./utils/JSONUtils');
  * @prop {object} properties - Properties of the engine instance.
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
- * @prop {number} [publicPort] - The public port, if the engine is reachable on it.
- * @prop {Network[]} networks - Array of networks the engine is attached to.
  */
 class EngineEntry extends EventEmitter {
   /**
