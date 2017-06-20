@@ -8,8 +8,7 @@ describe('EngineEntry', () => {
   describe('#constructor()', () => {
 
     it('should have correct default value', () => {
-      // const expectedMiraPort = 9100;
-      // expect(Config.miraPort).to.equal(expectedMiraPort);
+      
     });
   });
 
