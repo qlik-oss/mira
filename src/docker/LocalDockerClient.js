@@ -1,7 +1,6 @@
 const Docker = require('dockerode');
 const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
-const EngineEntry = require('../EngineEntry');
 
 const localhostIp = '127.0.0.1';
 const docker = new Docker();
@@ -44,7 +43,8 @@ class LocalDockerClient {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = getPort(container);
-            return new EngineEntry(properties, ipAddress, port);
+            const key = `${ipAddress}:${port}`;
+            return { key, properties, ipAddress, port };
           });
           resolve(engineInfoEntries);
         } else {

@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 const http = require('http');
 const logger = require('../logger/Logger').get();
-const EngineEntry = require('../EngineEntry');
 
 function listEndpoints() {
   return new Promise((resolve, reject) => {
@@ -53,8 +52,10 @@ class KubernetesClient {
         if (qixPorts.length > 0) { // The service has a qix port exposed
           const port = qixPorts[0].port;
           for (const address of subset.addresses) {
-            const entry = new EngineEntry(endpoint.metadata.labels, address.ip, port);
-            result.push(entry);
+            const properties = endpoint.metadata.labels;
+            const ipAddress = address.ip;
+            const key = `${ipAddress}:${port}`;
+            result.push({ key, properties, ipAddress, port });
           }
         }
       }

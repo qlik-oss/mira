@@ -1,6 +1,7 @@
 // const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 const EngineList = require('./EngineList');
+const EngineEntry = require('./EngineEntry');
 
 /**
  * Engine entry class definition.
@@ -43,8 +44,9 @@ class EngineDiscovery {
   async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     engines.forEach((engine) => {
-      if (!this.engineList.exists(engine)) {
-        this.engineList.add(engine);
+      if (!this.engineList.exists(engine.key)) {
+        const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port);
+        this.engineList.add(engine.key, engineEntry);
       }
     });
   }
