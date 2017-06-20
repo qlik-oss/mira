@@ -6,27 +6,13 @@ describe('EngineEntry', () => {
   });
 
   describe('#constructor()', () => {
-
-    it('should have correct default value', () => {
-      
+    it('Valid arguments', () => {
+      // TODO: Write tests
+      const entry = new EngineEntry({ a: 'foo', b: 'bar' }, '10.10.10.10', 9999);
+      expect(entry);
     });
-  });
-
-  describe('#enginePort', () => {
-    afterEach(() => {
-      // delete process.env.QIX_ENGINE_PORT;
-    });
-
-    it('should have correct default value', () => {
-      // const expectedEnginePort = 9076;
-      // expect(Config.enginePort).to.equal(expectedEnginePort);
-    });
-
-    it('should have value as set by QIX_ENGINE_PORT env var', () => {
-      // const qixEnginePort = 9777;
-      // process.env.QIX_ENGINE_PORT = qixEnginePort.toString();
-      // Config.init();
-      // expect(Config.enginePort).to.equal(qixEnginePort);
+    it('Invalid arguments', () => {
+      // TODO: Write tests
     });
   });
 });
