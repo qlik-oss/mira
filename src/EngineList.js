@@ -8,7 +8,6 @@
  * @prop {number} [publicPort] - The public port, if the engine is reachable on it.
  * @prop {Network[]} networks - Array of networks the engine is attached to.
  */
-
 function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   return allEngines.filter((engine) => {
     // eslint-disable-next-line no-restricted-syntax
@@ -55,6 +54,14 @@ class EngineList {
   }
 
   /**
+   * Returns all engines in list.
+   * @returns The list of engines.
+   */
+  all() {
+    return Object.keys(this.entries).map(key => this.entries[key]);
+  }
+
+  /**
    * Adds an engine to the list.
    * @param {string} key - The unique key of engine entry to add.
    * @param {EngineEntry} engine - The engine entry to add.
@@ -65,19 +72,24 @@ class EngineList {
   }
 
   /**
-   * Checks if a given engine is already in the list.
-   * @param {EngineEntry} the engine entry.
-   * @returns true if engine is already in list, false otherwise.
+   * Deletes the given engine entry.
+   * @param {string|string[]} arg - The key(s) to delete; either a single key or
+   *                                an array of keys.
    */
-  exists(key) {
-    return this.entries[key] !== undefined;
+  delete(arg) {
+    const keys = Array.isArray(arg) ? arg : [arg];
+    keys.forEach(key => delete this.entries[key]);
   }
 
   /**
-   * TODO: Document
+   * Returns the difference (i.e. the relative complement) between the list and
+   * the supplied set of keys.
+   * @param {string[]} keys - The set of keys.
+   * @returns {string[]} All keys that are present in the list but missing in the
+   *                     supplied set of keys.
    */
-  all() {
-    return Object.keys(this.entries).map(k => this.entries[k]);
+  difference(keys) {
+    return Object.keys(this.entries).filter(key => !keys.include(key));
   }
 
   /**
@@ -90,11 +102,12 @@ class EngineList {
   }
 
   /**
-   * Deletes the given engine entry.
-   * @param {string} key
+   * Checks if a given engine is already in the list.
+   * @param {string} key - the unique engine identifier.
+   * @returns true if engine is already in list, false otherwise.
    */
-  remove(key) {
-    delete this.entries[key];
+  has(key) {
+    return this.entries[key] !== undefined;
   }
 }
 
