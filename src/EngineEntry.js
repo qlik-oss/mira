@@ -1,7 +1,7 @@
 const http = require('http');
 const EventEmitter = require('events');
 const EngineHealthFetcher = require('./EngineHealthFetcher');
-const flattenStructureIntoProperties = require('./utils/JSONUtils');
+const JSONUtils = require('./utils/JSONUtils');
 
 /**
  * Engine health check failed event.
@@ -38,7 +38,7 @@ class EngineEntry extends EventEmitter {
     async function check() {
       try {
         const health = await this.healthFetcher.fetch();
-        flattenStructureIntoProperties(health, '', this.properties);
+        JSONUtils.flatten(health, '', this.properties);
         this.properties.healthy = true;
       } catch (err) {
         this.properties.healthy = false;
@@ -50,7 +50,7 @@ class EngineEntry extends EventEmitter {
   }
 
   /**
-   * 
+   * Stops periodical health cheking of the engine instance.
    */
   stopHealthChecks() {
     if (this.fetcherTimeOutId) {
@@ -58,6 +58,41 @@ class EngineEntry extends EventEmitter {
     }
   }
 
+  /**
+   * Checks if the properties of the engine {@link EngineEntry#properties} satisfies the property
+   * constraints given by the parameter.
+   * @param {object} constraints - Property constraints checked.
+   * @returns {boolean} True, if the constraints are satisfied.
+   */
+  satisfies(constraints) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in constraints) {
+      const actual = constraints[key];
+      const expected = this.properties[key];
+
+      if (Array.isArray(actual)) {
+        if (actual.indexOf(expected) === -1) {
+          return false;
+        }
+      } else if (typeof actual === 'boolean' || typeof expected === 'boolean') {
+        return actual.toString().toLowerCase() === expected.toString().toLowerCase();
+      } else if (expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
+        const expectedNumber = expected.substring(1);
+        if (actual <= expectedNumber) {
+          return false;
+        }
+      } else if (expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
+        const expectedNumber = expected.substring(1);
+        if (actual >= expectedNumber) {
+          return false;
+        }
+        // eslint-disable-next-line eqeqeq
+      } else if (expected != actual) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 module.exports = EngineEntry;

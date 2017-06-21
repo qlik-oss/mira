@@ -1,20 +1,25 @@
 /**
- * TODO
- * @param {*} object
- * @param {*} prefix
- * @param {*} output
+ * Class providing JSON manipulation utilities.
  */
-function flattenStructureIntoProperties(object, prefix, output) {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key in object) {
-    const value = object[key];
-    if (value instanceof Object && !Array.isArray(value)) {
-      flattenStructureIntoProperties(value, `${key}.`, output);
-    } else {
-      // eslint-disable-next-line no-param-reassign
-      output[prefix + key] = value;
+class JSONUtils {
+  /**
+   * TODO
+   * @param {*} object - TODO
+   * @param {*} prefix - TODO
+   * @param {*} output - TODO
+   */
+  static flatten(object, prefix, output) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in object) {
+      const value = object[key];
+      if (value instanceof Object && !Array.isArray(value)) {
+        JSONUtils.flatten(value, `${key}.`, output);
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        output[prefix + key] = value;
+      }
     }
   }
 }
 
-module.exports = flattenStructureIntoProperties;
+module.exports = JSONUtils;
