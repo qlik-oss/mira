@@ -50,7 +50,7 @@ class EngineEntry extends EventEmitter {
   }
 
   /**
-   * 
+   *
    */
   stopHealthChecks() {
     if (this.fetcherTimeOutId) {

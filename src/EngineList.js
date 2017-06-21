@@ -1,13 +1,3 @@
-// Temporary typedef if EngineEntry, will be replaced by the apropriate class.
-/**
- * Engine entry class definition.
- * @typedef {object} EngineEntry
- * @prop {object} properties - Properties of the engine instance.
- * @prop {string} ipAddress - The IP address of the engine.
- * @prop {number} port - The port of the engine.
- * @prop {number} [publicPort] - The public port, if the engine is reachable on it.
- * @prop {Network[]} networks - Array of networks the engine is attached to.
- */
 function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   return allEngines.filter((engine) => {
     // eslint-disable-next-line no-restricted-syntax
@@ -67,7 +57,8 @@ class EngineList {
    * @param {EngineEntry} engine - The engine entry to add.
    */
   add(key, engine) {
-    if (engine === undefined) { throw new Error('Parameter engine cannot be undefined'); }
+    if (this.has(key)) { throw new Error('Key already exists'); }
+    if (!engine) { throw new Error('Invalid engine parameter'); }
     this.entries[key] = engine;
   }
 
@@ -89,7 +80,7 @@ class EngineList {
    *                     supplied set of keys.
    */
   difference(keys) {
-    return Object.keys(this.entries).filter(key => !keys.include(key));
+    return Object.keys(this.entries).filter(key => !keys.includes(key));
   }
 
   /**
@@ -107,7 +98,7 @@ class EngineList {
    * @returns true if engine is already in list, false otherwise.
    */
   has(key) {
-    return this.entries[key] !== undefined;
+    return Object.prototype.hasOwnProperty.call(this.entries, key);
   }
 }
 
