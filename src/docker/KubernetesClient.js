@@ -40,24 +40,22 @@ function listEndpoints() {
 class KubernetesClient {
   /**
    * Lists engines.
-   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
     const endpointsData = await listEndpoints();
-
     const result = [];
+
     for (const endpoint of endpointsData.items) {
       for (const subset of endpoint.subsets) {
         const qixPorts = subset.ports.filter(item => item.name === 'qix');
         if (qixPorts.length > 0) { // The service has a qix port exposed
           const port = qixPorts[0].port;
           for (const address of subset.addresses) {
-            const item = {
-              properties: endpoint.metadata.labels,
-              ipAddress: address.ip,
-              port
-            };
-            result.push(item);
+            const properties = endpoint.metadata.labels;
+            const ipAddress = address.ip;
+            const key = `${ipAddress}:${port}`;
+            result.push({ key, properties, ipAddress, port });
           }
         }
       }

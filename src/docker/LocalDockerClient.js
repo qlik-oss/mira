@@ -24,19 +24,6 @@ function getPort(container) {
   return container.Ports[0].PublicPort;
 }
 
-function getNetworks(container) {
-  const networks = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const networkName in container.NetworkSettings.Networks) {
-    const network = container.NetworkSettings.Networks[networkName];
-    networks.push({
-      name: networkName,
-      addresses: [network.IPAddress]
-    });
-  }
-  return networks;
-}
-
 /**
  * Class providing a Docker client implementation that collects information on engines that
  * run locally as containers in a non-cluster configuration.
@@ -45,7 +32,7 @@ class LocalDockerClient {
   /**
    * Lists engines.
    * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
-   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
     return new Promise((resolve, reject) => {
@@ -56,13 +43,8 @@ class LocalDockerClient {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = getPort(container);
-            const networks = getNetworks(container);
-            return {
-              properties,
-              ipAddress,
-              port,
-              networks
-            };
+            const key = `${ipAddress}:${port}`;
+            return { key, properties, ipAddress, port };
           });
           resolve(engineInfoEntries);
         } else {

@@ -9,8 +9,6 @@
  * @prop {Network[]} networks - Array of networks the engine is attached to.
  */
 
-const key = engine => `${engine.ipAddress}:${engine.port}`;
-
 function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
   return allEngines.filter((engine) => {
     // eslint-disable-next-line no-restricted-syntax
@@ -58,10 +56,12 @@ class EngineList {
 
   /**
    * Adds an engine to the list.
-   * @param {EngineEntry} the engine entry to add.
+   * @param {string} key - The unique key of engine entry to add.
+   * @param {EngineEntry} engine - The engine entry to add.
    */
-  add(engine) {
-    this.entries[key(engine)] = engine;
+  add(key, engine) {
+    if (engine === undefined) { throw new Error('Parameter engine cannot be undefined'); }
+    this.entries[key] = engine;
   }
 
   /**
@@ -69,14 +69,21 @@ class EngineList {
    * @param {EngineEntry} the engine entry.
    * @returns true if engine is already in list, false otherwise.
    */
-  exists(engine) {
-    return Object.prototype.hasOwnProperty.call(this.entries.hasOwnProperty, key(engine));
+  exists(key) {
+    return this.entries[key] !== undefined;
   }
 
+  /**
+   * TODO: Document
+   */
   all() {
     return Object.keys(this.entries).map(k => this.entries[k]);
   }
 
+  /**
+   * TODO: Document
+   * @param {*} properties
+   */
   filter(properties) {
     const engines = this.all();
     return filterEnginesBasedOnProperties(engines, properties);
@@ -84,10 +91,10 @@ class EngineList {
 
   /**
    * Deletes the given engine entry.
-   * @param {EngineEntry} engine
+   * @param {string} key
    */
-  remove(engine) {
-    delete this.entries[key(engine)];
+  remove(key) {
+    delete this.entries[key];
   }
 }
 
