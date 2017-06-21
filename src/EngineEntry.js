@@ -48,6 +48,16 @@ class EngineEntry extends EventEmitter {
     }
     this.fetcherTimeOutId = setTimeout(check, ms);
   }
+
+  /**
+   * 
+   */
+  stopHealthChecks() {
+    if (this.fetcherTimeOutId) {
+      clearTimeout(this.fetcherTimeOutId);
+    }
+  }
+
 }
 
 module.exports = EngineEntry;

@@ -32,7 +32,7 @@ class LocalDockerClient {
   /**
    * Lists engines.
    * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
-   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
     return new Promise((resolve, reject) => {

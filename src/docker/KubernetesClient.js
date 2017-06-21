@@ -40,7 +40,7 @@ function listEndpoints() {
 class KubernetesClient {
   /**
    * Lists engines.
-   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
     const endpointsData = await listEndpoints();

@@ -92,7 +92,7 @@ class SwarmDockerClient {
   /**
    * Lists engines.
    * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
-   * @returns {Promise<EngineEntry[]>} A promise to a list of engine entries.
+   * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
     // const serviceMap = await getServiceMap();
@@ -102,10 +102,11 @@ class SwarmDockerClient {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);
       const port = Config.enginePort;
+      const key = `${ipAddress}:${port}`;
       // const serviceSpec = serviceMap[task.ServiceID];
       // const publicPort = getPublicPort(serviceSpec);
       // const networks = getNetworks(task);
-      return { properties, ipAddress, port };
+      return { key, properties, ipAddress, port };
     });
     return engineInfoEntries;
   }
