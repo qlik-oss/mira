@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const EngineEntry = require('../../src/EngineEntry');
 const EngineHealthFetcher = require('../../src/EngineHealthFetcher');
-const sleep = require('../../src/utils/sleep');
+const sleep = require('../test-utils/sleep');
 
 describe('EngineEntry', () => {
   let entry;
