@@ -1,3 +1,4 @@
+const EngineHealthFetcher = require('./EngineHealthFetcher');
 const JSONUtils = require('./utils/JSONUtils');
 
 /**
@@ -30,12 +31,16 @@ class EngineEntry {
    * @param {*} properties
    * @param {*} ipAddress
    * @param {*} port
+   * @param {*} refreshRate - refresh rate in milliseconds.
+   * @param {*} healthFetcher - The health fetcher to use. Optional and mainly used for testing;
+   *                            if not supplied, a default health checker will be used.
    */
-  constructor(properties, ipAddress, port) {
+  constructor(properties, ipAddress, port, refreshRate, healthFetcher) {
     this.properties = properties;
     this.ipAddress = ipAddress;
     this.port = port;
-    this.fetcherTimeOutId = null;
+    this.refreshRate = refreshRate;
+    this.healthFetcher = healthFetcher || new EngineHealthFetcher();
   }
 
   /**
@@ -43,21 +48,16 @@ class EngineEntry {
    * @param {EngineHealthFetcher} healthFetcher - The engine health fetcher to use.
    * @param {number} ms - The interval in milliseconds between health checks.
    */
-  startHealthChecks(healthFetcher, ms) {
-    if (this.fetcherTimeOutId != null) {
-      this.stopHealthChecks();
-    }
-    this.fetcherTimeOutId = setTimeout(checkHealth, ms, this, healthFetcher, ms);
+  startHealthChecks() {
+    this.stopHealthChecks();
+    checkHealth(this, this.healthFetcher, this.refreshRate);
   }
 
   /**
    * Stops periodical health checking.
    */
   stopHealthChecks() {
-    if (this.fetcherTimeOutId != null) {
-      clearTimeout(this.fetcherTimeOutId);
-      this.fetcherTimeOutId = null;
-    }
+    clearTimeout(this.fetcherTimeOutId);
   }
 
   /**

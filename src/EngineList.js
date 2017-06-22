@@ -27,6 +27,7 @@ class EngineList {
     if (this.has(key)) { throw new Error('Key already exists'); }
     if (!engine) { throw new Error('Invalid engine parameter'); }
     this.entries[key] = engine;
+    engine.startHealthChecks();
   }
 
   /**
