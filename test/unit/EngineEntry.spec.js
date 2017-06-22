@@ -53,7 +53,7 @@ describe('EngineEntry', () => {
       expect(Math.abs(callCount1 - callCount2) <= 1).to.be.true;
     });
 
-    it('should be possible to call with out stopping in between', async () => {
+    it('should be possible to call twice without stopping', async () => {
       entry.startHealthChecks(healthFetcher, 10);
       await sleep(100);
       const callCount1 = fetchStub.callCount;
