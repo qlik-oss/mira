@@ -8,7 +8,7 @@ describe('EngineEntry', () => {
   });
 
   describe('#constructor()', () => {
-    it('Simple construction', () => {
+    it('should construct with arguments', () => {
       const entry = new EngineEntry({ a: 'foo', b: 'bar' }, '10.10.10.10', 9999);
       expect(entry.properties).to.deep.equal({ a: 'foo', b: 'bar' });
       expect(entry.ipAddress).to.equal('10.10.10.10');
@@ -17,7 +17,7 @@ describe('EngineEntry', () => {
   });
 
   describe('#startHealthChecks', () => {
-    it('Health fetching is periodically performed', async () => {
+    it('should fetch health periodically', async () => {
       const entry = new EngineEntry({}, '10.10.10.10', 9999);
       const healthFetcher = new EngineHealthFetcher({ get: () => { } });
       const fetchStub = sinon.stub(healthFetcher, 'fetch');
@@ -28,7 +28,7 @@ describe('EngineEntry', () => {
       expect(entry.properties.healthy).to.be.true;
     });
 
-    it('Health fetching can be done with different intervals', async () => {
+    it('should be able to fetch at different intervals', async () => {
       const entry = new EngineEntry({}, '10.10.10.10', 9999);
       const healthFetcher = new EngineHealthFetcher({ get: () => { } });
       const fetchStub = sinon.stub(healthFetcher, 'fetch');
