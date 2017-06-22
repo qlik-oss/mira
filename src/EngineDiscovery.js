@@ -44,7 +44,7 @@ class EngineDiscovery {
   async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     engines.forEach((engine) => {
-      if (!this.engineList.exists(engine.key)) {
+      if (!this.engineList.has(engine.key)) {
         const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port);
         this.engineList.add(engine.key, engineEntry);
       }
@@ -65,7 +65,7 @@ class EngineDiscovery {
    * @param {object} properties - The properties a returned engine must have.
    * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries that have the required properties.
    */
-  async query(properties = []) {
+  async query(properties) {
     // Allow both single properties object and array
     if (!Array.isArray(properties)) {
       // eslint-disable-next-line no-param-reassign
