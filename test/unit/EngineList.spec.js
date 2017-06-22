@@ -21,14 +21,6 @@ describe('EngineList', () => {
     expect(engineList.add.bind('foo', 'ball')).to.throw();
   });
 
-  it('should delete single entries', () => {
-    const entry = { stopHealthChecks: sinon.stub() };
-    engineList.add('a', entry);
-    engineList.delete('a');
-    expect(entry.stopHealthChecks.calledOnce).to.equal(true);
-    expect(engineList.entries.a).to.equal(undefined);
-  });
-
   it('should delete multiple entries', () => {
     const entry1 = { stopHealthChecks: sinon.stub() };
     const entry2 = { stopHealthChecks: sinon.stub() };

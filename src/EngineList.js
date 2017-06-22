@@ -30,12 +30,11 @@ class EngineList {
   }
 
   /**
-   * Deletes the given engine entry.
-   * @param {string|string[]} arg - The key(s) to delete; either a single key or
-   *                                an array of keys.
+   * Deletes the given engine entries. Helth checks for the deleted entries
+   * will be suspended.
+   * @param {string[]} keys - The keys to delete.
    */
-  delete(arg) {
-    const keys = Array.isArray(arg) ? arg : [arg];
+  delete(keys) {
     keys.forEach((key) => {
       if (this.has(key)) {
         this.entries[key].stopHealthChecks();
