@@ -1,36 +1,3 @@
-function filterEnginesBasedOnProperties(allEngines, requiredProperties) {
-  return allEngines.filter((engine) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const k in requiredProperties) {
-      const actual = engine.properties[k];
-      const expected = requiredProperties[k];
-
-      if (Array.isArray(actual)) {
-        if (actual.indexOf(expected) === -1) {
-          return false;
-        }
-      } else if (typeof actual === 'boolean' || typeof expected === 'boolean') {
-        return actual.toString().toLowerCase() === expected.toString().toLowerCase();
-      } else if (expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual <= expectedNumber) {
-          return false;
-        }
-      } else if (expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual >= expectedNumber) {
-          return false;
-        }
-        // eslint-disable-next-line eqeqeq
-      } else if (expected != actual) {
-        return false;
-      }
-    }
-    return true;
-  });
-}
-
-
 /**
  * Class providing a central repository for discovered QIX engine instances.
  */
@@ -69,7 +36,12 @@ class EngineList {
    */
   delete(arg) {
     const keys = Array.isArray(arg) ? arg : [arg];
-    keys.forEach(key => delete this.entries[key]);
+    keys.forEach((key) => {
+      if (this.has(key)) {
+        this.entries[key].stopHealthChecks();
+        delete this.entries[key];
+      }
+    });
   }
 
   /**
@@ -84,12 +56,13 @@ class EngineList {
   }
 
   /**
-   * TODO: Document
-   * @param {*} properties
+   * Filters the lists based on a given set of constraints. Engines that satisfies
+   * the constraints will be included in the result.
+   * @param {object} constraints - Property constraints to use for filtering.
+   * @returns {EngineEntry[]} An array of engines satisfying the constraints.
    */
-  filter(properties) {
-    const engines = this.all();
-    return filterEnginesBasedOnProperties(engines, properties);
+  filter(constraints) {
+    return this.all().filter(engine => engine.satisfies(constraints));
   }
 
   /**

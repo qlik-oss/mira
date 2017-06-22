@@ -22,19 +22,23 @@ describe('EngineList', () => {
   });
 
   it('should delete single entries', () => {
-    engineList.add('foo', 'bar');
-    engineList.delete('foo');
-    expect(engineList.entries.foo).to.equal(undefined);
-    // TODO: Also test that engineEntry.cancel() is called.
+    const entry = { stopHealthChecks: sinon.stub() };
+    engineList.add('a', entry);
+    engineList.delete('a');
+    expect(entry.stopHealthChecks.calledOnce).to.equal(true);
+    expect(engineList.entries.a).to.equal(undefined);
   });
 
   it('should delete multiple entries', () => {
-    engineList.add('a', 1);
-    engineList.add('b', 2);
+    const entry1 = { stopHealthChecks: sinon.stub() };
+    const entry2 = { stopHealthChecks: sinon.stub() };
+    engineList.add('a', entry1);
+    engineList.add('b', entry2);
     engineList.delete(['a', 'b']);
+    expect(entry1.stopHealthChecks.calledOnce).to.equal(true);
+    expect(entry2.stopHealthChecks.calledOnce).to.equal(true);
     expect(engineList.entries.a).to.equal(undefined);
     expect(engineList.entries.b).to.equal(undefined);
-    // TODO: Also test that engineEntry.cancel() is called.
   });
 
   it('should calculate the difference', () => {
@@ -47,7 +51,16 @@ describe('EngineList', () => {
   });
 
   it('should filter', () => {
-    // TODO: implement once filtering is in place.
+    const entry1 = { satisfies: sinon.stub().returns(false) };
+    const entry2 = { satisfies: sinon.stub().returns(false) };
+    const entry3 = { satisfies: sinon.stub().returns(true) };
+
+    engineList.add('a', entry1);
+    engineList.add('b', entry2);
+    expect(engineList.filter('dummy')).to.deep.equal([]);
+
+    engineList.add('c', entry3);
+    expect(engineList.filter('dummy')).to.deep.equal([entry3]);
   });
 
   it('should exist', () => {
