@@ -1,12 +1,22 @@
-const http = require('http');
-const EventEmitter = require('events');
-const EngineHealthFetcher = require('./EngineHealthFetcher');
 const JSONUtils = require('./utils/JSONUtils');
 
 /**
- * Engine health check failed event.
- * @event EngineEntry#healthCheckFailed
+ * Helper for periodical health checking.
  */
+async function checkHealth(entry, healthFetcher, ms) {
+  /* eslint-disable no-param-reassign */
+  try {
+    const health = await healthFetcher.fetch(entry.ipAddress, entry.port, '/healthcheck');
+    JSONUtils.flatten(health, '', entry.properties);
+    entry.properties.healthy = true;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.log(err);
+    entry.properties.healthy = false;
+  }
+  entry.fetcherTimeOutId = setTimeout(checkHealth, ms, entry, healthFetcher, ms);
+  /* eslint-enable no-param-reassign */
+}
 
 /**
  * Engine entry class definition.
@@ -14,7 +24,7 @@ const JSONUtils = require('./utils/JSONUtils');
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
  */
-class EngineEntry extends EventEmitter {
+class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
    * @param {*} properties
@@ -22,39 +32,31 @@ class EngineEntry extends EventEmitter {
    * @param {*} port
    */
   constructor(properties, ipAddress, port) {
-    super();
     this.properties = properties;
     this.ipAddress = ipAddress;
     this.port = port;
-    this.healthFetcher = new EngineHealthFetcher(http, ipAddress, port, '/healthcheck');
+    this.fetcherTimeOutId = null;
   }
 
   /**
-   * Starts periodical health checking of the engine instance.
+   * Starts periodical health checking.
+   * @param {EngineHealthFetcher} healthFetcher - The engine health fetcher to use.
    * @param {number} ms - The interval in milliseconds between health checks.
-   * @emits EngineEntry#healthCheckFailed
    */
-  startHealthChecks(ms) {
-    async function check() {
-      try {
-        const health = await this.healthFetcher.fetch();
-        JSONUtils.flatten(health, '', this.properties);
-        this.properties.healthy = true;
-      } catch (err) {
-        this.properties.healthy = false;
-        this.emit('healthCheckFailed');
-      }
-      this.fetcherTimeOutId = setTimeout(check, ms);
+  startHealthChecks(healthFetcher, ms) {
+    if (this.fetcherTimeOutId != null) {
+      this.stopHealthChecks();
     }
-    this.fetcherTimeOutId = setTimeout(check, ms);
+    this.fetcherTimeOutId = setTimeout(checkHealth, ms, this, healthFetcher, ms);
   }
 
   /**
-   * Stops periodical health cheking of the engine instance.
+   * Stops periodical health checking.
    */
   stopHealthChecks() {
-    if (this.fetcherTimeOutId) {
+    if (this.fetcherTimeOutId != null) {
       clearTimeout(this.fetcherTimeOutId);
+      this.fetcherTimeOutId = null;
     }
   }
 
