@@ -1,4 +1,3 @@
-const EventEmitter = require('events');
 const JSONUtils = require('./utils/JSONUtils');
 
 /**
@@ -25,7 +24,7 @@ async function checkHealth(entry, healthFetcher, ms) {
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
  */
-class EngineEntry extends EventEmitter {
+class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
    * @param {*} properties
@@ -33,7 +32,6 @@ class EngineEntry extends EventEmitter {
    * @param {*} port
    */
   constructor(properties, ipAddress, port) {
-    super();
     this.properties = properties;
     this.ipAddress = ipAddress;
     this.port = port;
