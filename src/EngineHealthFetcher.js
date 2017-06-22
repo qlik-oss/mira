@@ -7,15 +7,9 @@ class EngineHealthFetcher {
   /**
    * Creates new {@link EngineHealthFetcher} object.
    * @param {object} http - HTTP client to use. Interface must comply with standard Node.js http module.
-   * @param {string} host - The host of the engine.
-   * @param {number} port - The port of the engine.
-   * @param {string} path - The path to the engine health check endpoint (e.g. '/healthcheck').
    */
-  constructor(http, host, port, path) {
+  constructor(http) {
     this.http = http;
-    this.host = host;
-    this.port = port;
-    this.path = path;
   }
 
   /**
