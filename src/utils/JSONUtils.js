@@ -7,7 +7,6 @@ class JSONUtils {
    * @param {*} object - TODO
    * @param {*} prefix - TODO
    * @param {*} output - TODO
-   * TODO
    */
   static flatten(object, prefix, output) {
     // eslint-disable-next-line no-restricted-syntax

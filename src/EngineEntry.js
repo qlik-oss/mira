@@ -59,6 +59,7 @@ class EngineEntry {
       this.fetcherTimeOutId = null;
     }
   }
+
   /**
    * Checks if the properties of the engine {@link EngineEntry#properties} satisfies the property
    * constraints given by the parameter.
