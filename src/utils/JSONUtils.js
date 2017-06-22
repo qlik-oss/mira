@@ -1,12 +1,13 @@
 /**
- * TODO
+ * Class providing JSON manipulation utilities.
  */
 class JSONUtils {
   /**
    * TODO
-   * @param {*} object
-   * @param {*} prefix
-   * @param {*} output
+   * @param {*} object - TODO
+   * @param {*} prefix - TODO
+   * @param {*} output - TODO
+   * TODO
    */
   static flatten(object, prefix, output) {
     // eslint-disable-next-line no-restricted-syntax
