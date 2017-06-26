@@ -1,3 +1,4 @@
+const logger = require('./logger/Logger').get();
 const EngineHealthFetcher = require('./EngineHealthFetcher');
 const JSONUtils = require('./utils/JSONUtils');
 
@@ -11,8 +12,7 @@ async function checkHealth(entry, healthFetcher, ms) {
     JSONUtils.flatten(health, '', entry.properties);
     entry.properties.healthy = true;
   } catch (err) {
-    // eslint-disable-next-line
-    console.log(err);
+    logger.error(`Engine health check failed on ${entry.ipAddress}:${entry.port}`, err);
     entry.properties.healthy = false;
   }
   entry.fetcherTimeOutId = setTimeout(checkHealth, ms, entry, healthFetcher, ms);
