@@ -1,13 +1,13 @@
 /**
  * Helper function to {@link JSONUtils#flatten}, taking a prefix parameter that determines
- * the prefix that shall be appended to the front flattened keys.
+ * the prefix that shall be appended to the flattened keys.
  */
-function flatten(object, prefix, output) {
+function flattenWithPrefix(object, prefix, output) {
   // eslint-disable-next-line no-restricted-syntax
   for (const key in object) {
     const value = object[key];
     if (value instanceof Object && !Array.isArray(value)) {
-      flatten(value, `${key}.`, output);
+      flattenWithPrefix(value, `${key}.`, output);
     } else {
       // eslint-disable-next-line no-param-reassign
       output[prefix + key] = value;
@@ -25,7 +25,7 @@ class JSONUtils {
    * @param {object} output - The output object to which the flattened keys are added.
    */
   static flatten(object, output) {
-    flatten(object, '', output);
+    flattenWithPrefix(object, '', output);
   }
 }
 
