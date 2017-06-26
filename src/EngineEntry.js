@@ -70,27 +70,31 @@ class EngineEntry {
   satisfies(constraints) {
     // eslint-disable-next-line no-restricted-syntax
     for (const key in constraints) {
-      const actual = constraints[key];
-      const expected = this.properties[key];
+      const expected = constraints[key];
+      const actual = this.properties[key];
 
-      if (Array.isArray(actual)) {
-        if (actual.indexOf(expected) === -1) {
+      if (typeof actual === 'undefined') {
+        return false;
+      } else if (Array.isArray(expected)) {
+        if (expected.indexOf(actual) === -1) {
           return false;
         }
-      } else if (typeof actual === 'boolean' || typeof expected === 'boolean') {
-        return actual.toString().toLowerCase() === expected.toString().toLowerCase();
-      } else if (expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
+      } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
+        return expected.toString().toLowerCase() === actual.toString().toLowerCase();
+      } else if (typeof expected === 'string' &&
+                 expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
         const expectedNumber = expected.substring(1);
         if (actual <= expectedNumber) {
           return false;
         }
-      } else if (expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
+      } else if (typeof expected === 'string' &&
+                 expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
         const expectedNumber = expected.substring(1);
         if (actual >= expectedNumber) {
           return false;
         }
         // eslint-disable-next-line eqeqeq
-      } else if (expected != actual) {
+      } else if (actual != expected) {
         return false;
       }
     }
