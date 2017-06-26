@@ -9,11 +9,9 @@ async function checkHealth(entry, healthFetcher, ms) {
   /* eslint-disable no-param-reassign */
   try {
     const health = await healthFetcher.fetch(entry.ipAddress, entry.port, '/healthcheck');
-    console.log(health);
     JSONUtils.flatten(health, '', entry.properties);
     entry.properties.healthy = true;
   } catch (err) {
-    // eslint-disable-next-line
     logger.error(`Engine health check failed on ${entry.ipAddress}:${entry.port}`, err);
     entry.properties.healthy = false;
   }
