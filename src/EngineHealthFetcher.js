@@ -1,4 +1,4 @@
-const http = require('http');
+const defaultHttp = require('http');
 const logger = require('./logger/Logger').get();
 
 /**
@@ -9,8 +9,8 @@ class EngineHealthFetcher {
    * Creates new {@link EngineHealthFetcher} object.
    * @param {object} http - HTTP client to use. Interface must comply with standard Node.js http module.
    */
-  constructor(_http) {
-    this.http = _http || http;
+  constructor(http) {
+    this.http = http || defaultHttp;
   }
 
   /**

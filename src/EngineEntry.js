@@ -45,8 +45,6 @@ class EngineEntry {
 
   /**
    * Starts periodical health checking.
-   * @param {EngineHealthFetcher} healthFetcher - The engine health fetcher to use.
-   * @param {number} ms - The interval in milliseconds between health checks.
    */
   startHealthChecks() {
     this.stopHealthChecks();
