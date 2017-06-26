@@ -61,12 +61,4 @@ describe('EngineEntry', () => {
       entry.stopHealthChecks();
     });
   });
-
-  describe('#satisfies()', () => {
-    it('???', async () => {
-    });
-
-    it('???', async () => {
-    });
-  });
 });
