@@ -1,33 +1,34 @@
-const http = require('http');
+const defaultHttp = require('http');
 const logger = require('./logger/Logger').get();
 
-const engineHealthEndpoint = '/healthcheck';
-
 /**
- * Class providing the ability to check health status of an engine.
+ * Class providing the ability to fetch health-check status from an engine.
  */
 class EngineHealthFetcher {
-  constructor(desktopMode) {
-    this.devMode = desktopMode;
-  }
   /**
-   * Fetches health for the provided engine.
-   * @param {object} engine - The engine to fetch health status from.
-   * @returns {Promise<object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
+   * Creates new {@link EngineHealthFetcher} object.
+   * @param {object} http - HTTP client to use. Interface must comply with standard Node.js http module.
    */
-  fetch(engine) {
-    return new Promise((resolve, reject) => {
-      const port = this.devMode ? engine.publicPort : engine.port;
-      const host = this.devMode ? 'localhost' : engine.ipAddress;
+  constructor(http) {
+    this.http = http || defaultHttp;
+  }
 
-      if (!host) { reject('No IP address defined'); }
+  /**
+   * Fetches health-check status from engine.
+   * @param {string} host - The host name of the engine.
+   * @param {string} port - The port of the engine.
+   * @param {string} path - The endpoint path to the engine health-check (e.g. '/healthcheck').
+   * @returns {Promise<object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
+   * @example
+   * // Fetch engine health from 'http://localhost:9076/healthcheck'
+   * await healthFetcher.fetch('localhost', 9076, '/healthcheck');
+   */
+  fetch(host, port, path) {
+    return new Promise((resolve, reject) => {
+      if (!host) { reject('No host defined'); }
       if (!port) { reject('No port defined'); }
 
-      http.get({
-        host,
-        port,
-        path: engineHealthEndpoint
-      }, (response) => {
+      this.http.get({ host, port, path }, (response) => {
         let body = '';
         response.on('data', (d) => {
           body += d;

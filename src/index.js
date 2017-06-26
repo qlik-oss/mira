@@ -47,12 +47,11 @@ process.on('unhandledRejection', onUnhandledError);
 router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
 
 router.get(`/${enginesEndpoint}`, async (ctx) => {
+  let properties;
   if (ctx.query.properties) {
-    const properties = JSON.parse(ctx.query.properties);
-    ctx.body = await engineDiscovery.query(properties);
-  } else {
-    ctx.body = await engineDiscovery.list();
+    properties = JSON.parse(ctx.query.properties);
   }
+  ctx.body = await engineDiscovery.list(properties);
 });
 
 app
