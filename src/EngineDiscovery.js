@@ -20,6 +20,9 @@ const EngineEntry = require('./EngineEntry');
  * @prop {string[]} addresses - Array of IP addresses.
  */
 
+const DISCOVERY_REFRESH_RATE_MS = 1000;
+const HEALTH_REFRESH_RATE_MS = 5000;
+
 /**
  * Class providing engine discovery operations such as to list available engine instances and
  * query for engine instances with certain properties.
@@ -33,8 +36,8 @@ class EngineDiscovery {
     this.DockerClient = DockerClient;
     this.engineList = new EngineList();
 
-    // Temporary refresh
-    setInterval(() => this.refresh(), 1000);
+    // Start discovery!
+    this.refresh();
   }
 
   /**
@@ -43,12 +46,15 @@ class EngineDiscovery {
    */
   async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
+    const keys = engines.map(engine => engine.key);
+    this.engineList.delete(this.engineList.difference(keys));
     engines.forEach((engine) => {
       if (!this.engineList.has(engine.key)) {
-        const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port);
+        const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
         this.engineList.add(engine.key, engineEntry);
       }
     });
+    setTimeout(this.refresh.bind(this), DISCOVERY_REFRESH_RATE_MS);
   }
 
   async list() {
