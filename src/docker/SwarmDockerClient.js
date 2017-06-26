@@ -55,7 +55,6 @@ class SwarmDockerClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
-    // const serviceMap = await getServiceMap();
     const tasks = await getTasks();
     const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
     const engineInfoEntries = engineTasks.map((task) => {

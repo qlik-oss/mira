@@ -1,24 +1,31 @@
 /**
+ * Helper function to {@link JSONUtils#flatten}, taking a prefix parameter that determines
+ * the prefix that shall be appended to the front flattened keys.
+ */
+function flatten(object, prefix, output) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key in object) {
+    const value = object[key];
+    if (value instanceof Object && !Array.isArray(value)) {
+      flatten(value, `${key}.`, output);
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      output[prefix + key] = value;
+    }
+  }
+}
+
+/**
  * Class providing JSON manipulation utilities.
  */
 class JSONUtils {
   /**
-   * TODO
-   * @param {*} object - TODO
-   * @param {*} prefix - TODO
-   * @param {*} output - TODO
+   * Flattens a JSON object structure so that all keys are primitive values or arrays.
+   * @param {object} object - The object to flatten.
+   * @param {object} output - The output object to which the flattened keys are added.
    */
-  static flatten(object, prefix, output) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key in object) {
-      const value = object[key];
-      if (value instanceof Object && !Array.isArray(value)) {
-        JSONUtils.flatten(value, `${key}.`, output);
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        output[prefix + key] = value;
-      }
-    }
+  static flatten(object, output) {
+    flatten(object, '', output);
   }
 }
 

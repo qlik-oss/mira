@@ -14,8 +14,14 @@ class EngineHealthFetcher {
   }
 
   /**
-   * Fetchers health-check status from engine.
+   * Fetches health-check status from engine.
+   * @param {string} host - The host name of the engine.
+   * @param {string} port - The port of the engine.
+   * @param {string} path - The endpoint path to the engine health-check (e.g. '/healthcheck').
    * @returns {Promise<object>} Promise to engine health status as JSON. Rejected if failing to retrieve engine health.
+   * @example
+   * // Fetch engine health from 'http://localhost:9076/healthcheck'
+   * await healthFetcher.fetch('localhost', 9076, '/healthcheck');
    */
   fetch(host, port, path) {
     return new Promise((resolve, reject) => {

@@ -9,7 +9,7 @@ async function checkHealth(entry, healthFetcher, ms) {
   /* eslint-disable no-param-reassign */
   try {
     const health = await healthFetcher.fetch(entry.ipAddress, entry.port, '/healthcheck');
-    JSONUtils.flatten(health, '', entry.properties);
+    JSONUtils.flatten(health, entry.properties);
     entry.properties.healthy = true;
   } catch (err) {
     logger.error(`Engine health check failed on ${entry.ipAddress}:${entry.port}`, err);
@@ -24,16 +24,19 @@ async function checkHealth(entry, healthFetcher, ms) {
  * @prop {object} properties - Properties of the engine instance.
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
+ * @prop {number} refreshRate - The health check refresh rate in milliseconds.
+ * @prop {EngineHealthFetcher} healthFetcher - The health fetcher to use. Optional and mainly used for testing;
+ *                                             if not supplied, a default implementation will be used.
  */
 class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
-   * @param {*} properties
-   * @param {*} ipAddress
-   * @param {*} port
-   * @param {*} refreshRate - refresh rate in milliseconds.
-   * @param {*} healthFetcher - The health fetcher to use. Optional and mainly used for testing;
-   *                            if not supplied, a default health checker will be used.
+   * @param {object} properties - Properties of the engine instance.
+   * @param {string} ipAddress - The IP address of the engine.
+   * @param {number} port - The port of the engine.
+   * @param {number} refreshRate - The health check refresh rate in milliseconds.
+   * @param {EngineHealthFetcher} healthFetcher - The helth fetcher to use. Optional and mainly used for testing;
+   *                                              if not supplied, a default implementation will be used.
    */
   constructor(properties, ipAddress, port, refreshRate, healthFetcher) {
     this.properties = properties;
