@@ -1,5 +1,5 @@
 const Config = require('./Config');
-const EngineList = require('./EngineList');
+const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
 
 /**
@@ -31,7 +31,7 @@ class EngineDiscovery {
    */
   constructor(DockerClient) {
     this.DockerClient = DockerClient;
-    this.engineList = new EngineList();
+    this.engineMap = new EngineMap();
 
     // Start discovery!
     this.refresh();
@@ -44,11 +44,11 @@ class EngineDiscovery {
   async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const keys = engines.map(engine => engine.key);
-    this.engineList.delete(this.engineList.difference(keys));
+    this.engineMap.delete(this.engineMap.difference(keys));
     engines.forEach((engine) => {
-      if (!this.engineList.has(engine.key)) {
+      if (!this.engineMap.has(engine.key)) {
         const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
-        this.engineList.add(engine.key, engineEntry);
+        this.engineMap.add(engine.key, engineEntry);
       }
     });
     setTimeout(this.refresh.bind(this), DISCOVERY_REFRESH_RATE_MS);
@@ -63,9 +63,9 @@ class EngineDiscovery {
     let engines;
 
     if (!properties) {
-      engines = this.engineList.all();
+      engines = this.engineMap.all();
     } else {
-      engines = this.engineList.filter(properties);
+      engines = this.engineMap.filter(properties);
     }
 
     return engines.map(engine => ({
