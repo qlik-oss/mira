@@ -1,4 +1,3 @@
-// const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 const EngineList = require('./EngineList');
 const EngineEntry = require('./EngineEntry');

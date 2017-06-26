@@ -31,46 +31,6 @@ function getIpAddress(task) {
   return undefined;
 }
 
-// function getNetworks(task) {
-//   const networks = [];
-//   if (task.NetworksAttachments) {
-//     // eslint-disable-next-line no-restricted-syntax
-//     for (const network of task.NetworksAttachments) {
-//       networks.push({
-//         name: network.Network.Spec.Name,
-//         addresses: network.Addresses
-//       });
-//     }
-//   } else {
-//     logger.warn('Encountered task with no network attachments (when getting networks)', task);
-//   }
-//   return networks;
-// }
-
-// function getPublicPort(serviceSpec) {
-//   if (serviceSpec.Endpoint.Ports) { // Might not be available during startup
-//     return serviceSpec.Endpoint.Ports[0].PublishedPort;
-//   }
-//   return undefined;
-// }
-
-// function getServiceMap() {
-//   return new Promise((resolve, reject) => {
-//     docker.listServices({}, (err, services) => {
-//       if (!err) {
-//         const serviceMap = {};
-//         for (let i = 0; i < services.length; i += 1) {
-//           serviceMap[services[i].ID] = services[i];
-//         }
-//         resolve(serviceMap);
-//       } else {
-//         logger.error('Error when listing Docker Swarm services', err);
-//         reject(err);
-//       }
-//     });
-//   });
-// }
-
 function getTasks() {
   return new Promise((resolve, reject) => {
     docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
@@ -103,9 +63,6 @@ class SwarmDockerClient {
       const ipAddress = getIpAddress(task);
       const port = Config.enginePort;
       const key = `${ipAddress}:${port}`;
-      // const serviceSpec = serviceMap[task.ServiceID];
-      // const publicPort = getPublicPort(serviceSpec);
-      // const networks = getNetworks(task);
       return { key, properties, ipAddress, port };
     });
     return engineInfoEntries;
