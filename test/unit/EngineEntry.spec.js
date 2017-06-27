@@ -12,7 +12,6 @@ describe('EngineEntry', () => {
     healthFetcher = new EngineHealthFetcher({ get: () => { } });
     fetchStub = sinon.stub(healthFetcher, 'fetch');
     entry = new EngineEntry({ a: 'foo', b: 'bar' }, '10.10.10.10', 9999, 10, healthFetcher);
-    entry.logger = { error: () => 0 };
   });
 
   describe('#constructor()', () => {
