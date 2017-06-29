@@ -3,8 +3,8 @@
 # Top-most EditorConfig file
 root = true
 
-# JavaScript source files
-[*.js]
+# Source files
+[*]
 charset = utf-8
 indent_style = space
 indent_size = 2
