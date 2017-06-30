@@ -26,10 +26,7 @@ class Config {
       Config.miraPort = defaultMiraPort;
     }
 
-    Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME;
-    if (!Config.engineImageName) {
-      Config.engineImageName = defaultQixEngineImageName;
-    }
+    Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
 
     Config.enginePort = parseInt(process.env.QIX_ENGINE_PORT, 10);
     if (!Config.enginePort || isNaN(Config.enginePort)) {
