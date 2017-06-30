@@ -35,7 +35,7 @@ class EngineHealthFetcher {
         });
         response.on('error', (d) => {
           response.resume();
-          logger.error(`Engine health check got HTTP error response: ${d}`);
+          logger.debug(`Engine health check got HTTP error response: ${d}`);
           reject(d);
         });
         response.on('end', () => {
@@ -46,8 +46,8 @@ class EngineHealthFetcher {
           }
         });
       }).on('error', (d) => {
-        logger.error(`Engine health check got HTTP error response: ${d}`);
-        reject('No connection to engine');
+        logger.debug(`Engine health check got HTTP error response: ${d}`);
+        reject(d);
       });
     });
   }
