@@ -1,5 +1,4 @@
 const defaultHttp = require('http');
-const logger = require('./logger/Logger').get();
 
 /**
  * Class providing the ability to fetch health-check status from an engine.
@@ -35,7 +34,6 @@ class EngineHealthFetcher {
         });
         response.on('error', (d) => {
           response.resume();
-          logger.error(`Engine health check got HTTP error response: ${d}`);
           reject(d);
         });
         response.on('end', () => {
@@ -46,8 +44,7 @@ class EngineHealthFetcher {
           }
         });
       }).on('error', (d) => {
-        logger.error(`Engine health check got HTTP error response: ${d}`);
-        reject('No connection to engine');
+        reject(d);
       });
     });
   }
