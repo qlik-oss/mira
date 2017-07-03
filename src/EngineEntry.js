@@ -4,19 +4,23 @@ const JSONUtils = require('./utils/JSONUtils');
 
 /**
  * Helper for periodical health checking.
+ * An {@link EngineEntry} object must be bound as this before calling.
  */
-async function checkHealth(entry, healthFetcher, ms) {
-  /* eslint-disable no-param-reassign */
+async function checkHealth() {
   try {
-    const health = await healthFetcher.fetch(entry.ipAddress, entry.port, '/healthcheck');
-    JSONUtils.flatten(health, entry.properties);
-    entry.properties.healthy = true;
+    const health = await this.healthFetcher.fetch(this.ipAddress, this.port, '/healthcheck');
+    JSONUtils.flatten(health, this.properties);
+    this.properties.healthy = true;
   } catch (err) {
-    logger.warn(`Engine health check failed on ${entry.ipAddress}:${entry.port}`);
-    entry.properties.healthy = false;
+    logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
+    this.properties.healthy = false;
   }
-  entry.fetcherTimeOutId = setTimeout(checkHealth, ms, entry, healthFetcher, ms);
-  /* eslint-enable no-param-reassign */
+  this.fetcherTimeOutId = setTimeout(
+    checkHealth.bind(this),
+    this.refreshRate,
+    this,
+    this.healthFetcher,
+    this.refreshRate);
 }
 
 /**
@@ -25,8 +29,9 @@ async function checkHealth(entry, healthFetcher, ms) {
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
  * @prop {number} refreshRate - The health check refresh rate in milliseconds.
- * @prop {EngineHealthFetcher} healthFetcher - The health fetcher to use. Optional and mainly used for testing;
- *                                             if not supplied, a default implementation will be used.
+ * @prop {EngineHealthFetcher} healthFetcher - The health fetcher to use.
+ *   Optional and mainly used for testing; if not supplied, a default
+ *   implementation will be used.
  */
 class EngineEntry {
   /**
@@ -35,8 +40,9 @@ class EngineEntry {
    * @param {string} ipAddress - The IP address of the engine.
    * @param {number} port - The port of the engine.
    * @param {number} refreshRate - The health check refresh rate in milliseconds.
-   * @param {EngineHealthFetcher} healthFetcher - The helth fetcher to use. Optional and mainly used for testing;
-   *                                              if not supplied, a default implementation will be used.
+   * @param {EngineHealthFetcher} healthFetcher - The helth fetcher to use.
+   *   Optional and mainly used for testing; if not supplied, a default
+   *   implementation will be used.
    */
   constructor(properties, ipAddress, port, refreshRate, healthFetcher) {
     this.properties = properties;
@@ -51,7 +57,7 @@ class EngineEntry {
    */
   startHealthChecks() {
     this.stopHealthChecks();
-    checkHealth(this, this.healthFetcher, this.refreshRate);
+    checkHealth.call(this);
   }
 
   /**
@@ -68,37 +74,38 @@ class EngineEntry {
    * @returns {boolean} True, if the constraints are satisfied.
    */
   satisfies(constraints) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key in constraints) {
-      const expected = constraints[key];
-      const actual = this.properties[key];
+    let retval = true;
+    const keys = Object.keys(constraints);
 
-      if (typeof actual === 'undefined') {
-        return false;
-      } else if (Array.isArray(expected)) {
-        if (expected.indexOf(actual) === -1) {
-          return false;
+    keys.forEach((key) => {
+      if (retval) {
+        const expected = constraints[key];
+        const actual = this.properties[key];
+
+        if (typeof actual === 'undefined') {
+          retval = false;
+        } else if (Array.isArray(expected)) {
+          retval = (expected.indexOf(actual) !== -1);
+        } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
+          retval = expected.toString().toLowerCase() === actual.toString().toLowerCase();
+        } else if ((typeof expected === 'string')
+          && (expected.indexOf('>') === 0)
+          && !isNaN(expected.substring(1))) {
+          const expectedNumber = expected.substring(1);
+          retval = (actual > expectedNumber);
+        } else if (typeof expected === 'string' &&
+          expected.indexOf('<') === 0 &&
+          !isNaN(expected.substring(1))) {
+          const expectedNumber = expected.substring(1);
+          retval = actual < expectedNumber;
+          // eslint-disable-next-line eqeqeq
+        } else if (actual != expected) {
+          retval = false;
         }
-      } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
-        return expected.toString().toLowerCase() === actual.toString().toLowerCase();
-      } else if (typeof expected === 'string' &&
-                 expected.indexOf('>') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual <= expectedNumber) {
-          return false;
-        }
-      } else if (typeof expected === 'string' &&
-                 expected.indexOf('<') === 0 && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        if (actual >= expectedNumber) {
-          return false;
-        }
-        // eslint-disable-next-line eqeqeq
-      } else if (actual != expected) {
-        return false;
       }
-    }
-    return true;
+    });
+
+    return retval;
   }
 }
 

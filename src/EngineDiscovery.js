@@ -47,7 +47,8 @@ class EngineDiscovery {
     this.engineMap.delete(this.engineMap.difference(keys));
     engines.forEach((engine) => {
       if (!this.engineMap.has(engine.key)) {
-        const engineEntry = new EngineEntry(engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
+        const engineEntry = new EngineEntry(
+          engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
         this.engineMap.add(engine.key, engineEntry);
       }
     });
@@ -71,7 +72,7 @@ class EngineDiscovery {
     return engines.map(engine => ({
       properties: engine.properties,
       ipAddress: engine.ipAddress,
-      port: engine.port
+      port: engine.port,
     }));
   }
 }

@@ -17,9 +17,9 @@ class Logger {
             json: true,
             stringify: true,
             level: process.env.LOG_LEVEL || 'silly',
-            humanReadableUnhandledException: true
-          })
-        ]
+            humanReadableUnhandledException: true,
+          }),
+        ],
       });
     }
     return Logger.logger;

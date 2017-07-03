@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-
 const nock = require('nock');
 const KubernetesClient = require('../../../src/docker/KubernetesClient');
 const specData = require('./KubernetesClient.spec.data.json');
@@ -15,7 +13,7 @@ describe('KubernetesClient', () => {
       const rawEngines = engines.map(engine => ({
         properties: engine.properties,
         ipAddress: engine.ipAddress,
-        port: engine.port
+        port: engine.port,
       }));
       expect(rawEngines).to.deep.equal(specData.miraOutput);
     });

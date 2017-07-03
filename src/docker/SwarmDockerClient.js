@@ -16,18 +16,22 @@ function getImageNameOfTask(task) {
 }
 
 function getIpAddress(task) {
+  let ipAddr;
+
   if (task.NetworksAttachments) { // This might not be available during startup of a service
-    // eslint-disable-next-line no-restricted-syntax
-    for (const network of task.NetworksAttachments) {
-      if (!network.Network.Spec.Ingress) {
+    task.NetworksAttachments.forEach((network) => {
+      if (!ipAddr && !network.Network.Spec.Ingress) {
         const fullIpAddr = network.Addresses[0];
         const slashPos = fullIpAddr.indexOf('/');
-        const ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
-        return ipAddr;
+        ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
       }
-    }
+    });
   }
-  logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
+
+  if (!ipAddr) {
+    logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
+  }
+
   return undefined;
 }
 
@@ -51,7 +55,8 @@ function getTasks() {
 class SwarmDockerClient {
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
+   * @param {string} engineImageName - The Engine Docker image name used to determine if a
+   *   container is an engine instance.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {

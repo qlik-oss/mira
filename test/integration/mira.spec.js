@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-expressions,no-console,import/no-extraneous-dependencies,func-names */
-
+/* e slint-disable func-names */
 
 const dockerSetup = require('./docker-setup');
-const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
 
@@ -11,7 +9,7 @@ const debugMode = true;
 process.env.DEV_MODE = true; // Force config dev mode to be true
 
 if (debugMode) {
-// eslint-disable-next-line global-require
+  // eslint-disable-next-line global-require
   require('../../src/index');
 } else {
   console.log('Expecting mira to be running inside docker');
@@ -20,13 +18,13 @@ if (debugMode) {
 chai.use(chaiHttp);
 chai.use(chaiSubset);
 describe('mira', () => {
-  before(async function () {
+  before(async () => {
     this.timeout(10000);
     await dockerSetup.removeService();
     await dockerSetup.awaitServiceDown();
   });
 
-  after(async function () {
+  after(async () => {
     this.timeout(10000);
     await dockerSetup.removeService();
   });
@@ -40,7 +38,7 @@ describe('mira', () => {
   });
 
   describe('Start an engine and immediately try to list it', () => {
-    before(async function () {
+    before(async () => {
       this.timeout(10000);
       return dockerSetup.startService();
     });
@@ -55,7 +53,7 @@ describe('mira', () => {
   });
 
   describe('Await the engine to actually be started', () => {
-    before(async function () {
+    before(async () => {
       this.timeout(10000);
       return dockerSetup.awaitService();
     });
@@ -72,7 +70,7 @@ describe('mira', () => {
   });
 
   describe('Stop the engine again', () => {
-    before(async function () {
+    before(async () => {
       this.timeout(10000);
       await dockerSetup.removeService();
       return dockerSetup.awaitServiceDown();

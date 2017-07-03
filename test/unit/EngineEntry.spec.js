@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 const EngineEntry = require('../../src/EngineEntry');
 const EngineHealthFetcher = require('../../src/EngineHealthFetcher');
 const sleep = require('../test-utils/sleep');
@@ -10,7 +9,7 @@ describe('EngineEntry', () => {
 
   beforeEach(() => {
     healthFetcher = new EngineHealthFetcher({ get: () => { } });
-    fetchStub = sinon.stub(healthFetcher, 'fetch');
+    fetchStub = sinon.stub(healthFetcher, 'fetch', async () => Promise.resolve({}));
     entry = new EngineEntry({ a: 'foo', b: 'bar' }, '10.10.10.10', 9999, 10, healthFetcher);
   });
 
@@ -29,6 +28,7 @@ describe('EngineEntry', () => {
       await sleep(30);  // Should make room for at least two time-outs.
       expect(fetchStub.callCount >= 2).to.be.true;
       expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/healthcheck');
+      console.log(entry.properties.healthy);
       expect(entry.properties.healthy).to.be.true;
     });
 
