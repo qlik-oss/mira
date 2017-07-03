@@ -60,21 +60,6 @@ class KubernetesClient {
       });
     });
 
-    // for (const endpoint of endpointsData.items) {
-    //   for (const subset of endpoint.subsets) {
-    //     const qixPorts = subset.ports.filter(item => item.name === 'qix');
-    //     if (qixPorts.length > 0) { // The service has a qix port exposed
-    //       const port = qixPorts[0].port;
-    //       for (const address of subset.addresses) {
-    //         const properties = endpoint.metadata.labels;
-    //         const ipAddress = address.ip;
-    //         const key = `${ipAddress}:${port}`;
-    //         result.push({ key, properties, ipAddress, port });
-    //       }
-    //     }
-    //   }
-    // }
-
     return result;
   }
 }

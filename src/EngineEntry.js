@@ -57,7 +57,7 @@ class EngineEntry {
    */
   startHealthChecks() {
     this.stopHealthChecks();
-    checkHealth.bind(this)();
+    checkHealth.call(this);
   }
 
   /**
