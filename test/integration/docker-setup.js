@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const Docker = require('dockerode');
 const request = require('superagent');
 
@@ -12,29 +10,29 @@ const engineServiceSpec = {
     ContainerSpec: {
       Image: 'qlik/engine',
       Labels: {
-        'qlik.engine.nodeport': '49076'
-      }
+        'qlik.engine.nodeport': '49076',
+      },
     },
-    Networks: [{ Target: 'mira-integration-test' }]
+    Networks: [{ Target: 'mira-integration-test' }],
   },
   EndpointSpec: {
     Ports: [
       {
         Protocol: 'tcp',
         PublishedPort: 49076,
-        TargetPort: 9076
-      }
-    ]
+        TargetPort: 9076,
+      },
+    ],
   },
   Labels: {
-    'qlik.engine.nodeport': '49076'
-  }
+    'qlik.engine.nodeport': '49076',
+  },
 };
 
 async function removeService() {
   const allServices = await docker.listServices();
   const existingServices = allServices.filter(existingServiceSpec =>
-    existingServiceSpec.Spec.Name === 'mira-integration-test-engine'
+    existingServiceSpec.Spec.Name === 'mira-integration-test-engine',
   );
 
   if (existingServices.length > 0) {
@@ -104,5 +102,5 @@ module.exports = {
   startService,
   awaitService,
   removeService,
-  awaitServiceDown
+  awaitServiceDown,
 };

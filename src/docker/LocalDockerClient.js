@@ -31,14 +31,17 @@ function getPort(container) {
 class LocalDockerClient {
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a container is an engine instance.
+   * @param {string} engineImageName - The Engine Docker image name used to determine if a
+   *   container is an engine instance.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
     return new Promise((resolve, reject) => {
       docker.listContainers((err, containers) => {
         if (!err) {
-          const engineContainers = containers.filter(container => container.Image.indexOf(engineImageName) === 0 && container.Names.length > 0);
+          const engineContainers = containers.filter(
+            container => (container.Image.indexOf(engineImageName) === 0)
+              && (container.Names.length > 0));
           const engineInfoEntries = engineContainers.map((container) => {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);

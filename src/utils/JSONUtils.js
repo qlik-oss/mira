@@ -1,12 +1,13 @@
-/* eslint no-param-reassign: [ "error", { "props": true, "ignorePropertyModificationsFor": ["output"] }] */
+/* eslint no-param-reassign:
+ [ "error", { "props": true, "ignorePropertyModificationsFor": ["output"] }]
+ */
 
 /**
  * Helper function to {@link JSONUtils#flatten}, taking a prefix parameter that determines
  * the prefix that shall be appended to the flattened keys.
  */
 function flattenWithPrefix(object, prefix, output) {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key in object) {
+  Object.keys(object).forEach((key) => {
     if (!(key in output)) {
       const value = object[key];
       if (value instanceof Object && !Array.isArray(value)) {
@@ -15,7 +16,7 @@ function flattenWithPrefix(object, prefix, output) {
         output[prefix + key] = value;
       }
     }
-  }
+  });
 }
 
 /**

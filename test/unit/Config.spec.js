@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 const Config = require('../../src/Config');
 
 describe('Config', () => {

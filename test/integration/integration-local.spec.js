@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions,import/no-extraneous-dependencies */
-
-const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
 
@@ -9,6 +6,7 @@ const miraEndpoint = `http://${testHost}:9100`;
 
 chai.use(chaiHttp);
 chai.use(chaiSubset);
+
 describe('GET /engines', () => {
   it('should return two engines', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');

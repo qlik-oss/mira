@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 const JSONUtils = require('../../../src/utils/JSONUtils');
 
 describe('JSONUtils', () => {
@@ -8,7 +7,7 @@ describe('JSONUtils', () => {
         a: 123,
         b: 'foo',
         c: ['bar', 'foobar', 123],
-        d: { k1: 111, k2: 222 }
+        d: { k1: 111, k2: 222 },
       };
       const flattened = {};
       JSONUtils.flatten(toFlatten, flattened);
@@ -17,13 +16,13 @@ describe('JSONUtils', () => {
         b: 'foo',
         c: ['bar', 'foobar', 123],
         'd.k1': 111,
-        'd.k2': 222
+        'd.k2': 222,
       });
     });
 
     it('should not flatten inside arrays', () => {
       const toFlatten = {
-        a: [1, { aa: 'foo', bb: { k1: 111, k2: 222 } }]
+        a: [1, { aa: 'foo', bb: { k1: 111, k2: 222 } }],
       };
       const flattened = {};
       JSONUtils.flatten(toFlatten, flattened);
@@ -37,14 +36,14 @@ describe('JSONUtils', () => {
         exists2: 123 };
       const flattened = {
         exists1: 'foobar',
-        exists2: 'cubacola'
+        exists2: 'cubacola',
       };
       JSONUtils.flatten(toFlatten, flattened);
       expect(flattened).to.eql({
         'a.b': 1,
         'a.c': 2,
         exists1: 'foobar',
-        exists2: 'cubacola'
+        exists2: 'cubacola',
       });
     });
   });

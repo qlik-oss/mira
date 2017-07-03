@@ -6,7 +6,8 @@ const KubernetesClient = require('./KubernetesClient');
 /**
  * Docker client class definition.
  * @typedef {object} DockerClient
- * @prop {function} listEngines - Lists QIX Engine instances as an array of {@link EngineEntry} objects.
+ * @prop {function} listEngines - Lists QIX Engine instances as an array of
+ *   {@link EngineEntry} objects.
  */
 
 /**

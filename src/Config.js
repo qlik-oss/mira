@@ -16,7 +16,8 @@ const defaultQixEngineImageName = 'qlikea/engine';
 class Config {
   /**
    * Initializes the configuration.
-   * @param {object} commandLineOptions - Options passed as command line arguments when starting the service.
+   * @param {object} commandLineOptions - Options passed as command line arguments when starting
+   *   the service.
    */
   static init(commandLineOptions) {
     const options = commandLineOptions || {};
@@ -40,7 +41,8 @@ class Config {
     }
 
     /**
-     * If true the process is expected to run outside of docker communicating with engines public ports.
+     * If true the process is expected to run outside of docker communicating with engines
+     * public ports.
      * @type {boolean}
      */
     Config.devMode = process.env.DEV_MODE;

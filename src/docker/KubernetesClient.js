@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 const http = require('http');
 const logger = require('../logger/Logger').get();
 
@@ -9,7 +8,7 @@ function listEndpoints() {
     http.get({
       host,
       port,
-      path: '/api/v1/endpoints'
+      path: '/api/v1/endpoints',
     }, (response) => {
       let body = '';
       response.on('data', (d) => {
@@ -46,20 +45,36 @@ class KubernetesClient {
     const endpointsData = await listEndpoints();
     const result = [];
 
-    for (const endpoint of endpointsData.items) {
-      for (const subset of endpoint.subsets) {
+    endpointsData.items.forEach((endpoint) => {
+      endpoint.subsets.forEach((subset) => {
         const qixPorts = subset.ports.filter(item => item.name === 'qix');
         if (qixPorts.length > 0) { // The service has a qix port exposed
           const port = qixPorts[0].port;
-          for (const address of subset.addresses) {
+          subset.addresses.forEach((address) => {
             const properties = endpoint.metadata.labels;
             const ipAddress = address.ip;
             const key = `${ipAddress}:${port}`;
             result.push({ key, properties, ipAddress, port });
-          }
+          });
         }
-      }
-    }
+      });
+    });
+
+    // for (const endpoint of endpointsData.items) {
+    //   for (const subset of endpoint.subsets) {
+    //     const qixPorts = subset.ports.filter(item => item.name === 'qix');
+    //     if (qixPorts.length > 0) { // The service has a qix port exposed
+    //       const port = qixPorts[0].port;
+    //       for (const address of subset.addresses) {
+    //         const properties = endpoint.metadata.labels;
+    //         const ipAddress = address.ip;
+    //         const key = `${ipAddress}:${port}`;
+    //         result.push({ key, properties, ipAddress, port });
+    //       }
+    //     }
+    //   }
+    // }
+
     return result;
   }
 }
