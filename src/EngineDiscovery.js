@@ -5,9 +5,14 @@ const EngineEntry = require('./EngineEntry');
 /**
  * Engine container return specification.
  * @typedef {object} EngineReturnSpec
- * @prop {object} properties - Properties of the engine container.
  * @prop {string} ipAddress - IP address on which the engine container can be reached.
  * @prop {number} port - Port number on which the engine container can be reached.
+ * @prop {string} started
+ * @prop {string} version
+ * @prop {string} memCommitted
+ * @prop {string} memAllocated
+ * @prop {string} memFree
+ * @prop {string} cpuTotal
  */
 
 /**
@@ -48,7 +53,7 @@ class EngineDiscovery {
     engines.forEach((engine) => {
       if (!this.engineMap.has(engine.key)) {
         const engineEntry = new EngineEntry(
-          engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
+          engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
         this.engineMap.add(engine.key, engineEntry);
       }
     });
@@ -73,6 +78,25 @@ class EngineDiscovery {
       properties: engine.properties,
       ipAddress: engine.ipAddress,
       port: engine.port,
+    }));
+  }
+  
+  /**
+   * Lists available engine instances.
+   * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
+   */
+  async list() {
+    let engines = this.engineMap.all();
+
+    return engines.map(engine => ({
+      ipAddress: engine.ipAddress,
+      port: engine.port,
+      started: engine.started,
+      version: engine.version,
+      memCommitted: engine.memCommited,
+      memAllocated: engine.memAllocated,
+      memFree: engine.memFree,
+      cpuTotal: engine.cpuTotal,
     }));
   }
 }

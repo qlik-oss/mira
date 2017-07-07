@@ -11,9 +11,13 @@ function flattenWithPrefix(object, prefix, output) {
     if (!(key in output)) {
       const value = object[key];
       if (value instanceof Object && !Array.isArray(value)) {
-        flattenWithPrefix(value, `${key}.`, output);
+        flattenWithPrefix(value, key, output);
       } else {
-        output[prefix + key] = value;
+        if (prefix) {
+          output[prefix + key.toCamelCase()] = value;
+        } else {
+          output[key] = value;
+        }
       }
     }
   });
@@ -33,6 +37,10 @@ class JSONUtils {
   static flatten(object, output) {
     flattenWithPrefix(object, '', output);
   }
+}
+
+String.prototype.toCamelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 module.exports = JSONUtils;

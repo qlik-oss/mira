@@ -5,11 +5,13 @@ const commandLineArgs = require('command-line-args');
 const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
 const path = require('path');
+const graphqlHTTP = require('koa-graphql');
 const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 const EngineDiscovery = require('./EngineDiscovery');
 const getDockerClient = require('./docker/getDockerClient');
 const EngineHealthFetcher = require('./EngineHealthFetcher');
+const schema = require('./schema');
 
 const apiVersion = 'v1';
 const healthEndpoint = 'health';
@@ -53,6 +55,11 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
   }
   ctx.body = await engineDiscovery.list(properties);
 });
+
+router.all('/graphql', graphqlHTTP({
+  schema: schema,
+  context: engineDiscovery,
+}));
 
 app
   .use(swagger2koa.ui(document, '/openapi'))

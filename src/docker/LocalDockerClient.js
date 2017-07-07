@@ -43,11 +43,10 @@ class LocalDockerClient {
             container => (container.Image.indexOf(engineImageName) === 0)
               && (container.Names.length > 0));
           const engineInfoEntries = engineContainers.map((container) => {
-            const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = getPort(container);
             const key = `${ipAddress}:${port}`;
-            return { key, properties, ipAddress, port };
+            return { key, ipAddress, port };
           });
           resolve(engineInfoEntries);
         } else {
