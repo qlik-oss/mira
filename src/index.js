@@ -57,7 +57,7 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
 });
 
 router.all('/graphql', graphqlHTTP({
-  schema: schema,
+  schema,
   context: engineDiscovery,
 }));
 

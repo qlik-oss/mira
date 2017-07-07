@@ -5,9 +5,9 @@ const logger = require('../logger/Logger').get();
 const localhostIp = '127.0.0.1';
 const docker = new Docker();
 
-function getProperties(container) {
-  return Object.assign({}, container.Labels);
-}
+// function getProperties(container) {
+//   return Object.assign({}, container.Labels);
+// }
 
 function getIpAddress(container) {
   if (containerized()) {

@@ -7,6 +7,41 @@ const {
   GraphQLBoolean,
   GraphQLFloat } = require('graphql');
 
+function satisfies(entry, constraints) {
+  let retval = true;
+  const keys = Object.keys(constraints);
+
+  keys.forEach((key) => {
+    if (retval) {
+      const expected = constraints[key];
+      const actual = entry[key];
+
+      if (typeof actual === 'undefined') {
+        retval = false;
+      } else if (Array.isArray(expected)) {
+        retval = (expected.indexOf(actual) !== -1);
+      } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
+        retval = expected.toString().toLowerCase() === actual.toString().toLowerCase();
+      } else if ((typeof expected === 'string')
+        && (expected.indexOf('>') === 0)
+        && !isNaN(expected.substring(1))) {
+        const expectedNumber = expected.substring(1);
+        retval = (actual > expectedNumber);
+      } else if (typeof expected === 'string' &&
+        expected.indexOf('<') === 0 &&
+        !isNaN(expected.substring(1))) {
+        const expectedNumber = expected.substring(1);
+        retval = actual < expectedNumber;
+        // eslint-disable-next-line eqeqeq
+      } else if (actual != expected) {
+        retval = false;
+      }
+    }
+  });
+  return retval;
+}
+
+
 const QixEngineType = new GraphQLObjectType({
   name: 'QixEngine',
   description: 'A Qix Engine',
@@ -47,7 +82,7 @@ const QixEngineType = new GraphQLObjectType({
       type: GraphQLFloat,
       description: 'Percentage of the CPU used by the engine, averaged over a time period of 30 seconds',
     },
-  })
+  }),
 });
 
 const queryType = new GraphQLObjectType({
@@ -68,9 +103,6 @@ const queryType = new GraphQLObjectType({
         healthy: {
           type: GraphQLBoolean,
         },
-        port: {
-          type: GraphQLInt,
-        },
         started: {
           type: GraphQLString,
         },
@@ -87,50 +119,16 @@ const queryType = new GraphQLObjectType({
           type: GraphQLString,
         },
       },
-      //engineDiscovery is passed as context obj.
+      // engineDiscovery is passed as context obj.
       resolve: async (parentValue, args, ctx) => {
         const engines = await ctx.list();
         return engines.filter(engine => satisfies(engine, args));
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
-function satisfies(entry, constraints) {
-  let retval = true;
-  const keys = Object.keys(constraints);
-
-  keys.forEach((key) => {
-    if (retval) {
-      const expected = constraints[key];
-      const actual = entry[key];
-
-      if (typeof actual === 'undefined') {
-        retval = false;
-      } else if (Array.isArray(expected)) {
-        retval = (expected.indexOf(actual) !== -1);
-      } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
-        retval = expected.toString().toLowerCase() === actual.toString().toLowerCase();
-      } else if ((typeof expected === 'string')
-        && (expected.indexOf('>') === 0)
-        && !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        retval = (actual > expectedNumber);
-      } else if (typeof expected === 'string' &&
-        expected.indexOf('<') === 0 &&
-        !isNaN(expected.substring(1))) {
-        const expectedNumber = expected.substring(1);
-        retval = actual < expectedNumber;
-        // eslint-disable-next-line eqeqeq
-      } else if (actual != expected) {
-        retval = false;
-      }
-    }
-  });
-  return retval;
-}
-
 module.exports = new GraphQLSchema({
-  query: queryType
+  query: queryType,
 });
 

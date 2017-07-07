@@ -2,6 +2,8 @@
  [ "error", { "props": true, "ignorePropertyModificationsFor": ["output"] }]
  */
 
+function toCamelCase(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
+
 /**
  * Helper function to {@link JSONUtils#flatten}, taking a prefix parameter that determines
  * the prefix that shall be appended to the flattened keys.
@@ -12,12 +14,10 @@ function flattenWithPrefix(object, prefix, output) {
       const value = object[key];
       if (value instanceof Object && !Array.isArray(value)) {
         flattenWithPrefix(value, key, output);
+      } else if (prefix) {
+        output[prefix + toCamelCase(key)] = value;
       } else {
-        if (prefix) {
-          output[prefix + key.toCamelCase()] = value;
-        } else {
-          output[key] = value;
-        }
+        output[key] = value;
       }
     }
   });
@@ -37,10 +37,6 @@ class JSONUtils {
   static flatten(object, output) {
     flattenWithPrefix(object, '', output);
   }
-}
-
-String.prototype.toCamelCase = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 module.exports = JSONUtils;

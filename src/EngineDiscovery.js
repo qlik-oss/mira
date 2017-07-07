@@ -65,28 +65,28 @@ class EngineDiscovery {
    * @param {object} [properties] - Optional properties a returned engine must have.
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
-  async list(properties) {
-    let engines;
+  // async list(properties) {
+  //   let engines;
 
-    if (!properties) {
-      engines = this.engineMap.all();
-    } else {
-      engines = this.engineMap.filter(properties);
-    }
+  //   if (!properties) {
+  //     engines = this.engineMap.all();
+  //   } else {
+  //     engines = this.engineMap.filter(properties);
+  //   }
 
-    return engines.map(engine => ({
-      properties: engine.properties,
-      ipAddress: engine.ipAddress,
-      port: engine.port,
-    }));
-  }
-  
+  //   return engines.map(engine => ({
+  //     properties: engine.properties,
+  //     ipAddress: engine.ipAddress,
+  //     port: engine.port,
+  //   }));
+  // }
+
   /**
    * Lists available engine instances.
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
   async list() {
-    let engines = this.engineMap.all();
+    const engines = this.engineMap.all();
 
     return engines.map(engine => ({
       ipAddress: engine.ipAddress,
