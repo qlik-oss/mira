@@ -6,8 +6,6 @@ services:
     ports:
       - "9100:9100"
     command: --mode local
-    environment:
-      - QIX_ENGINE_IMAGE_NAME=qlikea/engine
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
