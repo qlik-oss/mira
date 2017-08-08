@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mira-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: mira
+    spec:
+      containers:
+      - name: mira
+        args: [ "--mode=kubernetes" ]
+        image: qlikea/mira:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9100
+      - name: kubectl
+        args: [ "proxy", "-p", "8001" ]
+        image: "gcr.io/google_containers/kubectl:v0.18.0-120-gaeb4ac55ad12b1-dirty"
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: dockerhub
