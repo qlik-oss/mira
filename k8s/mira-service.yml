@@ -6,7 +6,6 @@ spec:
   selector:
     service: mira
   ports:
-    - protocol: TCP
-      port: 9100
+    - port: 9100
       nodePort: 31000
   type: NodePort
