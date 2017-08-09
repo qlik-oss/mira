@@ -51,7 +51,7 @@ class KubernetesClient {
         if (qixPorts.length > 0) { // The service has a qix port exposed
           const port = qixPorts[0].port;
           subset.addresses.forEach((address) => {
-            const properties = endpoint.metadata.labels;
+            const properties = endpoint.metadata.labels || {};
             const ipAddress = address.ip;
             const key = `${ipAddress}:${port}`;
             result.push({ key, properties, ipAddress, port });
