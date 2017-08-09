@@ -66,9 +66,12 @@ $ docker stack rm mira-stack
 ```
 
 ### Kubernetes Mode
+
 In _kubernetes_ mode, Mira assumes that all engine instances are run as Kubernetes pods and that the engines are exposed as Kubernetes services with _named_ ports. _Kubernetes_ mode is set by providing the `--mode kubernetes` command line argument when starting the Mira pod.
 
-Since Mira needs to communicate with the Kubernetes API server, a `kubectl` proxy should be set up in the Kubernetes deployment. A convenient way to do this is to bubdle the `kubectl` proxy as a container in the same pod as the Mira container. In this way, Mira can reach the proxy on `localhost`.
+Since Mira needs to communicate with the Kubernetes API server, a `kubectl` proxy should be set up in the Kubernetes deployment. A convenient way to do this is to bundle the `kubectl` proxy as a container in the same pod as the Mira container. In this way, Mira can reach the proxy on `localhost`.
+
+In order to deploy Mira and QIX Engine instances to Kubernetes, it is assumed that a Kubernetes cluster exists and is configured properly. The quickest way to do this for development purposes is to use `minikube`. See the [Minikube Mini Tutorial](./doc/MINIKUBE_MINI_TUTORIAL.md) for a quick guide on how to set up a local cluster on your dev machine. After that it should be possible to successfully issue the deployment commands as follows.
 
 To start Mira in _kubernetes_ mode, the `kubectl` command line tool can be used. Preferably, a Kubernetes deployment YAML file is used; for example
 
@@ -76,7 +79,7 @@ To start Mira in _kubernetes_ mode, the `kubectl` command line tool can be used.
 $ kubectl apply -f mira-deployment.yml
 ```
 
-The file [mira-deployment.yml](./k8s/mira-deployment.yml) shows an example. Note how this deployment also bundles the `kubectl` proxy into the same pod. Since Kubernetes must be able to pull Docker images, the deployment file assumes that Kubernetes is configured with Docker Hub registry credentials in a secret named `dockerhub`. It is also assumed that the `kubectl` command line tool is configured to communicate to an existing Kubernetes cluster. A simple way to set up a local cluster on a dev machine is to use the `minikube` utility. See the [Minikube Mini Tutorial](./doc/MINIKUBE_MINI_TUTORIAL.md) for a quick guide on how to set up a local cluster on your dev machine using `minikube`.
+The file [mira-deployment.yml](./k8s/mira-deployment.yml) shows an example. Note how the deployment also bundles the `kubectl` proxy into the same pod. Since Kubernetes must be able to pull Docker images, the deployment file assumes that Kubernetes is configured with Docker Hub registry credentials in a secret named `dockerhub`.
 
 Normally the Mira REST API shall also be exposed as a service. Preferably, this can also be done by applying the service configuration as a YML file; for example
 
@@ -102,13 +105,13 @@ The file [engine-deployment.yml](./k8s/engine-deployment.yml) shows an example o
 $ kubectl apply -f engine-service.yml
 ```
 
-The file [engine-service.yml](./k8s/engine-service.yml) show as example of how the engine pods are exposed as a service with a named port, `qix`. Each engine replica will appear in the _endpoints_ object that will be related to the service and Mira uses this information to list the engine instances. This should now be possible to retrieve with
+The file [engine-service.yml](./k8s/engine-service.yml) show as example of how the engine pods are exposed as a service with a named port, `qix`. Each engine replica will appear in the _endpoints_ object that will be related to the service and Mira uses this information to list the engine instances. This list should now be possible to retrieve with
 
 ```sh
 $ curl http://$(minikube ip):31000/v1/engines
 ```
 
-Note that the example files here only provide a minimal setup in order to get Mira up and running in a Kubernetes cluster. In a production deployment, many other aspects must be considered.
+Note that the example files here only provide a minimal setup in order to get Mira up and running with Kubernetes. In a production deployment, many other aspects must be considered.
 
 ### Non-Dockerized Node.js process
 For convenience and development purposes, Mira can be started as a non-Dockerized Node.js process. The _local_ and _swarm_ modes described above, still apply.
