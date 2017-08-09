@@ -69,10 +69,12 @@ The IP addresses in the output from these two commands should match.
 
 In order for the Kubernetes server to be able to pull Docker images under access control from Docker Hub, the cluster must be configured with credentials in a secret object. For public Docker images this is not needed.
 
-Create the secret named `dockerhub` with (replace `<USERNAME>`, `<PASSWORD>`, and `<EMAIL>` with actual values)
+Create the secret named `dockerhub` with the command below (replace `<USERNAME>`, `<PASSWORD>`, and `<EMAIL>` with actual values).
+
+**NOTE!** - Observe the intentional leading space character in the command. This is to avoid that the credentials end up in the command history. At least `bash` supports this and it is recommended to have it configured in this way.
 
 ```sh
-$ kubectl create secret docker-registry dockerhub --docker-server=https://index.docker.io/v1/ --docker-username=<USERNAME> --docker-password=<PASSWORD> --docker-email=<EMAIL>
+$  kubectl create secret docker-registry dockerhub --docker-server=https://index.docker.io/v1/ --docker-username=<USERNAME> --docker-password=<PASSWORD> --docker-email=<EMAIL>
 ```
 
 In a Kubernetes deployment file, the secret can then be used for to specify `imagePullSecrets` as follows (parts left out for brevity)
