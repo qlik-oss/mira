@@ -15,10 +15,10 @@ Mira is distributed as a Docker image built from source in this repository and i
 ## API
 _This section remains to be written._
 
-## Running and Operation Modes
+## Operation Modes
 Mira supports different operation modes. The operation mode determines what operations Mira uses to discover QIX Engine instances. This depends on
-1. The deployment environment in which QIX Engine instances are running. This operation mode must be explicitly provided when starting Mira. Currently _local_ and _swarm_ deployment environments are supported.
-2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process "non-Dockerized". Mira detects this operation mode automatically.
+1. The orchestration environment in which QIX Engine instances are running. This environment must be explicitly provided when starting Mira. Currently _local_, _swarm_, and _kubernetes_ environments are supported.
+2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Environment Variables
 The following environment variable can optionally be set for Mira
@@ -30,9 +30,9 @@ The following environment variable can optionally be set for Mira
 | QIX_ENGINE_IMAGE_NAME | qlikea/engine | QIX Engine image name used to discover engines |
 
 ### Local Mode
-In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
+In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
 
-The recommended way to start Mira in _local_ mode is through `docker-compose`; for example
+The recommended way to start Mira in _local_ mode is through a `docker-compose` file; for example
 
 ```sh
 $ docker-compose -f docker-compose.yml up -d
@@ -44,7 +44,7 @@ The file [docker-compose.yml](./docker-compose.yml) shows an example of this. It
 $ curl http://localhost:9100/v1/engines
 ```
 
-which shall list the discovery of the two engine containers and return information in JSON format.
+which shall list two engine containers in JSON format.
 
 ### Swarm Mode
 In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by providing the `--mode swarm` command line argument when starting the Mira Docker service.
@@ -57,13 +57,61 @@ To start Mira in _swarm_ mode, `docker stack` can be used; for example
 $ docker stack deploy -c docker-compose-swarm.yml --with-registry-auth mira-stack
 ```
 
-The file [docker-compose-swarm.yml](./docker-compose-swarm.yml) shows an example of this. It assumed that a Docker Swarm cluster is already created with at least one manager, and that the Docker CLI client is configured to issue commands towards the manager node. All Swarm services in the example file are configured to run on manager nodes.
+The file [docker-compose-swarm.yml](./swarm/docker-compose-swarm.yml) shows an example of this. It assumed that a Docker Swarm cluster is already created with at least one manager, and that the Docker CLI client is configured to issue commands towards the manager node. All Swarm services in the example file are configured to run on manager nodes.
 
 To remove the stack, run
 
 ```sh
 $ docker stack rm mira-stack
 ```
+
+### Kubernetes Mode
+
+In _kubernetes_ mode, Mira assumes that all engine instances are run as Kubernetes pods and that the engines are exposed as Kubernetes services with _named_ ports. _Kubernetes_ mode is set by providing the `--mode kubernetes` command line argument when starting the Mira pod.
+
+Since Mira needs to communicate with the Kubernetes API server, a `kubectl` proxy should be set up in the Kubernetes deployment. A convenient way to do this is to bundle the `kubectl` proxy as a container in the same pod as the Mira container. In this way, Mira can reach the proxy on `localhost`.
+
+In order to deploy Mira and QIX Engine instances to Kubernetes, it is assumed that a Kubernetes cluster exists and is configured properly. The quickest way to do this for development purposes is to use `minikube`. See the [Minikube Mini Tutorial](./doc/MINIKUBE_MINI_TUTORIAL.md) for a quick guide on how to set up a local cluster on your dev machine. After that it should be possible to successfully issue the deployment commands as follows.
+
+To start Mira in _kubernetes_ mode, the `kubectl` command line tool can be used. Preferably, a Kubernetes deployment YAML file is used; for example
+
+```sh
+$ kubectl apply -f mira-deployment.yml
+```
+
+The file [mira-deployment.yml](./k8s/mira-deployment.yml) shows an example. Note how the deployment also bundles the `kubectl` proxy into the same pod. Since Kubernetes must be able to pull Docker images, the deployment file assumes that Kubernetes is configured with Docker Hub registry credentials in a secret named `dockerhub`.
+
+Normally the Mira REST API shall also be exposed as a service. Preferably, this can also be done by applying the service configuration as a YML file; for example
+
+```sh
+$ kubectl apply -f mira-service.yml
+```
+
+The file [mira-service.yml](./k8s/mira-service.yml) show an example of this where Mira's default port 9100 is exposed outside the cluster as port 31000 (using the `NodePort` type). Assuming `minikube` is used to create the cluster, the Mira health check should now be possible to reach.
+
+```sh
+$ curl http://$(minikube ip):31000/v1/health
+```
+
+In order for Mira to discover QIX Engine instances in the cluster, a Kubernetes deployment file can also be used.
+
+```sh
+$ kubectl apply -f engine-deployment.yml
+```
+
+The file [engine-deployment.yml](./k8s/engine-deployment.yml) shows an example of a deployment of two engine pod replicas. However, this is not enough for Mira to be able to discover the two engine instances. For this to happen, the engines need to be exposed as services with named ports. For example
+
+```sh
+$ kubectl apply -f engine-service.yml
+```
+
+The file [engine-service.yml](./k8s/engine-service.yml) show as example of how the engine pods are exposed as a service with a named port, `qix`. Each engine replica will appear in the _endpoints_ object that will be related to the service and Mira uses this information to list the engine instances. This list should now be possible to retrieve with
+
+```sh
+$ curl http://$(minikube ip):31000/v1/engines
+```
+
+Note that the example files here only provide a minimal setup in order to get Mira up and running with Kubernetes. In a production deployment, many other aspects must be considered.
 
 ### Non-Dockerized Node.js process
 For convenience and development purposes, Mira can be started as a non-Dockerized Node.js process. The _local_ and _swarm_ modes described above, still apply.
