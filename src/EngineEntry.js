@@ -9,11 +9,11 @@ const JSONUtils = require('./utils/JSONUtils');
 async function checkHealth() {
   try {
     const health = await this.healthFetcher.fetch(this.ipAddress, this.port, '/healthcheck');
-    JSONUtils.flatten(health, this.properties);
-    this.properties.healthy = true;
+    JSONUtils.flatten(health, this);
+    this.healthy = true;
   } catch (err) {
     logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
-    this.properties.healthy = false;
+    this.healthy = false;
   }
   this.fetcherTimeOutId = setTimeout(
     checkHealth.bind(this),
@@ -25,7 +25,6 @@ async function checkHealth() {
 
 /**
  * Engine entry class definition.
- * @prop {object} properties - Properties of the engine instance.
  * @prop {string} ipAddress - The IP address of the engine.
  * @prop {number} port - The port of the engine.
  * @prop {number} refreshRate - The health check refresh rate in milliseconds.
@@ -36,7 +35,6 @@ async function checkHealth() {
 class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
-   * @param {object} properties - Properties of the engine instance.
    * @param {string} ipAddress - The IP address of the engine.
    * @param {number} port - The port of the engine.
    * @param {number} refreshRate - The health check refresh rate in milliseconds.
@@ -44,8 +42,7 @@ class EngineEntry {
    *   Optional and mainly used for testing; if not supplied, a default
    *   implementation will be used.
    */
-  constructor(properties, ipAddress, port, refreshRate, healthFetcher) {
-    this.properties = properties;
+  constructor(ipAddress, port, refreshRate, healthFetcher) {
     this.ipAddress = ipAddress;
     this.port = port;
     this.refreshRate = refreshRate;

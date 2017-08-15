@@ -5,9 +5,9 @@ const logger = require('../logger/Logger').get();
 const localhostIp = '127.0.0.1';
 const docker = new Docker();
 
-function getProperties(container) {
-  return Object.assign({}, container.Labels);
-}
+// function getProperties(container) {
+//   return Object.assign({}, container.Labels);
+// }
 
 function getIpAddress(container) {
   if (containerized()) {
@@ -43,11 +43,10 @@ class LocalDockerClient {
             container => (container.Image.indexOf(engineImageName) === 0)
               && (container.Names.length > 0));
           const engineInfoEntries = engineContainers.map((container) => {
-            const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = getPort(container);
             const key = `${ipAddress}:${port}`;
-            return { key, properties, ipAddress, port };
+            return { key, ipAddress, port };
           });
           resolve(engineInfoEntries);
         } else {
