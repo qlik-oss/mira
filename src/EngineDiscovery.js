@@ -17,8 +17,8 @@ const EngineEntry = require('./EngineEntry');
  * @prop {string[]} addresses - Array of IP addresses.
  */
 
-const DISCOVERY_REFRESH_RATE_MS = 1000;
-const HEALTH_REFRESH_RATE_MS = 5000;
+const DEFAULT_DISCOVERY_REFRESH_RATE_MS = 1000;
+const DEFAULT_HEALTH_REFRESH_RATE_MS = 5000;
 
 /**
  * Class providing engine discovery operations such as to list available engine instances and
@@ -28,31 +28,38 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
+   * @param {number} [discoveryRefreshRate=1000] - The engine discovery refresh rate in
+   *  milliseconds.
+   * @param {number} [healthRefreshRate=5000] - The health check refresh rate in milliseconds.
    */
-  constructor(DockerClient) {
+  constructor(
+    DockerClient,
+    discoveryRefreshRate = DEFAULT_DISCOVERY_REFRESH_RATE_MS,
+    healthRefreshRate = DEFAULT_HEALTH_REFRESH_RATE_MS) {
     this.DockerClient = DockerClient;
     this.engineMap = new EngineMap();
 
     // Start discovery!
-    this.refresh();
+    this.refresh(discoveryRefreshRate, healthRefreshRate);
   }
 
   /**
-   * Lists available engine instances.
-   * @returns {Promise<EngineEntry[]>} Promise to an array of engine entries.
+   * Refreshes the list of discovered engines and sets the timeout for periodical refreshing.
+   * NOTE: This method shall not be called externally. It is only intended to be called from
+   * the constructor.
    */
-  async refresh() {
+  async refresh(discoveryRefreshRate, healthRefreshRate) {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const keys = engines.map(engine => engine.key);
     this.engineMap.delete(this.engineMap.difference(keys));
     engines.forEach((engine) => {
       if (!this.engineMap.has(engine.key)) {
         const engineEntry = new EngineEntry(
-          engine.properties, engine.ipAddress, engine.port, HEALTH_REFRESH_RATE_MS);
+          engine.properties, engine.ipAddress, engine.port, healthRefreshRate);
         this.engineMap.add(engine.key, engineEntry);
       }
     });
-    setTimeout(this.refresh.bind(this), DISCOVERY_REFRESH_RATE_MS);
+    setTimeout(this.refresh.bind(this), discoveryRefreshRate);
   }
 
   /**
