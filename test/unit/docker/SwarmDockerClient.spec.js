@@ -26,6 +26,7 @@ describe('SwarmDockerClient', () => {
         port: engine.port,
       }));
       expect(listTasksStub).to.be.called.once;
+      expect(listTasksStub).to.be.calledWith({ filters: '{ "desired-state": ["running"] }' });
       expect(rawEngines).to.deep.equal(specData.miraOutput);
     });
 
