@@ -1,20 +1,20 @@
 const Docker = require('dockerode');
 const DockerClient = require('../../../src/docker/SwarmDockerClient');
-const specData = require('./LocalDockerClient.spec.data.json');
+const specData = require('./SwarmDockerClient.spec.data.json');
 
 const docker = new Docker();
 
-describe('LocalDockerClient', () => {
-  let listContainersStub;
+describe('SwarmDockerClient', () => {
+  let listTasksStub;
 
   before(() => {
-    listContainersStub = sinon.stub(docker, 'listContainers', callback => callback(undefined, specData.endpointsResponse));
+    listTasksStub = sinon.stub(docker, 'listTasks', (opts, callback) => callback(undefined, specData.endpointsResponse));
     // Provide stubbed Dockerode instance for testing purposes.
     DockerClient.docker = docker;
   });
 
   afterEach(() => {
-    listContainersStub.reset();
+    listTasksStub.reset();
   });
 
   describe('#listEngines', () => {
@@ -25,13 +25,13 @@ describe('LocalDockerClient', () => {
         ipAddress: engine.ipAddress,
         port: engine.port,
       }));
-      expect(listContainersStub).to.be.called.once;
+      expect(listTasksStub).to.be.called.once;
       expect(rawEngines).to.deep.equal(specData.miraOutput);
     });
 
     it('should not list any engines since no container matches provided image name', async () => {
       const engines = await DockerClient.listEngines('xxxyyyzzz');
-      expect(listContainersStub).to.be.called.once;
+      expect(listTasksStub).to.be.called.once;
       expect(engines.length === 0).to.be.true;
     });
   });

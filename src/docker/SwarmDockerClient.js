@@ -32,7 +32,7 @@ function getIpAddress(task) {
     logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
   }
 
-  return undefined;
+  return ipAddr;
 }
 
 function getTasks(docker) {
