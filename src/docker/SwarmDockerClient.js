@@ -2,7 +2,7 @@ const Docker = require('dockerode');
 const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
-const docker = new Docker();
+let dockerode = new Docker();
 
 function getProperties(task) {
   return Object.assign({}, task.Spec.ContainerSpec.Labels);
@@ -32,10 +32,10 @@ function getIpAddress(task) {
     logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
   }
 
-  return undefined;
+  return ipAddr;
 }
 
-function getTasks() {
+function getTasks(docker) {
   return new Promise((resolve, reject) => {
     docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
       if (!err) {
@@ -54,13 +54,27 @@ function getTasks() {
  */
 class SwarmDockerClient {
   /**
+   * Gets the Dockerode instance used.
+   * Mainly for testing purposes. Should normally not be used externally.
+   * @returns {Docker} The Dockerode instance used for Docker Engine API access.
+   */
+  static get docker() { return dockerode; }
+
+  /**
+   * Sets the Dockerode instance to use.
+   * Mainly for testing purposes. Should normally not be used externally,
+   * @param {Docker} value - The Dockerode instance to use for Docker Engine API access.
+   */
+  static set docker(value) { dockerode = value; }
+
+  /**
    * Lists engines.
    * @param {string} engineImageName - The Engine Docker image name used to determine if a
    *   container is an engine instance.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(engineImageName) {
-    const tasks = await getTasks();
+    const tasks = await getTasks(SwarmDockerClient.docker);
     const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
