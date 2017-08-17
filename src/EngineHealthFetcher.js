@@ -41,7 +41,7 @@ class EngineHealthFetcher {
           try {
             resolve(JSON.parse(body));
           } catch (err) {
-            logger.error(`Engine health check returned invalid JSON: ${err}`);
+            logger.warn(`Engine health check returned invalid JSON: ${err}`);
             reject(err);
           }
         });
