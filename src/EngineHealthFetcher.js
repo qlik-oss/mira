@@ -27,9 +27,6 @@ class EngineHealthFetcher {
    */
   fetch(host, port, path) {
     return new Promise((resolve, reject) => {
-      if (!host) { reject('No host defined'); }
-      if (!port) { reject('No port defined'); }
-
       this.http.get({ host, port, path }, (response) => {
         let body = '';
         response.on('data', (d) => {
@@ -37,18 +34,19 @@ class EngineHealthFetcher {
         });
         response.on('error', (d) => {
           response.resume();
-          logger.debug(`Engine health check got HTTP error response: ${d}`);
+          logger.warn(`Engine health check got HTTP error response (response.on: ${d}`);
           reject(d);
         });
         response.on('end', () => {
           try {
             resolve(JSON.parse(body));
           } catch (err) {
+            logger.warn(`Engine health check returned invalid JSON: ${err}`);
             reject(err);
           }
         });
       }).on('error', (d) => {
-        logger.debug(`Engine health check got HTTP error response: ${d}`);
+        logger.warn(`Engine health check got HTTP error response (get.on): ${d}`);
         reject(d);
       });
     });
