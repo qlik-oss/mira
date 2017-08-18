@@ -74,26 +74,16 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    // const endpointsData = await listEndpoints();
-    const pods = await kubeHttpGet('/api/v1/pods');
+    const pods = await kubeHttpGet('/api/v1/pods?labelSelector=com.qlik.mira.id=qix-engine');
     const result = [];
 
     pods.items.forEach((pod) => {
-      logger.debug('pod', pod.metadata.name);
-      result.push(pod.metadata.name);
-
-      // pod.subsets.forEach((subset) => {
-      //   const qixPorts = subset.ports.filter(item => item.name === 'qix');
-      //   if (qixPorts.length > 0) { // The service has a qix port exposed
-      //     const port = qixPorts[0].port;
-      //     subset.addresses.forEach((address) => {
+      logger.debug('pod', pod.metadata.labels);
+      // const port = qixPorts[0].port;
       //       const properties = endpoint.metadata.labels || {};
       //       const ipAddress = address.ip;
       //       const key = `${ipAddress}:${port}`;
       //       result.push({ key, properties, ipAddress, port });
-      //     });
-      //   }
-      // });
     });
 
     return result;
