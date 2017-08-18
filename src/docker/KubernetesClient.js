@@ -78,22 +78,23 @@ class KubernetesClient {
     const pods = await kubeHttpGet('/api/v1/pods');
     const result = [];
 
-    logger.debug('pods', pods);
+    pods.items.forEach((pod) => {
+      logger.debug('pod', pod.metadata.name);
+      result.push(pod.metadata.name);
 
-    // endpointsData.items.forEach((endpoint) => {
-    //   endpoint.subsets.forEach((subset) => {
-    //     const qixPorts = subset.ports.filter(item => item.name === 'qix');
-    //     if (qixPorts.length > 0) { // The service has a qix port exposed
-    //       const port = qixPorts[0].port;
-    //       subset.addresses.forEach((address) => {
-    //         const properties = endpoint.metadata.labels || {};
-    //         const ipAddress = address.ip;
-    //         const key = `${ipAddress}:${port}`;
-    //         result.push({ key, properties, ipAddress, port });
-    //       });
-    //     }
-    //   });
-    // });
+      // pod.subsets.forEach((subset) => {
+      //   const qixPorts = subset.ports.filter(item => item.name === 'qix');
+      //   if (qixPorts.length > 0) { // The service has a qix port exposed
+      //     const port = qixPorts[0].port;
+      //     subset.addresses.forEach((address) => {
+      //       const properties = endpoint.metadata.labels || {};
+      //       const ipAddress = address.ip;
+      //       const key = `${ipAddress}:${port}`;
+      //       result.push({ key, properties, ipAddress, port });
+      //     });
+      //   }
+      // });
+    });
 
     return result;
   }

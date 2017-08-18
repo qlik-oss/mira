@@ -12,7 +12,7 @@ spec:
       containers:
       - name: mira
         args: [ "--mode=kubernetes" ]
-        image: qlikea/mira:latest
+        image: qlikea/mira:0.0.1-180
         imagePullPolicy: Always
         ports:
         - containerPort: 9100
