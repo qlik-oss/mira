@@ -148,6 +148,8 @@ Unit tests run as part of the Circle CI build. To run unit tests locally
 $ npm run test:unit
 ```
 
+Test coverage lcov and html report will be stored at `./coverage`. In Circle CI the coverage reports will be saved as build artifacts for each build.
+
 #### Component Tests
 _This section remains to be written._
 
