@@ -39,16 +39,16 @@ class Config {
       logger.info(`Engine port set to: ${Config.enginePort}`);
     }
 
-    Config.discoveryRefreshRate = parseInt(process.env.ENGINE_DISCOVERY_REFRESH_RATE_MS, 10);
-    if (!Config.discoveryRefreshRate || isNaN(Config.discoveryRefreshRate)) {
-      Config.discoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
-      logger.info(`Discovery refresh rate set to: ${Config.discoveryRefreshRate}`);
+    Config.engineDiscoveryRefreshRate = parseInt(process.env.ENGINE_DISCOVERY_REFRESH_RATE_MS, 10);
+    if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
+      Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
+      logger.info(`Discovery refresh rate set to: ${Config.engineDiscoveryRefreshRate}`);
     }
 
-    Config.healthRefreshRate = parseInt(process.env.ENGINE_HEALTH_REFRESH_RATE_MS, 10);
-    if (!Config.healthRefreshRate || isNaN(Config.healthRefreshRate)) {
-      Config.healthRefreshRate = defaultEngineHealthRefreshRate;
-      logger.info(`Health check refresh rate set to: ${Config.healthRefreshRate}`);
+    Config.engineHealthRefreshRate = parseInt(process.env.ENGINE_HEALTH_REFRESH_RATE_MS, 10);
+    if (!Config.engineHealthRefreshRate || isNaN(Config.engineHealthRefreshRate)) {
+      Config.engineHealthRefreshRate = defaultEngineHealthRefreshRate;
+      logger.info(`Health check refresh rate set to: ${Config.engineHealthRefreshRate}`);
     }
 
     Config.kubernetesProxyPort = parseInt(process.env.KUBERNETES_PROXY_PORT, 10);
