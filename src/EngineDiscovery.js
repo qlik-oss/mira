@@ -29,10 +29,7 @@ class EngineDiscovery {
    *  milliseconds.
    * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
-  constructor(
-    DockerClient,
-    discoveryRefreshRate,
-    healthRefreshRate) {
+  constructor(DockerClient, discoveryRefreshRate, healthRefreshRate) {
     this.DockerClient = DockerClient;
     this.engineMap = new EngineMap();
 

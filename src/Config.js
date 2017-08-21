@@ -39,13 +39,13 @@ class Config {
       logger.info(`Engine port set to: ${Config.enginePort}`);
     }
 
-    Config.discoveryRefreshRate = parseInt(process.env.DISCOVERY_REFRESH_RATE_MS, 10);
+    Config.discoveryRefreshRate = parseInt(process.env.ENGINE_DISCOVERY_REFRESH_RATE_MS, 10);
     if (!Config.discoveryRefreshRate || isNaN(Config.discoveryRefreshRate)) {
       Config.discoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
       logger.info(`Discovery refresh rate set to: ${Config.discoveryRefreshRate}`);
     }
 
-    Config.healthRefreshRate = parseInt(process.env.HEALTH_REFRESH_RATE_MS, 10);
+    Config.healthRefreshRate = parseInt(process.env.ENGINE_HEALTH_REFRESH_RATE_MS, 10);
     if (!Config.healthRefreshRate || isNaN(Config.healthRefreshRate)) {
       Config.healthRefreshRate = defaultEngineHealthRefreshRate;
       logger.info(`Health check refresh rate set to: ${Config.healthRefreshRate}`);

@@ -23,14 +23,14 @@ Mira supports different operation modes. The operation mode determines what oper
 ### Environment Variables
 The following environment variable can optionally be set for Mira
 
-| Name                      | Default value | Description |
-|---------------------------|---------------|-------------|
-| PORT                      | 9100          | Port on which Mira will expose its REST API |
-| QIX_ENGINE_PORT           | 9076          | Port that Mira will use for QIX Engine communication |
-| QIX_ENGINE_IMAGE_NAME     | qlikea/engine | QIX Engine image name used to discover engines |
-| DISCOVERY_REFRESH_RATE_MS | 1000          | Refresh rate for discovering engines |
-| HEALTH_REFRESH_RATE_MS    | 5000          | Refresh rate for checking if engines are healthy |
-| KUBERNETES_PROXY_PORT     | 8001          | Port that mira will use to talk to kubernetes api server |
+| Name                             | Default value | Description |
+|----------------------------------|---------------|-------------|
+| PORT                             | 9100          | Port on which Mira will expose its REST API |
+| QIX_ENGINE_PORT                  | 9076          | Port that Mira will use for QIX Engine communication |
+| QIX_ENGINE_IMAGE_NAME            | qlikea/engine | QIX Engine image name used to discover engines |
+| ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000          | Refresh rate for discovering engines |
+| ENGINE_HEALTH_REFRESH_RATE_MS    | 5000          | Refresh rate for checking if engines are healthy |
+| KUBERNETES_PROXY_PORT            | 8001          | Port that mira will use to talk to kubernetes api server |
 
 ### Local Mode
 In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
