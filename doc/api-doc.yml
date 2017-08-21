@@ -20,6 +20,8 @@ tags:
     description: "List available QIX Engines"
   - name: "health"
     description: "Health status of the service"
+x-qlik-visibility: "private"
+x-qlik-stability: "experimental"
 paths:
   /engines:
     get:
