@@ -1,37 +1,6 @@
 const http = require('http');
 const logger = require('../logger/Logger').get();
-
-// function listEndpoints() {
-//   return new Promise((resolve, reject) => {
-//     const host = 'localhost';
-//     const port = 8001;
-//     http.get({
-//       host,
-//       port,
-//       path: '/api/v1/endpoints',
-//     }, (response) => {
-//       let body = '';
-//       response.on('data', (d) => {
-//         body += d;
-//       });
-//       response.on('error', (d) => {
-//         response.resume();
-//         logger.error(`Kubernetes endpoints returned HTTP error: ${d}`);
-//         reject(d);
-//       });
-//       response.on('end', () => {
-//         try {
-//           resolve(JSON.parse(body));
-//         } catch (err) {
-//           reject(err);
-//         }
-//       });
-//     }).on('error', (d) => {
-//       logger.error(`Kubernetes endpoints returned HTTP error: ${d}`);
-//       reject('No connection to kubernetes');
-//     });
-//   });
-// }
+const Config = require('../Config');
 
 function kubeHttpGet(path) {
   return new Promise((resolve, reject) => {
@@ -79,11 +48,13 @@ class KubernetesClient {
 
     pods.items.forEach((pod) => {
       logger.debug(pod.metadata.labels);
-      // const port = qixPorts[0].port;
-      //       const properties = endpoint.metadata.labels || {};
-      //       const ipAddress = address.ip;
-      //       const key = `${ipAddress}:${port}`;
-      //       result.push({ key, properties, ipAddress, port });
+      const ipAddress = pod.status.podIP;
+      if (ipAddress.length !== 0) {
+        const port = Config.enginePort;
+        const properties = pod.metadata.labels;
+        const key = `${ipAddress}:${port}`;
+        result.push({ key, properties, ipAddress, port });
+      }
     });
 
     return result;

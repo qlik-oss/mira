@@ -1,7 +1,6 @@
 const Config = require('./Config');
 const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
-const logger = require('./logger/Logger').get();
 
 /**
  * Engine container return specification.
@@ -25,7 +24,6 @@ const DEFAULT_HEALTH_REFRESH_RATE_MS = 5000;
   * Discovers engines and sets the timeout for periodical refreshing.
   */
 async function discover() {
-  logger.info('discover');
   const engines = await this.DockerClient.listEngines(Config.engineImageName);
   const keys = engines.map(engine => engine.key);
   this.engineMap.delete(this.engineMap.difference(keys));
