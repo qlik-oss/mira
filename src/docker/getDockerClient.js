@@ -22,7 +22,7 @@ const KubernetesClient = require('./KubernetesClient');
 /**
  * Gets a Docker client implementation for the provided operation mode.
  * @param {string} mode - Service operation mode.
- * @param {number} kubernetesProxyPort - The proxy port to reach the kubernetess API server.
+ * @param {number} kubernetesProxyPort - The proxy port to reach the kubernetes API server.
  * @returns {DockerClient} The Docker client implementation.
  */
 function getDockerClient(mode, kubernetesProxyPort) {
