@@ -2,9 +2,9 @@ const logger = require('./logger/Logger').get();
 
 const defaultMiraPort = 9100;
 const defaultQixEnginePort = 9076;
-const defaultDiscoveryRefreshRate = 1000;
-const defaultHealthRefreshRate = 5000;
-const defaultk8sProxyPort = 8001;
+const defaultEngineDiscoveryRefreshRate = 1000;
+const defaultEngineHealthRefreshRate = 5000;
+const defaultKubernetesProxyPort = 8001;
 const defaultQixEngineImageName = 'qlikea/engine';
 
 /**
@@ -41,20 +41,20 @@ class Config {
 
     Config.discoveryRefreshRate = parseInt(process.env.DISCOVERY_REFRESH_RATE_MS, 10);
     if (!Config.discoveryRefreshRate || isNaN(Config.discoveryRefreshRate)) {
-      Config.discoveryRefreshRate = defaultDiscoveryRefreshRate;
+      Config.discoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
       logger.info(`Discovery refresh rate set to: ${Config.discoveryRefreshRate}`);
     }
 
     Config.healthRefreshRate = parseInt(process.env.HEALTH_REFRESH_RATE_MS, 10);
     if (!Config.healthRefreshRate || isNaN(Config.healthRefreshRate)) {
-      Config.healthRefreshRate = defaultHealthRefreshRate;
+      Config.healthRefreshRate = defaultEngineHealthRefreshRate;
       logger.info(`Health check refresh rate set to: ${Config.healthRefreshRate}`);
     }
 
-    Config.k8sProxyPort = parseInt(process.env.K8S_PROXY_PORT, 10);
-    if (!Config.k8sProxyPort || isNaN(Config.k8sProxyPort)) {
-      Config.k8sProxyPort = defaultk8sProxyPort;
-      logger.info(`Kubernetes api server port set to: ${Config.k8sProxyPort}`);
+    Config.kubernetesProxyPort = parseInt(process.env.K8S_PROXY_PORT, 10);
+    if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
+      Config.kubernetesProxyPort = defaultKubernetesProxyPort;
+      logger.info(`Kubernetes api server port set to: ${Config.kubernetesProxyPort}`);
     }
 
     Config.mode = options.mode || 'swarm'; // swarm is the default value
