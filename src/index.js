@@ -21,6 +21,9 @@ Config.init(commandLineOptions);
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });
 const DockerClient = getDockerClient(Config.mode, Config.kubernetesProxyPort);
+if (Config.mode === 'kubernetes') {
+  DockerClient.proxyPort = Config.kubernetesProxyPort;
+}
 const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
 const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher,
                                             Config.discoveryRefreshRate, Config.healthRefreshRate);
