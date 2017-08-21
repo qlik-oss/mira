@@ -2,6 +2,9 @@ const logger = require('./logger/Logger').get();
 
 const defaultMiraPort = 9100;
 const defaultQixEnginePort = 9076;
+const defaultDiscoveryRefreshRate = 1000;
+const defaultHealthRefreshRate = 5000;
+const defaultk8sProxyPort = 8001;
 const defaultQixEngineImageName = 'qlikea/engine';
 
 /**
@@ -32,6 +35,21 @@ class Config {
     Config.enginePort = parseInt(process.env.QIX_ENGINE_PORT, 10);
     if (!Config.enginePort || isNaN(Config.enginePort)) {
       Config.enginePort = defaultQixEnginePort;
+    }
+
+    Config.discoveryRefreshRate = parseInt(process.env.DISCOVERY_REFRESH_RATE_MS, 10);
+    if (!Config.discoveryRefreshRate || isNaN(Config.discoveryRefreshRate)) {
+      Config.discoveryRefreshRate = defaultDiscoveryRefreshRate;
+    }
+
+    Config.healthRefreshRate = parseInt(process.env.HEALTH_REFRESH_RATE_MS, 10);
+    if (!Config.healthRefreshRate || isNaN(Config.healthRefreshRate)) {
+      Config.healthRefreshRate = defaultHealthRefreshRate;
+    }
+
+    Config.k8sProxyPort = parseInt(process.env.K8S_PROXY_PORT, 10);
+    if (!Config.k8sProxyPort || isNaN(Config.k8sProxyPort)) {
+      Config.k8sProxyPort = defaultk8sProxyPort;
     }
 
     Config.mode = options.mode || 'swarm'; // swarm is the default value
