@@ -38,7 +38,7 @@ In _local_ mode, Mira assumes that all engine instances run as Docker containers
 The recommended way to start Mira in _local_ mode is through a `docker-compose` file; for example
 
 ```sh
-$ docker-compose up --build -d
+$ docker-compose up -d
 ```
 
 The file [docker-compose.yml](./docker-compose.yml) shows an example of this. It starts one Mira container and two engine containers. To verify that Mira discovers the engines, do
@@ -160,7 +160,14 @@ _This section remains to be written._
 Integration tests on a local setup of Mira is part of the Circle CI build pipeline. To run the test cases locally:
 
 ```bash
-$ docker-compose up --build -d
+$ docker-compose up -d
+$ npm run test:integration
+```
+
+If you have your locally built mira image and want to test a specific image version:
+
+```bash
+$ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 
