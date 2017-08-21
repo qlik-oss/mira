@@ -1,6 +1,7 @@
 const Config = require('./Config');
 const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
+const logger = require('./logger/Logger').get();
 
 /**
  * Engine container return specification.
@@ -19,6 +20,24 @@ const EngineEntry = require('./EngineEntry');
 
 const DEFAULT_DISCOVERY_REFRESH_RATE_MS = 1000;
 const DEFAULT_HEALTH_REFRESH_RATE_MS = 5000;
+
+/**
+  * Discovers engines and sets the timeout for periodical refreshing.
+  */
+async function discover() {
+  logger.info('discover');
+  const engines = await this.DockerClient.listEngines(Config.engineImageName);
+  const keys = engines.map(engine => engine.key);
+  this.engineMap.delete(this.engineMap.difference(keys));
+  engines.forEach((engine) => {
+    if (!this.engineMap.has(engine.key)) {
+      const engineEntry = new EngineEntry(
+        engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
+      this.engineMap.add(engine.key, engineEntry);
+    }
+  });
+  setTimeout(discover.bind(this), this.discoveryRefreshRate);
+}
 
 /**
  * Class providing engine discovery operations such as to list available engine instances and
@@ -42,26 +61,7 @@ class EngineDiscovery {
     this.engineMap = new EngineMap();
 
     // Start discovery!
-    this.refresh();
-  }
-
-  /**
-   * Refreshes the list of discovered engines and sets the timeout for periodical refreshing.
-   * NOTE: This method shall not be called externally. It is only intended to be called from
-   * the constructor.
-   */
-  async refresh() {
-    const engines = await this.DockerClient.listEngines(Config.engineImageName);
-    const keys = engines.map(engine => engine.key);
-    this.engineMap.delete(this.engineMap.difference(keys));
-    engines.forEach((engine) => {
-      if (!this.engineMap.has(engine.key)) {
-        const engineEntry = new EngineEntry(
-          engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
-        this.engineMap.add(engine.key, engineEntry);
-      }
-    });
-    setTimeout(this.refresh.bind(this), this.discoveryRefreshRate);
+    discover.call(this);
   }
 
   /**
