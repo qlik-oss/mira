@@ -26,7 +26,8 @@ if (Config.mode === 'kubernetes') {
 }
 const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
 const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher,
-                                            Config.engineDiscoveryRefreshRate, Config.engineHealthRefreshRate);
+                                            Config.engineDiscoveryRefreshRate,
+                                            Config.engineHealthRefreshRate);
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
 function onUnhandledError(err) {
