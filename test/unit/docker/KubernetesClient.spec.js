@@ -9,6 +9,7 @@ describe('KubernetesClient', () => {
 
   describe('#listEngines', () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {
+      KubernetesClient.proxyPort = 8001;
       const engines = await KubernetesClient.listEngines('engine');
       const rawEngines = engines.map(engine => ({
         properties: engine.properties,
