@@ -51,7 +51,7 @@ class Config {
       logger.info(`Health check refresh rate set to: ${Config.healthRefreshRate}`);
     }
 
-    Config.kubernetesProxyPort = parseInt(process.env.K8S_PROXY_PORT, 10);
+    Config.kubernetesProxyPort = parseInt(process.env.KUBERNETES_PROXY_PORT, 10);
     if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
       Config.kubernetesProxyPort = defaultKubernetesProxyPort;
       logger.info(`Kubernetes api server port set to: ${Config.kubernetesProxyPort}`);
