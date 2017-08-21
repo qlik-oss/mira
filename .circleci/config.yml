@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:7
+      - image: node:8
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikea/mira
