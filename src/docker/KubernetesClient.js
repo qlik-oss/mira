@@ -1,10 +1,9 @@
 const http = require('http');
 const logger = require('../logger/Logger').get();
 
-function listEndpoints() {
+function listEndpoints(port) {
   return new Promise((resolve, reject) => {
     const host = 'localhost';
-    const port = 8001;
     http.get({
       host,
       port,
@@ -42,7 +41,7 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    const endpointsData = await listEndpoints();
+    const endpointsData = await listEndpoints(KubernetesClient.proxyPort);
     const result = [];
 
     endpointsData.items.forEach((endpoint) => {

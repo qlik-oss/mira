@@ -21,8 +21,13 @@ Config.init(commandLineOptions);
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });
 const DockerClient = getDockerClient(Config.mode);
+if (Config.mode === 'kubernetes') {
+  DockerClient.proxyPort = Config.kubernetesProxyPort;
+}
 const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
-const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher);
+const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher,
+                                            Config.engineDiscoveryRefreshRate,
+                                            Config.engineHealthRefreshRate);
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
 function onUnhandledError(err) {
