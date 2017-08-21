@@ -22,10 +22,10 @@ const KubernetesClient = require('./KubernetesClient');
 /**
  * Gets a Docker client implementation for the provided operation mode.
  * @param {string} mode - Service operation mode.
- * @param {number} k8sProxyPort - The proxy port to reach the k8s API server.
+ * @param {number} kubernetesProxyPort - The proxy port to reach the kubernetess API server.
  * @returns {DockerClient} The Docker client implementation.
  */
-function getDockerClient(mode, k8sProxyPort) {
+function getDockerClient(mode, kubernetesProxyPort) {
   switch (mode) {
     case 'local':
       logger.info('Local Docker Client requested');
@@ -35,7 +35,7 @@ function getDockerClient(mode, k8sProxyPort) {
       return SwarmDockerClient;
     case 'kubernetes':
       logger.info('Kubernetes Client requested');
-      KubernetesClient.proxyPort = k8sProxyPort;
+      KubernetesClient.proxyPort = kubernetesProxyPort;
       return KubernetesClient;
     default:
       logger.error('Unknown/no Docker Client requested');

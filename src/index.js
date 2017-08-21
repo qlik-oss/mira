@@ -20,7 +20,7 @@ Config.init(commandLineOptions);
 
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });
-const DockerClient = getDockerClient(Config.mode, Config.k8sProxyPort);
+const DockerClient = getDockerClient(Config.mode, Config.kubernetesProxyPort);
 const engineHealthFetcher = new EngineHealthFetcher(Config.devMode);
 const engineDiscovery = new EngineDiscovery(DockerClient, engineHealthFetcher,
                                             Config.discoveryRefreshRate, Config.healthRefreshRate);
