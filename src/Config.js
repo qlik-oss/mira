@@ -28,6 +28,7 @@ class Config {
     Config.miraPort = parseInt(process.env.PORT, 10);
     if (!Config.miraPort || isNaN(Config.miraPort)) {
       Config.miraPort = defaultMiraPort;
+      logger.info(`Mira port set to: ${Config.miraPort}`);
     }
 
     Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
@@ -35,21 +36,25 @@ class Config {
     Config.enginePort = parseInt(process.env.QIX_ENGINE_PORT, 10);
     if (!Config.enginePort || isNaN(Config.enginePort)) {
       Config.enginePort = defaultQixEnginePort;
+      logger.info(`Engine port set to: ${Config.enginePort}`);
     }
 
     Config.discoveryRefreshRate = parseInt(process.env.DISCOVERY_REFRESH_RATE_MS, 10);
     if (!Config.discoveryRefreshRate || isNaN(Config.discoveryRefreshRate)) {
       Config.discoveryRefreshRate = defaultDiscoveryRefreshRate;
+      logger.info(`Discovery refresh rate set to: ${Config.discoveryRefreshRate}`);
     }
 
     Config.healthRefreshRate = parseInt(process.env.HEALTH_REFRESH_RATE_MS, 10);
     if (!Config.healthRefreshRate || isNaN(Config.healthRefreshRate)) {
       Config.healthRefreshRate = defaultHealthRefreshRate;
+      logger.info(`Health check refresh rate set to: ${Config.healthRefreshRate}`);
     }
 
     Config.k8sProxyPort = parseInt(process.env.K8S_PROXY_PORT, 10);
     if (!Config.k8sProxyPort || isNaN(Config.k8sProxyPort)) {
       Config.k8sProxyPort = defaultk8sProxyPort;
+      logger.info(`Kubernetes api server port set to: ${Config.k8sProxyPort}`);
     }
 
     Config.mode = options.mode || 'swarm'; // swarm is the default value
@@ -57,6 +62,7 @@ class Config {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
     }
+    logger.info(`Mira is running in ${Config.mode} mode`);
 
     /**
      * If true the process is expected to run outside of docker communicating with engines
@@ -64,6 +70,7 @@ class Config {
      * @type {boolean}
      */
     Config.devMode = process.env.DEV_MODE;
+    logger.info(`Mira is running in ${Config.devMode ? 'dev' : 'production'} mode`);
   }
 }
 
