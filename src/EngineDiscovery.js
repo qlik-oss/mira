@@ -36,11 +36,13 @@ class EngineDiscovery {
     DockerClient,
     discoveryRefreshRate = DEFAULT_DISCOVERY_REFRESH_RATE_MS,
     healthRefreshRate = DEFAULT_HEALTH_REFRESH_RATE_MS) {
+    this.discoveryRefreshRate = discoveryRefreshRate;
+    this.healthRefreshRate = healthRefreshRate;
     this.DockerClient = DockerClient;
     this.engineMap = new EngineMap();
 
     // Start discovery!
-    this.refresh(discoveryRefreshRate, healthRefreshRate);
+    this.refresh();
   }
 
   /**
@@ -48,18 +50,18 @@ class EngineDiscovery {
    * NOTE: This method shall not be called externally. It is only intended to be called from
    * the constructor.
    */
-  async refresh(discoveryRefreshRate, healthRefreshRate) {
+  async refresh() {
     const engines = await this.DockerClient.listEngines(Config.engineImageName);
     const keys = engines.map(engine => engine.key);
     this.engineMap.delete(this.engineMap.difference(keys));
     engines.forEach((engine) => {
       if (!this.engineMap.has(engine.key)) {
         const engineEntry = new EngineEntry(
-          engine.properties, engine.ipAddress, engine.port, healthRefreshRate);
+          engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
         this.engineMap.add(engine.key, engineEntry);
       }
     });
-    setTimeout(this.refresh.bind(this), discoveryRefreshRate);
+    setTimeout(this.refresh.bind(this), this.discoveryRefreshRate);
   }
 
   /**

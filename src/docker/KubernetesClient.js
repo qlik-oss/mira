@@ -78,7 +78,7 @@ class KubernetesClient {
     const result = [];
 
     pods.items.forEach((pod) => {
-      logger.debug('pod', pod.metadata.labels);
+      logger.debug(pod.metadata.labels);
       // const port = qixPorts[0].port;
       //       const properties = endpoint.metadata.labels || {};
       //       const ipAddress = address.ip;
