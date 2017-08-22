@@ -12,9 +12,10 @@ spec:
     spec:
       containers:
       - name: engine
-        image: qlikea/engine:12.38.0
+        image: qlikea/engine:12.42.0
         ports:
         - containerPort: 9076
+        - containerPort: 9098
       restartPolicy: Always
       imagePullSecrets:
         - name: dockerhub

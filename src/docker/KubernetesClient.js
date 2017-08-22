@@ -47,7 +47,6 @@ class KubernetesClient {
     const result = [];
 
     pods.items.forEach((pod) => {
-      logger.debug(pod.metadata.labels);
       const ipAddress = pod.status.podIP;
       if (ipAddress.length !== 0) {
         const port = Config.enginePort;

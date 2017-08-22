@@ -7,7 +7,6 @@ const JSONUtils = require('./utils/JSONUtils');
  * An {@link EngineEntry} object must be bound as this before calling.
  */
 async function checkHealth() {
-  logger.info('health');
   try {
     const health = await this.healthFetcher.fetch(this.ipAddress, this.port, '/healthcheck');
     JSONUtils.flatten(health, this.properties);
