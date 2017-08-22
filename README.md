@@ -23,11 +23,14 @@ Mira supports different operation modes. The operation mode determines what oper
 ### Environment Variables
 The following environment variable can optionally be set for Mira
 
-| Name                  | Default value | Description |
-|-----------------------|---------------|-------------|
-| PORT                  | 9100          | Port on which Mira will expose its REST API |
-| QIX_ENGINE_PORT       | 9076          | Port that Mira will use for QIX Engine communication |
-| QIX_ENGINE_IMAGE_NAME | qlikea/engine | QIX Engine image name used to discover engines |
+| Name                             | Default value | Description |
+|----------------------------------|---------------|-------------|
+| PORT                             | 9100          | Port on which Mira will expose its REST API |
+| QIX_ENGINE_PORT                  | 9076          | Port that Mira will use for QIX Engine communication |
+| QIX_ENGINE_IMAGE_NAME            | qlikea/engine | QIX Engine image name used to discover engines |
+| ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000          | Refresh rate for discovering engines |
+| ENGINE_HEALTH_REFRESH_RATE_MS    | 5000          | Refresh rate for checking if engines are healthy |
+| KUBERNETES_PROXY_PORT            | 8001          | Port that mira will use to talk to kubernetes api server |
 
 ### Local Mode
 In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
@@ -35,7 +38,7 @@ In _local_ mode, Mira assumes that all engine instances run as Docker containers
 The recommended way to start Mira in _local_ mode is through a `docker-compose` file; for example
 
 ```sh
-$ docker-compose -f docker-compose.yml up -d
+$ docker-compose up -d
 ```
 
 The file [docker-compose.yml](./docker-compose.yml) shows an example of this. It starts one Mira container and two engine containers. To verify that Mira discovers the engines, do
@@ -148,6 +151,8 @@ Unit tests run as part of the Circle CI build. To run unit tests locally
 $ npm run test:unit
 ```
 
+Test coverage lcov and html report will be stored at `./coverage`. In Circle CI the coverage reports will be saved as build artifacts for each build.
+
 #### Component Tests
 _This section remains to be written._
 
@@ -155,7 +160,14 @@ _This section remains to be written._
 Integration tests on a local setup of Mira is part of the Circle CI build pipeline. To run the test cases locally:
 
 ```bash
-$ docker-compose -f ./test/integration/docker-compose-integration-local.yml up -d
+$ docker-compose up -d
+$ npm run test:integration
+```
+
+If you have your locally built mira image and want to test a specific image version:
+
+```bash
+$ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 

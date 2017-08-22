@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:7
+      - image: node:8
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikea/mira
@@ -22,6 +22,8 @@ jobs:
           name: Run Unit Tests
           command:
             npm run test:unit
+      - store_artifacts:
+          path: ./coverage
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -49,12 +51,18 @@ jobs:
               npm version $VER --no-git-tag-version
             fi
       - run:
+          name: Build Docker image
+          command: |
+            VER=$(cat ./version.txt)
+            docker build -t $DOCKER_REPO:$VER .
+      - run:
           name: Run integration tests on a local setup
           command: |
-            # Spin up a local setup
-            docker-compose -f ./test/integration/docker-compose-integration-local.yml up -d
+            # Spin up a local setup with the previously built docker image.
+            VER=$(cat ./version.txt)
+            TAG=:${VER} docker-compose up -d
             # Find IP address of gateway
-            CONTAINER_ID=$(docker ps -aqf "name=integration_mira_1")
+            CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
             TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
             # Build docker image for test.
             # To be able to interact with services running in a remote docker environment, the tests must be executed from a container in the remote docker as well.
@@ -62,11 +70,6 @@ jobs:
             docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
             # Execute tests
             docker run --rm test/test-integration
-      - run:
-          name: Build Docker image
-          command: |
-            VER=$(cat ./version.txt)
-            docker build -t $DOCKER_REPO:$VER .
       - deploy:
           name: Push image to Docker Hub
           command: |

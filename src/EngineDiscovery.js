@@ -17,9 +17,6 @@ const EngineEntry = require('./EngineEntry');
  * @prop {string[]} addresses - Array of IP addresses.
  */
 
-const DEFAULT_DISCOVERY_REFRESH_RATE_MS = 1000;
-const DEFAULT_HEALTH_REFRESH_RATE_MS = 5000;
-
 /**
   * Discovers engines and sets the timeout for periodical refreshing.
   */
@@ -45,14 +42,11 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
-   * @param {number} [discoveryRefreshRate=1000] - The engine discovery refresh rate in
+   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in
    *  milliseconds.
-   * @param {number} [healthRefreshRate=5000] - The health check refresh rate in milliseconds.
+   * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
-  constructor(
-    DockerClient,
-    discoveryRefreshRate = DEFAULT_DISCOVERY_REFRESH_RATE_MS,
-    healthRefreshRate = DEFAULT_HEALTH_REFRESH_RATE_MS) {
+  constructor(DockerClient, discoveryRefreshRate, healthRefreshRate) {
     this.discoveryRefreshRate = discoveryRefreshRate;
     this.healthRefreshRate = healthRefreshRate;
     this.DockerClient = DockerClient;
