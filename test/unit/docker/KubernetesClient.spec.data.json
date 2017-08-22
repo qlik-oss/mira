@@ -1,267 +1,277 @@
 {
   "endpointsResponse": {
-    "kind": "EndpointsList",
+    "kind": "PodList",
     "apiVersion": "v1",
     "metadata": {
-      "selfLink": "/api/v1/endpoints",
-      "resourceVersion": "1432659"
+      "selfLink": "/api/v1/pods",
+      "resourceVersion": "114022"
     },
     "items": [
       {
         "metadata": {
-          "name": "engine",
+          "name": "engine-deployment-4163433257-0kl33",
+          "generateName": "engine-deployment-4163433257-",
           "namespace": "default",
-          "selfLink": "/api/v1/namespaces/default/endpoints/engine",
-          "uid": "50ec9c79-4060-11e7-86b6-00155db1c61b",
-          "resourceVersion": "1213813",
-          "creationTimestamp": "2017-05-24T09:06:47Z",
+          "selfLink": "/api/v1/namespaces/default/pods/engine-deployment-4163433257-0kl33",
+          "uid": "88ccc7c8-872b-11e7-b00a-00155d014987",
+          "resourceVersion": "113204",
+          "creationTimestamp": "2017-08-22T11:17:50Z",
           "labels": {
+            "com.qlik.mira.id": "qix-engine",
+            "pod-template-hash": "4163433257",
             "service": "engine"
-          }
-        },
-        "subsets": [
-          {
-            "addresses": [
-              {
-                "ip": "172.17.0.4",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "default",
-                  "name": "engine-ea-2236039752-ztffs",
-                  "uid": "b668ca8a-4074-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "754174"
-                }
-              },
-              {
-                "ip": "172.17.0.6",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "default",
-                  "name": "engine-841497536-hhnll",
-                  "uid": "c130ac19-4440-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "1213802"
-                }
-              },
-              {
-                "ip": "172.17.0.7",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "default",
-                  "name": "engine-841497536-0l9rv",
-                  "uid": "c130c035-4440-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "1213811"
-                }
-              }
-            ],
-            "ports": [
-              {
-                "name": "qix",
-                "port": 9076,
-                "protocol": "TCP"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "metadata": {
-          "name": "kubernetes",
-          "namespace": "default",
-          "selfLink": "/api/v1/namespaces/default/endpoints/kubernetes",
-          "uid": "232cfa06-3ae3-11e7-86b6-00155db1c61b",
-          "resourceVersion": "11",
-          "creationTimestamp": "2017-05-17T09:28:08Z"
-        },
-        "subsets": [
-          {
-            "addresses": [
-              {
-                "ip": "10.88.4.250"
-              }
-            ],
-            "ports": [
-              {
-                "name": "https",
-                "port": 8443,
-                "protocol": "TCP"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "metadata": {
-          "name": "mira",
-          "namespace": "default",
-          "selfLink": "/api/v1/namespaces/default/endpoints/mira",
-          "uid": "f03e9525-3bc0-11e7-86b6-00155db1c61b",
-          "resourceVersion": "1432639",
-          "creationTimestamp": "2017-05-18T11:55:50Z",
-          "labels": {
-            "service": "mira"
-          }
-        },
-        "subsets": [
-          {
-            "notReadyAddresses": [
-              {
-                "ip": "172.17.0.5",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "default",
-                  "name": "mira-3288868778-k7p4s",
-                  "uid": "9d70bca5-446e-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "1432638"
-                }
-              }
-            ],
-            "ports": [
-              {
-                "name": "mira",
-                "port": 9100,
-                "protocol": "TCP"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "metadata": {
-          "name": "kube-controller-manager",
-          "namespace": "kube-system",
-          "selfLink": "/api/v1/namespaces/kube-system/endpoints/kube-controller-manager",
-          "uid": "d6ed1319-3ae3-11e7-86b6-00155db1c61b",
-          "resourceVersion": "1432658",
-          "creationTimestamp": "2017-05-17T09:33:09Z",
+          },
           "annotations": {
-            "control-plane.alpha.kubernetes.io/leader": "{\"holderIdentity\":\"minikube\",\"leaseDurationSeconds\":15,\"acquireTime\":\"2017-05-17T09:33:09Z\",\"renewTime\":\"2017-05-31T06:36:49Z\",\"leaderTransitions\":0}"
-          }
+            "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"default\",\"name\":\"engine-deployment-4163433257\",\"uid\":\"88cb5d22-872b-11e7-b00a-00155d014987\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"113182\"}}\n"
+          },
+          "ownerReferences": [
+            {
+              "apiVersion": "extensions/v1beta1",
+              "kind": "ReplicaSet",
+              "name": "engine-deployment-4163433257",
+              "uid": "88cb5d22-872b-11e7-b00a-00155d014987",
+              "controller": true,
+              "blockOwnerDeletion": true
+            }
+          ]
         },
-        "subsets": []
-      },
-      {
-        "metadata": {
-          "name": "kube-dns",
-          "namespace": "kube-system",
-          "selfLink": "/api/v1/namespaces/kube-system/endpoints/kube-dns",
-          "uid": "2eb17ce5-3ae3-11e7-86b6-00155db1c61b",
-          "resourceVersion": "1431512",
-          "creationTimestamp": "2017-05-17T09:28:27Z",
-          "labels": {
-            "addonmanager.kubernetes.io/mode": "Reconcile",
-            "k8s-app": "kube-dns",
-            "kubernetes.io/name": "KubeDNS"
-          }
-        },
-        "subsets": [
-          {
-            "addresses": [
-              {
-                "ip": "172.17.0.3",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "kube-system",
-                  "name": "kube-dns-268032401-c6rl9",
-                  "uid": "2ea2adc0-3ae3-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "1431510"
-                }
+        "spec": {
+          "volumes": [
+            {
+              "name": "default-token-4l9dx",
+              "secret": {
+                "secretName": "default-token-4l9dx",
+                "defaultMode": 420
               }
-            ],
-            "ports": [
-              {
-                "name": "dns",
-                "port": 53,
-                "protocol": "UDP"
+            }
+          ],
+          "containers": [
+            {
+              "name": "engine",
+              "image": "qlikea/engine:12.42.0",
+              "ports": [
+                {
+                  "containerPort": 9076,
+                  "protocol": "TCP"
+                },
+                {
+                  "containerPort": 9098,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {},
+              "volumeMounts": [
+                {
+                  "name": "default-token-4l9dx",
+                  "readOnly": true,
+                  "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+                }
+              ],
+              "terminationMessagePath": "/dev/termination-log",
+              "terminationMessagePolicy": "File",
+              "imagePullPolicy": "IfNotPresent"
+            }
+          ],
+          "restartPolicy": "Always",
+          "terminationGracePeriodSeconds": 30,
+          "dnsPolicy": "ClusterFirst",
+          "serviceAccountName": "default",
+          "serviceAccount": "default",
+          "nodeName": "minikube",
+          "securityContext": {},
+          "imagePullSecrets": [
+            {
+              "name": "dockerhub"
+            }
+          ],
+          "schedulerName": "default-scheduler"
+        },
+        "status": {
+          "phase": "Running",
+          "conditions": [
+            {
+              "type": "Initialized",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:50Z"
+            },
+            {
+              "type": "Ready",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:51Z"
+            },
+            {
+              "type": "PodScheduled",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:50Z"
+            }
+          ],
+          "hostIP": "10.88.1.181",
+          "podIP": "172.17.0.4",
+          "startTime": "2017-08-22T11:17:50Z",
+          "containerStatuses": [
+            {
+              "name": "engine",
+              "state": {
+                "running": {
+                  "startedAt": "2017-08-22T11:17:51Z"
+                }
               },
-              {
-                "name": "dns-tcp",
-                "port": 53,
-                "protocol": "TCP"
-              }
-            ]
-          }
-        ]
+              "lastState": {},
+              "ready": true,
+              "restartCount": 0,
+              "image": "qlikea/engine:12.42.0",
+              "imageID": "docker-pullable://qlikea/engine@sha256:331d299079cb758403099dd0cfbd34a2970f3a2d15504d4994fd8425558116ce",
+              "containerID": "docker://44f1576b356f5613e1c2dd55187ee90c02c60726482fa55c40e8c1b46908db0e"
+            }
+          ],
+          "qosClass": "BestEffort"
+        }
       },
       {
         "metadata": {
-          "name": "kube-scheduler",
-          "namespace": "kube-system",
-          "selfLink": "/api/v1/namespaces/kube-system/endpoints/kube-scheduler",
-          "uid": "d790899a-3ae3-11e7-86b6-00155db1c61b",
-          "resourceVersion": "1432657",
-          "creationTimestamp": "2017-05-17T09:33:10Z",
-          "annotations": {
-            "control-plane.alpha.kubernetes.io/leader": "{\"holderIdentity\":\"minikube\",\"leaseDurationSeconds\":15,\"acquireTime\":\"2017-05-17T09:33:10Z\",\"renewTime\":\"2017-05-31T06:36:49Z\",\"leaderTransitions\":0}"
-          }
-        },
-        "subsets": []
-      },
-      {
-        "metadata": {
-          "name": "kubernetes-dashboard",
-          "namespace": "kube-system",
-          "selfLink": "/api/v1/namespaces/kube-system/endpoints/kubernetes-dashboard",
-          "uid": "2e97f214-3ae3-11e7-86b6-00155db1c61b",
-          "resourceVersion": "648233",
-          "creationTimestamp": "2017-05-17T09:28:27Z",
+          "name": "engine-deployment-4163433257-pm219",
+          "generateName": "engine-deployment-4163433257-",
+          "namespace": "default",
+          "selfLink": "/api/v1/namespaces/default/pods/engine-deployment-4163433257-pm219",
+          "uid": "8957f5bc-872b-11e7-b00a-00155d014987",
+          "resourceVersion": "113232",
+          "creationTimestamp": "2017-08-22T11:17:51Z",
           "labels": {
-            "addonmanager.kubernetes.io/mode": "Reconcile",
-            "app": "kubernetes-dashboard",
-            "kubernetes.io/minikube-addons": "dashboard",
-            "kubernetes.io/minikube-addons-endpoint": "dashboard"
-          }
+            "com.qlik.mira.id": "qix-engine",
+            "pod-template-hash": "4163433257",
+            "service": "engine"
+          },
+          "annotations": {
+            "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"default\",\"name\":\"engine-deployment-4163433257\",\"uid\":\"88cb5d22-872b-11e7-b00a-00155d014987\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"113210\"}}\n"
+          },
+          "ownerReferences": [
+            {
+              "apiVersion": "extensions/v1beta1",
+              "kind": "ReplicaSet",
+              "name": "engine-deployment-4163433257",
+              "uid": "88cb5d22-872b-11e7-b00a-00155d014987",
+              "controller": true,
+              "blockOwnerDeletion": true
+            }
+          ]
         },
-        "subsets": [
-          {
-            "addresses": [
-              {
-                "ip": "172.17.0.2",
-                "nodeName": "minikube",
-                "targetRef": {
-                  "kind": "Pod",
-                  "namespace": "kube-system",
-                  "name": "kubernetes-dashboard-q8nw7",
-                  "uid": "2e8c04ba-3ae3-11e7-86b6-00155db1c61b",
-                  "resourceVersion": "648231"
+        "spec": {
+          "volumes": [
+            {
+              "name": "default-token-4l9dx",
+              "secret": {
+                "secretName": "default-token-4l9dx",
+                "defaultMode": 420
+              }
+            }
+          ],
+          "containers": [
+            {
+              "name": "engine",
+              "image": "qlikea/engine:12.42.0",
+              "ports": [
+                {
+                  "containerPort": 9076,
+                  "protocol": "TCP"
+                },
+                {
+                  "containerPort": 9098,
+                  "protocol": "TCP"
                 }
-              }
-            ],
-            "ports": [
-              {
-                "port": 9090,
-                "protocol": "TCP"
-              }
-            ]
-          }
-        ]
+              ],
+              "resources": {},
+              "volumeMounts": [
+                {
+                  "name": "default-token-4l9dx",
+                  "readOnly": true,
+                  "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+                }
+              ],
+              "terminationMessagePath": "/dev/termination-log",
+              "terminationMessagePolicy": "File",
+              "imagePullPolicy": "IfNotPresent"
+            }
+          ],
+          "restartPolicy": "Always",
+          "terminationGracePeriodSeconds": 30,
+          "dnsPolicy": "ClusterFirst",
+          "serviceAccountName": "default",
+          "serviceAccount": "default",
+          "nodeName": "minikube",
+          "securityContext": {},
+          "imagePullSecrets": [
+            {
+              "name": "dockerhub"
+            }
+          ],
+          "schedulerName": "default-scheduler"
+        },
+        "status": {
+          "phase": "Running",
+          "conditions": [
+            {
+              "type": "Initialized",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:51Z"
+            },
+            {
+              "type": "Ready",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:53Z"
+            },
+            {
+              "type": "PodScheduled",
+              "status": "True",
+              "lastProbeTime": null,
+              "lastTransitionTime": "2017-08-22T11:17:51Z"
+            }
+          ],
+          "hostIP": "10.88.1.181",
+          "podIP": "172.17.0.5",
+          "startTime": "2017-08-22T11:17:51Z",
+          "containerStatuses": [
+            {
+              "name": "engine",
+              "state": {
+                "running": {
+                  "startedAt": "2017-08-22T11:17:52Z"
+                }
+              },
+              "lastState": {},
+              "ready": true,
+              "restartCount": 0,
+              "image": "qlikea/engine:12.42.0",
+              "imageID": "docker-pullable://qlikea/engine@sha256:331d299079cb758403099dd0cfbd34a2970f3a2d15504d4994fd8425558116ce",
+              "containerID": "docker://063f46fbc0a77a4cf2e82a2856ceee222a1a0738dfbf33701a49af0a06e2d203"
+            }
+          ],
+          "qosClass": "BestEffort"
+        }
       }
     ]
   },
   "miraOutput": [
     {
       "properties": {
-        "service": "engine"
+        "service": "engine",
+        "com.qlik.mira.id": "qix-engine",
+        "pod-template-hash": "4163433257"
       },
       "ipAddress": "172.17.0.4",
       "port": 9076
     },
     {
       "properties": {
+        "com.qlik.mira.id": "qix-engine",
+        "pod-template-hash": "4163433257",
         "service": "engine"
       },
-      "ipAddress": "172.17.0.6",
-      "port": 9076
-    },
-    {
-      "properties": {
-        "service": "engine"
-      },
-      "ipAddress": "172.17.0.7",
+      "ipAddress": "172.17.0.5",
       "port": 9076
     }
   ]

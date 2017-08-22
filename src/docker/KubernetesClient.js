@@ -2,12 +2,12 @@ const http = require('http');
 const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
-function kubeHttpGet(port, path) {
+function kubeHttpGet(path) {
   return new Promise((resolve, reject) => {
     const host = 'localhost';
     http.get({
       host,
-      port,
+      port: Config.kubernetesProxyPort,
       path,
     }, (response) => {
       let body = '';
@@ -42,7 +42,7 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    const pods = await kubeHttpGet(KubernetesClient.proxyPort, '/api/v1/pods?labelSelector=com.qlik.mira.id=qix-engine');
+    const pods = await kubeHttpGet('/api/v1/pods?labelSelector=com.qlik.mira.id=qix-engine');
     const result = [];
 
     pods.items.forEach((pod) => {

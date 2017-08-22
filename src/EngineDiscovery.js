@@ -42,8 +42,7 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
-   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in
-   *  milliseconds.
+   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in milliseconds.
    * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
   constructor(DockerClient, discoveryRefreshRate, healthRefreshRate) {
