@@ -5,7 +5,7 @@ const defaultQixEnginePort = 9076;
 const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
-const defaultQixEngineImageName = 'qlikea/engine';
+const defaultDiscoveryId = 'qix-engine';
 
 /**
  * Class representing the configuration options for running the service.
@@ -31,10 +31,12 @@ class Config {
     }
 
     /**
-     * @prop {string} engineImageName - The image name of the QIX Engine Docker image to use.
+     * @prop {string[]} discoveryIds - Array of identifiers used to discover QIX Engine Docker
+     *   instances. It is assumed that engines are labeled accordingly with the miraDiscoveryId
+     *   label key.
      * @static
      */
-    Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
+    Config.discoveryIds = (process.env.DISCOVERY_IDS || defaultDiscoveryId).replace(/\s+/g, '').split(',');
 
     /**
      * @prop {number} enginePort - The port to use for communicating with the QIX Engine.

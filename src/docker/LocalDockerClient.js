@@ -46,17 +46,15 @@ class LocalDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a
-   *   container is an engine instance.
+   * @param {string[]} discoveryIds - Array of engine discovery identifiers.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(engineImageName) {
+  static async listEngines(discoveryIds) {
     return new Promise((resolve, reject) => {
       LocalDockerClient.docker.listContainers((err, containers) => {
         if (!err) {
           const engineContainers = containers.filter(
-            container => (container.Image.indexOf(engineImageName) === 0)
-              && (container.Names.length > 0));
+            container => discoveryIds.indexOf(container.Labels.miraDiscoveryId) >= 0);
           const engineInfoEntries = engineContainers.map((container) => {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);

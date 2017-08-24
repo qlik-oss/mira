@@ -8,13 +8,6 @@ function getProperties(task) {
   return Object.assign({}, task.Spec.ContainerSpec.Labels);
 }
 
-function getImageNameOfTask(task) {
-  const taskImageName = task.Spec.ContainerSpec.Image;
-  const semiColPos = taskImageName.indexOf(':');
-  const imageName = (semiColPos >= 0) ? taskImageName.substring(0, semiColPos) : taskImageName;
-  return imageName;
-}
-
 function getIpAddress(task) {
   let ipAddr;
 
@@ -35,9 +28,9 @@ function getIpAddress(task) {
   return ipAddr;
 }
 
-function getTasks(docker) {
+function getTasks(docker, discoveryIds) {
   return new Promise((resolve, reject) => {
-    docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
+    docker.listTasks({ filters: `{ "desired-state": ["running"], "label": ${JSON.stringify(discoveryIds)} }` }, (err, tasks) => {
       if (!err) {
         resolve(tasks);
       } else {
@@ -69,13 +62,11 @@ class SwarmDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a
-   *   container is an engine instance.
+   * @param {string[]} discoveryIds - Array of engine discovery identifiers.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(engineImageName) {
-    const tasks = await getTasks(SwarmDockerClient.docker);
-    const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
+  static async listEngines(discoveryIds) {
+    const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryIds);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);

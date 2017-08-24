@@ -8,7 +8,7 @@ spec:
     metadata:
       labels:
         service: engine
-        com.qlik.mira.id: qix-engine
+        miraDiscoveryId: qix-engine
     spec:
       containers:
       - name: engine

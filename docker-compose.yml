@@ -13,8 +13,12 @@ services:
     image: qlikea/engine:12.42.0
     ports:
       - "9176:9076"
+    labels:
+      miraDiscoveryId: qix-engine
 
   engine2:
     image: qlikea/engine:12.42.0
     ports:
       - "9276:9076"
+    labels:
+      miraDiscoveryId: qix-engine

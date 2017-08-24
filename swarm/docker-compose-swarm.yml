@@ -17,6 +17,8 @@ services:
     image: qlikea/engine:12.42.0
     ports:
       - "9176:9076"
+    labels:
+      miraDiscoveryId: qix-engine
     deploy:
       replicas: 2
       placement:

@@ -41,21 +41,19 @@ describe('Config', () => {
     });
   });
 
-  describe('#engineImageName', () => {
+  describe('#discoveryIds', () => {
     afterEach(() => {
-      delete process.env.QIX_ENGINE_IMAGE_NAME;
+      delete process.env.DISCOVERY_IDS;
     });
 
-    it('should have correct value', () => {
-      const expectedEngineImageName = 'qlikea/engine';
-      expect(Config.engineImageName).to.equal(expectedEngineImageName);
+    it('should have correct default value', () => {
+      expect(Config.discoveryIds).to.deep.equal(['qix-engine']);
     });
 
-    it('should have value as set by QIX_ENGINE_IMAGE_NAME env var', () => {
-      const qixEngineImageName = 'dummy/engineimagename';
-      process.env.QIX_ENGINE_IMAGE_NAME = qixEngineImageName;
+    it('should have value as set by DISCOVERY_IDS env var', () => {
+      process.env.DISCOVERY_IDS = ' my-engine,   engine  , qlik-engine  ';
       Config.init();
-      expect(Config.engineImageName).to.equal(qixEngineImageName);
+      expect(Config.discoveryIds).to.deep.equal(['my-engine', 'engine', 'qlik-engine']);
     });
   });
 

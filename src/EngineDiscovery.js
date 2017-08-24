@@ -21,7 +21,7 @@ const EngineEntry = require('./EngineEntry');
   * Discovers engines and sets the timeout for periodical refreshing.
   */
 async function discover() {
-  const engines = await this.DockerClient.listEngines(Config.engineImageName);
+  const engines = await this.DockerClient.listEngines(Config.discoveryIds);
   const keys = engines.map(engine => engine.key);
   this.engineMap.delete(this.engineMap.difference(keys));
   engines.forEach((engine) => {
