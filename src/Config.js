@@ -29,7 +29,7 @@ class Config {
     if (!Config.miraApiPort || isNaN(Config.miraApiPort)) {
       Config.miraApiPort = defaultMiraApiPort;
     }
-    logger.info(`Mira port set to: ${Config.miraApiPort}`);
+    logger.info(`Mira API port set to: ${Config.miraApiPort}`);
 
     Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
 
