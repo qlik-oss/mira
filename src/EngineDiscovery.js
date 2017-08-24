@@ -1,6 +1,7 @@
 const Config = require('./Config');
 const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
+const logger = require('./logger/Logger').get();
 
 /**
  * Engine container return specification.
@@ -23,11 +24,14 @@ const EngineEntry = require('./EngineEntry');
 async function discover() {
   const engines = await this.DockerClient.listEngines(Config.discoveryIds);
   const keys = engines.map(engine => engine.key);
+  const keysToDelete = this.engineMap.difference(keys);
+  keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
   this.engineMap.delete(this.engineMap.difference(keys));
   engines.forEach((engine) => {
     if (!this.engineMap.has(engine.key)) {
       const engineEntry = new EngineEntry(
         engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
+      logger.info(`Engine discovered: ${engine.key}`, engine);
       this.engineMap.add(engine.key, engineEntry);
     }
   });
