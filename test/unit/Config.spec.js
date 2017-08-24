@@ -5,21 +5,21 @@ describe('Config', () => {
     Config.init();
   });
 
-  describe('#miraPort', () => {
+  describe('#miraApiPort', () => {
     afterEach(() => {
-      delete process.env.MIRA_PORT;
+      delete process.env.MIRA_API_PORT;
     });
 
     it('should have correct default value', () => {
-      const expectedMiraPort = 9100;
-      expect(Config.miraPort).to.equal(expectedMiraPort);
+      const expectedMiraApiPort = 9100;
+      expect(Config.miraApiPort).to.equal(expectedMiraApiPort);
     });
 
     it('should have value as set by PORT env var', () => {
-      const miraPort = 9111;
-      process.env.MIRA_PORT = miraPort.toString();
+      const miraApiPort = 9111;
+      process.env.MIRA_API_PORT = miraApiPort.toString();
       Config.init();
-      expect(Config.miraPort).to.equal(miraPort);
+      expect(Config.miraApiPort).to.equal(miraApiPort);
     });
   });
 

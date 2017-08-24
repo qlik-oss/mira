@@ -1,6 +1,6 @@
 const logger = require('./logger/Logger').get();
 
-const defaultMiraPort = 9100;
+const defaultMiraApiPort = 9100;
 const defaultQixEnginePort = 9076;
 const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
@@ -11,7 +11,7 @@ const defaultQixEngineImageName = 'qlikea/engine';
  * Class representing the configuration options for running the service.
  *
  * When the configuration has been initialized, it is populated with the following data
- * - Config.miraPort - The TCP port the service shall expose its API on.
+ * - Config.miraApiPort - The TCP port the service shall expose its API on.
  * - Config.engineImageName - The image name of the QIX Engine Docker image to use.
  * - Config.enginePort - The port to use for communicating with the QIX Engine.
  * - Config.mode - The operation mode of mira which can be 'local', 'swarm' or 'kubernetes'.
@@ -25,11 +25,11 @@ class Config {
   static init(commandLineOptions) {
     const options = commandLineOptions || {};
 
-    Config.miraPort = parseInt(process.env.MIRA_PORT, 10);
-    if (!Config.miraPort || isNaN(Config.miraPort)) {
-      Config.miraPort = defaultMiraPort;
+    Config.miraApiPort = parseInt(process.env.MIRA_API_PORT, 10);
+    if (!Config.miraApiPort || isNaN(Config.miraApiPort)) {
+      Config.miraApiPort = defaultMiraApiPort;
     }
-    logger.info(`Mira port set to: ${Config.miraPort}`);
+    logger.info(`Mira port set to: ${Config.miraApiPort}`);
 
     Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
 

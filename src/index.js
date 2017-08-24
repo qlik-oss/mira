@@ -65,6 +65,6 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(Config.miraPort);
+app.listen(Config.miraApiPort);
 
-logger.info(`Listening on port ${Config.miraPort}`);
+logger.info(`Listening on port ${Config.miraApiPort}`);
