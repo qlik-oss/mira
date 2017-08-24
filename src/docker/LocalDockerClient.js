@@ -54,7 +54,7 @@ class LocalDockerClient {
       LocalDockerClient.docker.listContainers((err, containers) => {
         if (!err) {
           const engineContainers = containers.filter(
-            container => discoveryIds.indexOf(container.Labels.miraDiscoveryId) >= 0);
+            container => discoveryIds.some(id => id === container.Labels.miraDiscoveryId));
           const engineInfoEntries = engineContainers.map((container) => {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
