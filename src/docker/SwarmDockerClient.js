@@ -32,6 +32,8 @@ function getTasks(docker, discoveryIds) {
   return new Promise((resolve, reject) => {
     docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
       if (!err) {
+        // We do filtering on the discovery label here, but this should be possible to do by
+        // specifying a filter on labels above.
         const labeledEngineTasks = tasks.filter(task => discoveryIds.indexOf(
           task.Spec.ContainerSpec.Labels.miraDiscoveryId) >= 0);
         resolve(labeledEngineTasks);

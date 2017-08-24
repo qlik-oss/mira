@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   mira:
-    image: qlikea/mira:0.0.1-226
+    image: qlikea/mira:latest
     ports:
       - "9100:9100"
     command: --mode swarm
@@ -28,6 +28,8 @@ services:
     image: qlikea/engine:12.42.0
     ports:
       - "9276:9076"
+    labels:
+      miraDiscoveryId: qix-engine
     deploy:
       replicas: 1
       placement:
