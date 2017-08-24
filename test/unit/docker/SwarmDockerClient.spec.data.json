@@ -1,17 +1,18 @@
 {
   "endpointsResponse": [
     {
-      "ID": "5z2tle7zljfghsm1g9ied8sa4",
+      "ID": "ac1yt6jzmbvdj9z6namdblnn6",
       "Version": {
-        "Index": 43
+        "Index": 769
       },
-      "CreatedAt": "2017-08-16T10:32:36.740456563Z",
-      "UpdatedAt": "2017-08-16T10:32:45.768274863Z",
+      "CreatedAt": "2017-08-24T09:13:23.354140063Z",
+      "UpdatedAt": "2017-08-24T09:13:38.424336496Z",
       "Labels": {},
       "Spec": {
         "ContainerSpec": {
-          "Image": "qlikea/engine:12.38.0@sha256:9a93bdb2101ec950dc1129b69e9749ba71924004e315c337919e5f902b1faa61",
+          "Image": "qlikea/engine:12.42.0",
           "Labels": {
+            "com.docker.stack.namespace": "mira-stack",
             "miraDiscoveryId": "qix-engine",
             "foo": "foo1",
             "bar": "bar1"
@@ -25,34 +26,28 @@
         "Placement": {
           "Constraints": [
             "node.role == manager"
-          ],
-          "Platforms": [
-            {
-              "Architecture": "amd64",
-              "OS": "linux"
-            }
           ]
         },
         "Networks": [
           {
-            "Target": "04aqg8fssfttnze9uei4llmei",
+            "Target": "vtj9ni6c1mkv7v4ak4j3iqh9g",
             "Aliases": [
-              "engine2"
+              "engine1"
             ]
           }
         ],
         "ForceUpdate": 0
       },
-      "ServiceID": "sevmn3vmg0re72srt0d42cv1u",
-      "Slot": 1,
-      "NodeID": "zcduzrp63zwj3rtuung7ho9vm",
+      "ServiceID": "t1s73kzykq9oenl414moh4htr",
+      "Slot": 2,
+      "NodeID": "4j4kqo4xx8ihfrkmuebvps11m",
       "Status": {
-        "Timestamp": "2017-08-16T10:32:45.668759016Z",
+        "Timestamp": "2017-08-24T09:13:38.372687435Z",
         "State": "running",
         "Message": "started",
         "ContainerStatus": {
-          "ContainerID": "22b73eb200366e3a93ab1ab77a82d52d46b4c1940a0b31249dabca991aeaec20",
-          "PID": 4260
+          "ContainerID": "3701dcfc9c0a0b66715630b3f7cacc2f2226ce4c53380f6f0d66833ec1630d2b",
+          "PID": 41297
         },
         "PortStatus": {}
       },
@@ -60,12 +55,12 @@
       "NetworksAttachments": [
         {
           "Network": {
-            "ID": "ci9263vgunt3x6fkl9j8wzfeq",
+            "ID": "e67gn9n85r0q4tvjwth7d3tay",
             "Version": {
               "Index": 6
             },
-            "CreatedAt": "2017-08-16T10:17:11.766253992Z",
-            "UpdatedAt": "2017-08-16T10:17:11.78261435Z",
+            "CreatedAt": "2017-08-23T13:48:18.402425147Z",
+            "UpdatedAt": "2017-08-23T13:48:18.418368808Z",
             "Spec": {
               "Name": "ingress",
               "Labels": {},
@@ -101,17 +96,17 @@
             }
           },
           "Addresses": [
-            "10.255.0.9/16"
+            "10.255.0.12/16"
           ]
         },
         {
           "Network": {
-            "ID": "04aqg8fssfttnze9uei4llmei",
+            "ID": "vtj9ni6c1mkv7v4ak4j3iqh9g",
             "Version": {
-              "Index": 22
+              "Index": 569
             },
-            "CreatedAt": "2017-08-16T10:32:29.651424915Z",
-            "UpdatedAt": "2017-08-16T10:32:29.656326917Z",
+            "CreatedAt": "2017-08-23T14:06:39.512982339Z",
+            "UpdatedAt": "2017-08-23T14:06:39.519284155Z",
             "Spec": {
               "Name": "mira-stack_default",
               "Labels": {
@@ -125,7 +120,7 @@
             "DriverState": {
               "Name": "overlay",
               "Options": {
-                "com.docker.network.driver.overlay.vxlanid_list": "4097"
+                "com.docker.network.driver.overlay.vxlanid_list": "4098"
               }
             },
             "IPAMOptions": {
@@ -134,30 +129,31 @@
               },
               "Configs": [
                 {
-                  "Subnet": "10.0.0.0/24",
-                  "Gateway": "10.0.0.1"
+                  "Subnet": "10.0.1.0/24",
+                  "Gateway": "10.0.1.1"
                 }
               ]
             }
           },
           "Addresses": [
-            "10.0.0.6/24"
+            "10.0.1.9/24"
           ]
         }
       ]
     },
     {
-      "ID": "6f7jbnwckt9ptcao4pdqsyam3",
+      "ID": "eqlp1xzxu6kfdh2a9i91hd7im",
       "Version": {
-        "Index": 44
+        "Index": 780
       },
-      "CreatedAt": "2017-08-16T10:32:33.26620174Z",
-      "UpdatedAt": "2017-08-16T10:32:45.98614277Z",
+      "CreatedAt": "2017-08-24T09:13:38.429799819Z",
+      "UpdatedAt": "2017-08-24T09:13:52.511982557Z",
       "Labels": {},
       "Spec": {
         "ContainerSpec": {
-          "Image": "qlikea/engine:12.38.0@sha256:9a93bdb2101ec950dc1129b69e9749ba71924004e315c337919e5f902b1faa61",
+          "Image": "qlikea/engine:12.42.0",
           "Labels": {
+            "com.docker.stack.namespace": "mira-stack",
             "miraDiscoveryId": "qix-engine",
             "foo": "foo2",
             "bar": "bar2"
@@ -171,17 +167,11 @@
         "Placement": {
           "Constraints": [
             "node.role == manager"
-          ],
-          "Platforms": [
-            {
-              "Architecture": "amd64",
-              "OS": "linux"
-            }
           ]
         },
         "Networks": [
           {
-            "Target": "04aqg8fssfttnze9uei4llmei",
+            "Target": "vtj9ni6c1mkv7v4ak4j3iqh9g",
             "Aliases": [
               "engine1"
             ]
@@ -189,162 +179,16 @@
         ],
         "ForceUpdate": 0
       },
-      "ServiceID": "hyo7xwewb6sabc35kprx66v09",
-      "Slot": 2,
-      "NodeID": "zcduzrp63zwj3rtuung7ho9vm",
-      "Status": {
-        "Timestamp": "2017-08-16T10:32:45.942283439Z",
-        "State": "running",
-        "Message": "started",
-        "ContainerStatus": {
-          "ContainerID": "ee9256a8964bc34ba083cb9b35ac5b1c65a56473ecabdc6b604f6c469955d43f",
-          "PID": 4259
-        },
-        "PortStatus": {}
-      },
-      "DesiredState": "running",
-      "NetworksAttachments": [
-        {
-          "Network": {
-            "ID": "ci9263vgunt3x6fkl9j8wzfeq",
-            "Version": {
-              "Index": 6
-            },
-            "CreatedAt": "2017-08-16T10:17:11.766253992Z",
-            "UpdatedAt": "2017-08-16T10:17:11.78261435Z",
-            "Spec": {
-              "Name": "ingress",
-              "Labels": {},
-              "DriverConfiguration": {},
-              "Ingress": true,
-              "IPAMOptions": {
-                "Driver": {},
-                "Configs": [
-                  {
-                    "Subnet": "10.255.0.0/16",
-                    "Gateway": "10.255.0.1"
-                  }
-                ]
-              },
-              "Scope": "swarm"
-            },
-            "DriverState": {
-              "Name": "overlay",
-              "Options": {
-                "com.docker.network.driver.overlay.vxlanid_list": "4096"
-              }
-            },
-            "IPAMOptions": {
-              "Driver": {
-                "Name": "default"
-              },
-              "Configs": [
-                {
-                  "Subnet": "10.255.0.0/16",
-                  "Gateway": "10.255.0.1"
-                }
-              ]
-            }
-          },
-          "Addresses": [
-            "10.255.0.7/16"
-          ]
-        },
-        {
-          "Network": {
-            "ID": "04aqg8fssfttnze9uei4llmei",
-            "Version": {
-              "Index": 22
-            },
-            "CreatedAt": "2017-08-16T10:32:29.651424915Z",
-            "UpdatedAt": "2017-08-16T10:32:29.656326917Z",
-            "Spec": {
-              "Name": "mira-stack_default",
-              "Labels": {
-                "com.docker.stack.namespace": "mira-stack"
-              },
-              "DriverConfiguration": {
-                "Name": "overlay"
-              },
-              "Scope": "swarm"
-            },
-            "DriverState": {
-              "Name": "overlay",
-              "Options": {
-                "com.docker.network.driver.overlay.vxlanid_list": "4097"
-              }
-            },
-            "IPAMOptions": {
-              "Driver": {
-                "Name": "default"
-              },
-              "Configs": [
-                {
-                  "Subnet": "10.0.0.0/24",
-                  "Gateway": "10.0.0.1"
-                }
-              ]
-            }
-          },
-          "Addresses": [
-            "10.0.0.4/24"
-          ]
-        }
-      ]
-    },
-    {
-      "ID": "qkqilh1u0zdme549i20msbpam",
-      "Version": {
-        "Index": 44
-      },
-      "CreatedAt": "2017-08-16T10:32:33.26616184Z",
-      "UpdatedAt": "2017-08-16T10:32:45.986249974Z",
-      "Labels": {},
-      "Spec": {
-        "ContainerSpec": {
-          "Image": "qlikea/engine:12.38.0@sha256:9a93bdb2101ec950dc1129b69e9749ba71924004e315c337919e5f902b1faa61",
-          "Labels": {
-            "miraDiscoveryId": "qix-engine",
-            "foo": "foo3",
-            "bar": "bar3"
-          },
-          "Privileges": {
-            "CredentialSpec": null,
-            "SELinuxContext": null
-          }
-        },
-        "Resources": {},
-        "Placement": {
-          "Constraints": [
-            "node.role == manager"
-          ],
-          "Platforms": [
-            {
-              "Architecture": "amd64",
-              "OS": "linux"
-            }
-          ]
-        },
-        "Networks": [
-          {
-            "Target": "04aqg8fssfttnze9uei4llmei",
-            "Aliases": [
-              "engine1"
-            ]
-          }
-        ],
-        "ForceUpdate": 0
-      },
-      "ServiceID": "hyo7xwewb6sabc35kprx66v09",
+      "ServiceID": "t1s73kzykq9oenl414moh4htr",
       "Slot": 1,
-      "NodeID": "zcduzrp63zwj3rtuung7ho9vm",
+      "NodeID": "4j4kqo4xx8ihfrkmuebvps11m",
       "Status": {
-        "Timestamp": "2017-08-16T10:32:45.9441491Z",
+        "Timestamp": "2017-08-24T09:13:52.463896476Z",
         "State": "running",
         "Message": "started",
         "ContainerStatus": {
-          "ContainerID": "8425a809e5074f316ee4d4bcd4bd9a0ba2e3703e21f3a969e2b211605234852b",
-          "PID": 4300
+          "ContainerID": "8262d7dfcda867547affaeccac013d401b72448e4a621d9e300736d9e5b1643f",
+          "PID": 41650
         },
         "PortStatus": {}
       },
@@ -352,12 +196,12 @@
       "NetworksAttachments": [
         {
           "Network": {
-            "ID": "ci9263vgunt3x6fkl9j8wzfeq",
+            "ID": "e67gn9n85r0q4tvjwth7d3tay",
             "Version": {
               "Index": 6
             },
-            "CreatedAt": "2017-08-16T10:17:11.766253992Z",
-            "UpdatedAt": "2017-08-16T10:17:11.78261435Z",
+            "CreatedAt": "2017-08-23T13:48:18.402425147Z",
+            "UpdatedAt": "2017-08-23T13:48:18.418368808Z",
             "Spec": {
               "Name": "ingress",
               "Labels": {},
@@ -398,12 +242,12 @@
         },
         {
           "Network": {
-            "ID": "04aqg8fssfttnze9uei4llmei",
+            "ID": "vtj9ni6c1mkv7v4ak4j3iqh9g",
             "Version": {
-              "Index": 22
+              "Index": 569
             },
-            "CreatedAt": "2017-08-16T10:32:29.651424915Z",
-            "UpdatedAt": "2017-08-16T10:32:29.656326917Z",
+            "CreatedAt": "2017-08-23T14:06:39.512982339Z",
+            "UpdatedAt": "2017-08-23T14:06:39.519284155Z",
             "Spec": {
               "Name": "mira-stack_default",
               "Labels": {
@@ -417,7 +261,7 @@
             "DriverState": {
               "Name": "overlay",
               "Options": {
-                "com.docker.network.driver.overlay.vxlanid_list": "4097"
+                "com.docker.network.driver.overlay.vxlanid_list": "4098"
               }
             },
             "IPAMOptions": {
@@ -426,14 +270,14 @@
               },
               "Configs": [
                 {
-                  "Subnet": "10.0.0.0/24",
-                  "Gateway": "10.0.0.1"
+                  "Subnet": "10.0.1.0/24",
+                  "Gateway": "10.0.1.1"
                 }
               ]
             }
           },
           "Addresses": [
-            "10.0.0.3/24"
+            "10.0.1.3/24"
           ]
         }
       ]
@@ -443,28 +287,21 @@
     {
       "properties": {
         "miraDiscoveryId": "qix-engine",
+        "com.docker.stack.namespace": "mira-stack", 
         "foo": "foo1",
         "bar": "bar1"
       },
-      "ipAddress": "10.0.0.6",
+      "ipAddress": "10.0.1.9",
       "port": 9076
     },
     {
       "properties": {
         "miraDiscoveryId": "qix-engine",
+        "com.docker.stack.namespace": "mira-stack",
         "foo": "foo2",
         "bar": "bar2"
       },
-      "ipAddress": "10.0.0.4",
-      "port": 9076
-    },
-    {
-      "properties": {
-        "miraDiscoveryId": "qix-engine",
-        "foo": "foo3",
-        "bar": "bar3"
-      },
-      "ipAddress": "10.0.0.3",
+      "ipAddress": "10.0.1.3",
       "port": 9076
     }
   ]

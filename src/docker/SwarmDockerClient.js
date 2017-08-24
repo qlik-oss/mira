@@ -30,9 +30,11 @@ function getIpAddress(task) {
 
 function getTasks(docker, discoveryIds) {
   return new Promise((resolve, reject) => {
-    docker.listTasks({ filters: `{ "desired-state": ["running"], "label": ${JSON.stringify(discoveryIds)} }` }, (err, tasks) => {
+    docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
       if (!err) {
-        resolve(tasks);
+        const labeledEngineTasks = tasks.filter(task => discoveryIds.indexOf(
+          task.Spec.ContainerSpec.Labels.miraDiscoveryId) >= 0);
+        resolve(labeledEngineTasks);
       } else {
         logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);
