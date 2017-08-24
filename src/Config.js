@@ -14,7 +14,7 @@ const defaultQixEngineImageName = 'qlikea/engine';
  * - Config.miraPort - The TCP port the service shall expose its API on.
  * - Config.engineImageName - The image name of the QIX Engine Docker image to use.
  * - Config.enginePort - The port to use for communicating with the QIX Engine.
- * - Config.mode - The operation mode of mira which can be 'local' or 'swarm'.
+ * - Config.mode - The operation mode of mira which can be 'local', 'swarm' or 'kubernetes'.
  */
 class Config {
   /**
@@ -25,39 +25,39 @@ class Config {
   static init(commandLineOptions) {
     const options = commandLineOptions || {};
 
-    Config.miraPort = parseInt(process.env.PORT, 10);
+    Config.miraPort = parseInt(process.env.MIRA_PORT, 10);
     if (!Config.miraPort || isNaN(Config.miraPort)) {
       Config.miraPort = defaultMiraPort;
-      logger.info(`Mira port set to: ${Config.miraPort}`);
     }
+    logger.info(`Mira port set to: ${Config.miraPort}`);
 
     Config.engineImageName = process.env.QIX_ENGINE_IMAGE_NAME || defaultQixEngineImageName;
 
     Config.enginePort = parseInt(process.env.QIX_ENGINE_PORT, 10);
     if (!Config.enginePort || isNaN(Config.enginePort)) {
       Config.enginePort = defaultQixEnginePort;
-      logger.info(`Engine port set to: ${Config.enginePort}`);
     }
+    logger.info(`Engine port set to: ${Config.enginePort}`);
 
     Config.engineDiscoveryRefreshRate = parseInt(process.env.ENGINE_DISCOVERY_REFRESH_RATE_MS, 10);
     if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
       Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
-      logger.info(`Discovery refresh rate set to: ${Config.engineDiscoveryRefreshRate}`);
     }
+    logger.info(`Discovery refresh rate set to: ${Config.engineDiscoveryRefreshRate}`);
 
     Config.engineHealthRefreshRate = parseInt(process.env.ENGINE_HEALTH_REFRESH_RATE_MS, 10);
     if (!Config.engineHealthRefreshRate || isNaN(Config.engineHealthRefreshRate)) {
       Config.engineHealthRefreshRate = defaultEngineHealthRefreshRate;
-      logger.info(`Health check refresh rate set to: ${Config.engineHealthRefreshRate}`);
     }
+    logger.info(`Health check refresh rate set to: ${Config.engineHealthRefreshRate}`);
 
     Config.kubernetesProxyPort = parseInt(process.env.KUBERNETES_PROXY_PORT, 10);
     if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
       Config.kubernetesProxyPort = defaultKubernetesProxyPort;
-      logger.info(`Kubernetes api server port set to: ${Config.kubernetesProxyPort}`);
     }
+    logger.info(`Kubernetes api server port set to: ${Config.kubernetesProxyPort}`);
 
-    Config.mode = options.mode || 'swarm'; // swarm is the default value
+    Config.mode = options.mode || process.env.MIRA_MODE || 'swarm'; // swarm is the default value
     if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes') {
       logger.error('Incorrect operation mode. Use --mode option.');
       process.exit(1);
