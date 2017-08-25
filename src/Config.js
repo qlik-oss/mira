@@ -6,6 +6,7 @@ const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
 const defaultDiscoveryId = 'qix-engine';
+const defaultEngineAPIPortLabel = 'qix-api-port';
 
 /**
  * Class representing the configuration options for running the service.
@@ -46,6 +47,17 @@ class Config {
     if (!Config.enginePort || isNaN(Config.enginePort)) {
       Config.enginePort = defaultQixEnginePort;
       logger.info(`Engine port set to: ${Config.enginePort}`);
+    }
+
+    /**
+     * @prop {string} engineAPIPortLabel - The port to use for communicating
+     *                                     with the QIX Engine if no port label has been found.
+     * @static
+     */
+    Config.engineAPIPortLabel = process.env.QIX_ENGINE_API_PORT_LABEL;
+    if (!Config.engineAPIPortLabel) {
+      Config.engineAPIPortLabel = defaultEngineAPIPortLabel;
+      logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
     }
 
     /**

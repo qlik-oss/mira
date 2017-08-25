@@ -15,7 +15,8 @@
             "com.docker.stack.namespace": "mira-stack",
             "miraDiscoveryId": "qix-engine",
             "foo": "foo1",
-            "bar": "bar1"
+            "bar": "bar1",
+            "qix-api-port": 9076
           },
           "Privileges": {
             "CredentialSpec": null,
@@ -289,7 +290,8 @@
         "miraDiscoveryId": "qix-engine",
         "com.docker.stack.namespace": "mira-stack", 
         "foo": "foo1",
-        "bar": "bar1"
+        "bar": "bar1",
+        "qix-api-port": 9076
       },
       "ipAddress": "10.0.1.9",
       "port": 9076
