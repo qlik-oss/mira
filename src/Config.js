@@ -57,8 +57,8 @@ class Config {
     Config.engineAPIPortLabel = process.env.QIX_ENGINE_API_PORT_LABEL;
     if (!Config.engineAPIPortLabel) {
       Config.engineAPIPortLabel = defaultEngineAPIPortLabel;
-      logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
     }
+    logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
 
     /**
      * @prop {number} engineDiscoveryRefreshRate - The engine discovery refresh rate in
