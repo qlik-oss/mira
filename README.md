@@ -26,7 +26,8 @@ The following environment variable can optionally be set for Mira
 | Name                             | Default value | Description |
 |----------------------------------|---------------|-------------|
 | PORT                             | 9100          | Port on which Mira will expose its REST API |
-| QIX_ENGINE_PORT                  | 9076          | Port that Mira will use for QIX Engine communication |
+| QIX_ENGINE_PORT_LABEL            | qix-api-port  | Label that Mira will look for on the engines specifying the port to use for communication |
+| QIX_ENGINE_PORT                  | 9076          | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port|
 | QIX_ENGINE_IMAGE_NAME            | qlikea/engine | QIX Engine image name used to discover engines |
 | ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000          | Refresh rate for discovering engines |
 | ENGINE_HEALTH_REFRESH_RATE_MS    | 5000          | Refresh rate for checking if engines are healthy |
