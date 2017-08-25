@@ -1,6 +1,6 @@
 const nock = require('nock');
 const KubernetesClient = require('../../../src/docker/KubernetesClient');
-const specData = require('./KubernetesClient.spec.data.json');
+const specData = require('./../../test-data/KubernetesClient.spec.data.json');
 
 describe('KubernetesClient', () => {
   before(() => {
