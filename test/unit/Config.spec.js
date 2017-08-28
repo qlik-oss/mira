@@ -5,21 +5,21 @@ describe('Config', () => {
     Config.init();
   });
 
-  describe('#miraPort', () => {
+  describe('#miraApiPort', () => {
     afterEach(() => {
-      delete process.env.PORT;
+      delete process.env.MIRA_API_PORT;
     });
 
     it('should have correct default value', () => {
-      const expectedMiraPort = 9100;
-      expect(Config.miraPort).to.equal(expectedMiraPort);
+      const expectedMiraApiPort = 9100;
+      expect(Config.miraApiPort).to.equal(expectedMiraApiPort);
     });
 
     it('should have value as set by PORT env var', () => {
-      const miraPort = 9111;
-      process.env.PORT = miraPort.toString();
+      const miraApiPort = 9111;
+      process.env.MIRA_API_PORT = miraApiPort.toString();
       Config.init();
-      expect(Config.miraPort).to.equal(miraPort);
+      expect(Config.miraApiPort).to.equal(miraApiPort);
     });
   });
 
@@ -58,6 +58,10 @@ describe('Config', () => {
   });
 
   describe('#mode', () => {
+    afterEach(() => {
+      delete process.env.MIRA_MODE;
+    });
+
     it('should return correct default value after initialization', () => {
       Config.init();
       expect(Config.mode).to.equal('swarm');
@@ -70,6 +74,19 @@ describe('Config', () => {
       expect(Config.mode).to.equal('local');
       Config.init({ mode: 'swarm' });
       expect(Config.mode).to.equal('swarm');
+    });
+
+    it('should be able to set by MIRA_MODE env var', () => {
+      const miraMode = 'kubernetes';
+      process.env.MIRA_MODE = miraMode;
+      Config.init();
+      expect(Config.mode).to.equal(miraMode);
+    });
+
+    it('but mode provided by command should have precedence', () => {
+      process.env.MIRA_MODE = 'kubernetes';
+      Config.init({ mode: 'local' });
+      expect(Config.mode).to.equal('local');
     });
   });
 });
