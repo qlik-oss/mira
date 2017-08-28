@@ -33,11 +33,12 @@ class Config {
 
     /**
      * @prop {string[]} discoveryIds - Array of identifiers used to discover QIX Engine Docker
-     *   instances. It is assumed that engines are labeled accordingly with the miraDiscoveryId
+     *   instances. It is assumed that engines are labeled accordingly with the mira-discovery-id
      *   label key.
      * @static
      */
     Config.discoveryIds = (process.env.DISCOVERY_IDS || defaultDiscoveryId).replace(/\s+/g, '').split(',');
+    logger.info(`Discovery IDs set to: ${Config.discoveryIds}`);
 
     /**
      * @prop {number} enginePort - The port to use for communicating with the QIX Engine.

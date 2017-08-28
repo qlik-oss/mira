@@ -42,7 +42,7 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines(discoveryIds) {
-    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=miraDiscoveryId in (${discoveryIds})`);
+    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=mira-discovery-id in (${discoveryIds})`);
     const result = [];
 
     pods.items.forEach((pod) => {

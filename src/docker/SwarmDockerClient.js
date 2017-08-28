@@ -34,9 +34,9 @@ function getTasks(docker, discoveryIds) {
       if (!err) {
         // We do filtering on the discovery label here, but this should be possible to do by
         // specifying a filter on labels above.
-        const labeledEngineTasks = tasks.filter(task => discoveryIds.indexOf(
-          task.Spec.ContainerSpec.Labels.miraDiscoveryId) >= 0);
-        resolve(labeledEngineTasks);
+        const filteredTasks = tasks.filter(task => discoveryIds.indexOf(
+          task.Spec.ContainerSpec.Labels['mira-discovery-id']) >= 0);
+        resolve(filteredTasks);
       } else {
         logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);

@@ -6,6 +6,8 @@ services:
     ports:
       - "9100:9100"
     command: --mode local
+    environment:
+     - DISCOVERY_IDS=qix-engine, qix-engine-dev
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -14,11 +16,11 @@ services:
     ports:
       - "9176:9076"
     labels:
-      miraDiscoveryId: qix-engine
+      mira-discovery-id: qix-engine
 
   engine2:
     image: qlikea/engine:12.42.0
     ports:
       - "9276:9076"
     labels:
-      miraDiscoveryId: qix-engine
+      mira-discovery-id: qix-engine-dev

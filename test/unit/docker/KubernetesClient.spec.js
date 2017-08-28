@@ -4,7 +4,7 @@ const specData = require('./KubernetesClient.spec.data.json');
 
 describe('KubernetesClient', () => {
   before(() => {
-    nock('http://localhost:8001').get('/api/v1/pods?labelSelector=miraDiscoveryId in (qix-engine)').reply(200, specData.endpointsResponse);
+    nock('http://localhost:8001').get('/api/v1/pods?labelSelector=mira-discovery-id in (qix-engine)').reply(200, specData.endpointsResponse);
   });
 
   describe('#listEngines', async () => {
