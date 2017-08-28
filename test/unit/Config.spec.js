@@ -41,6 +41,24 @@ describe('Config', () => {
     });
   });
 
+  describe('#enginePortLabel', () => {
+    afterEach(() => {
+      delete process.env.QIX_ENGINE_API_PORT_LABEL;
+    });
+
+    it('should have correct default value', () => {
+      const expectedEngineAPIPortLabel = 'qix-engine-port';
+      expect(Config.engineAPIPortLabel).to.equal(expectedEngineAPIPortLabel);
+    });
+
+    it('should have value as set by QIX_ENGINE_API_PORT_LABEL env var', () => {
+      const qixEngineAPIPortLabel = 'qix-engine-port-label-set-by-env';
+      process.env.QIX_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
+      Config.init();
+      expect(Config.engineAPIPortLabel).to.equal(qixEngineAPIPortLabel);
+    });
+  });
+
   describe('#discoveryIds', () => {
     afterEach(() => {
       delete process.env.DISCOVERY_IDS;
