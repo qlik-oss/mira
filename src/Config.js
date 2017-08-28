@@ -6,7 +6,7 @@ const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
 const defaultDiscoveryId = 'qix-engine';
-const defaultEngineAPIPortLabel = 'qix-api-port';
+const defaultEngineAPIPortLabel = 'qix-engine-port';
 
 /**
  * Class representing the configuration options for running the service.

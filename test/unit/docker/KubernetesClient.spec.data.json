@@ -20,7 +20,7 @@
             "com.qlik.mira.id": "qix-engine",
             "pod-template-hash": "4163433257",
             "service": "engine",
-            "qix-api-port": 9076
+            "qix-engine-port": 9076
           },
           "annotations": {
             "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"default\",\"name\":\"engine-deployment-4163433257\",\"uid\":\"88cb5d22-872b-11e7-b00a-00155d014987\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"113182\"}}\n"
@@ -144,7 +144,7 @@
             "com.qlik.mira.id": "qix-engine",
             "pod-template-hash": "4163433257",
             "service": "engine",
-            "qix-api-port": 9076
+            "qix-engine-port": 9076
           },
           "annotations": {
             "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"default\",\"name\":\"engine-deployment-4163433257\",\"uid\":\"88cb5d22-872b-11e7-b00a-00155d014987\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"113210\"}}\n"
@@ -263,7 +263,7 @@
         "service": "engine",
         "com.qlik.mira.id": "qix-engine",
         "pod-template-hash": "4163433257",
-        "qix-api-port": 9076
+        "qix-engine-port": 9076
       },
       "ipAddress": "172.17.0.4",
       "port": 9076
@@ -273,7 +273,7 @@
         "com.qlik.mira.id": "qix-engine",
         "pod-template-hash": "4163433257",
         "service": "engine",
-        "qix-api-port": 9076
+        "qix-engine-port": 9076
       },
       "ipAddress": "172.17.0.5",
       "port": 9076

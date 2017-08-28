@@ -47,12 +47,12 @@ describe('Config', () => {
     });
 
     it('should have correct default value', () => {
-      const expectedEngineAPIPortLabel = 'qix-api-port';
+      const expectedEngineAPIPortLabel = 'qix-engine-port';
       expect(Config.engineAPIPortLabel).to.equal(expectedEngineAPIPortLabel);
     });
 
     it('should have value as set by QIX_ENGINE_API_PORT_LABEL env var', () => {
-      const qixEngineAPIPortLabel = 'qix-api-port-label-set-by-env';
+      const qixEngineAPIPortLabel = 'qix-engine-port-label-set-by-env';
       process.env.QIX_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
       Config.init();
       expect(Config.engineAPIPortLabel).to.equal(qixEngineAPIPortLabel);
