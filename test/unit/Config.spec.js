@@ -61,15 +61,15 @@ describe('Config', () => {
 
   describe('#discoveryIds', () => {
     afterEach(() => {
-      delete process.env.DISCOVERY_IDS;
+      delete process.env.MIRA_DISCOVERY_IDS;
     });
 
     it('should have correct default value', () => {
       expect(Config.discoveryIds).to.deep.equal(['qix-engine']);
     });
 
-    it('should have value as set by DISCOVERY_IDS env var', () => {
-      process.env.DISCOVERY_IDS = ' my-engine,   engine  , qlik-engine  ';
+    it('should have value as set by MIRA_DISCOVERY_IDS env var', () => {
+      process.env.MIRA_DISCOVERY_IDS = ' my-engine,   engine  , qlik-engine  ';
       Config.init();
       expect(Config.discoveryIds).to.deep.equal(['my-engine', 'engine', 'qlik-engine']);
     });

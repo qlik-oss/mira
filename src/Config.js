@@ -37,7 +37,7 @@ class Config {
      *   label key.
      * @static
      */
-    Config.discoveryIds = (process.env.DISCOVERY_IDS || defaultDiscoveryId).replace(/\s+/g, '').split(',');
+    Config.discoveryIds = (process.env.MIRA_DISCOVERY_IDS || defaultDiscoveryId).replace(/\s+/g, '').split(',');
     logger.info(`Discovery IDs set to: ${Config.discoveryIds}`);
 
     /**
