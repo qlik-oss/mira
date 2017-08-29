@@ -43,7 +43,6 @@ The following environment variable can optionally be set for Mira
 | MIRA_MODE                        | swarm            | The operation mode of mira which can be local, swarm or kubernetes. |
 | QIX_ENGINE_API_PORT_LABEL        | qix-engine-port  | Label that Mira will look for on the engines specifying the port to use for communication. |
 | QIX_ENGINE_PORT                  | 9076             | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port. |
-| QIX_ENGINE_IMAGE_NAME            | qlikea/engine    | QIX Engine image name used to discover engines. |
 | ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000             | Refresh rate for discovering engines. |
 | ENGINE_HEALTH_REFRESH_RATE_MS    | 5000             | Refresh rate for checking if engines are healthy. |
 | KUBERNETES_PROXY_PORT            | 8001             | Port that mira will use to talk to kubernetes api server. |
