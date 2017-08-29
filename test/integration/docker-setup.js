@@ -10,6 +10,7 @@ const engineServiceSpec = {
     ContainerSpec: {
       Image: 'qlik/engine',
       Labels: {
+        'qix-engine': 'test',
         'qlik.engine.nodeport': '49076',
       },
     },
