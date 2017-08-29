@@ -18,7 +18,7 @@ describe('LocalDockerClient', () => {
   });
 
   describe('#listEngines', () => {
-    it('should list two engines with matching discovery id', async () => {
+    it('should list two engines with matching discovery label', async () => {
       const engines = await DockerClient.listEngines('qix-engine');
       const rawEngines = engines.map(engine => ({
         properties: engine.properties,
@@ -29,7 +29,7 @@ describe('LocalDockerClient', () => {
       expect(rawEngines).to.deep.equal(specData.miraOutput);
     });
 
-    it('should not list any engines since discovery id does not match', async () => {
+    it('should not list any engines since discovery label does not match', async () => {
       const engines = await DockerClient.listEngines('xxxyyyzzz');
       expect(listContainersStub).to.be.called.once;
       expect(engines.length === 0).to.be.true;
