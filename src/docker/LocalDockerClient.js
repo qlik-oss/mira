@@ -60,7 +60,7 @@ class LocalDockerClient {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
             const port = properties[Config.enginePortLabel] ?
-              properties[Config.enginePortLabel] : getPort(container);
+                         parseInt(properties[Config.enginePortLabel], 10) : getPort(container);
             const key = `${ipAddress}:${port}`;
             return { key, properties, ipAddress, port };
           });

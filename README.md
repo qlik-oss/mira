@@ -83,7 +83,7 @@ services:
     image: qlikea/engine
     ...
     labels:
-      qix-engine-prod:
+      qix-engine-prod: ""
 
 ```
 
@@ -126,7 +126,7 @@ services:
   engine1:
     image: qlikea/engine
     labels:
-      qix-engine-dev:
+      qix-engine-dev: ""
     deploy:
       replicas: 2
       placement:
@@ -200,7 +200,7 @@ spec:
   template:
     metadata:
       labels:
-        qix-engine:
+        qix-engine: ""
     spec:
       containers:
         ...

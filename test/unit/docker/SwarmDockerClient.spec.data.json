@@ -16,7 +16,7 @@
             "qix-engine": "",
             "foo": "foo1",
             "bar": "bar1",
-            "qix-engine-port": 9076
+            "qix-engine-port": "9076"
           },
           "Privileges": {
             "CredentialSpec": null,
@@ -291,7 +291,7 @@
         "com.docker.stack.namespace": "mira-stack", 
         "foo": "foo1",
         "bar": "bar1",
-        "qix-engine-port": 9076
+        "qix-engine-port": "9076"
       },
       "ipAddress": "10.0.1.9",
       "port": 9076
