@@ -22,9 +22,9 @@ _This section remains to be written._
 
 ## Discovery
 
-Engine discovery in Mira is based on labels. Mira assumes that Engine containers are labeled according a specific scheme. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
+Engine discovery in Mira is based on labeling. Mira assumes that Engine container according some simple rules. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
 
-Labeling uses a key-value pair. Mira uses a fixed key of `mira-discovery-id` to identify engines. The value Mira tries to match for this key is by default set to `qix-engine` but this can be changed by providing the `MIRA_DISCOVERY_IDS` environment variable to Mira (see section on environment variables).
+Labeling uses a key-value pair. Mira searches for a specific label key to identify engines. By default, this label key is `qix-engine` but can be configured using the `MIRA_DISCOVERY_LABEL` environment variable. Note that Mira only looks at the label key and ignores its value. The values can even be omitted.
 
 ## Operation Modes
 
@@ -38,15 +38,15 @@ The following environment variable can optionally be set for Mira
 
 | Name                             | Default value    | Description |
 |----------------------------------|------------------|-------------|
-| MIRA_API_PORT                    | 9100             | Port on which Mira will expose its REST API |
-| MIRA_DISCOVERY_IDS               | qix-engine       | Label value identifiers that Mira uses to identify engine instances. Use a comma separated list to allow multiple ids to be used. |
-| MIRA_MODE                        | swarm            | The operation mode of mira which can be local, swarm or kubernetes.|
-| QIX_ENGINE_API_PORT_LABEL        | qix-engine-port  | Label that Mira will look for on the engines specifying the port to use for communication |
-| QIX_ENGINE_PORT                  | 9076             | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port|
-| QIX_ENGINE_IMAGE_NAME            | qlikea/engine    | QIX Engine image name used to discover engines |
-| ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000             | Refresh rate for discovering engines |
-| ENGINE_HEALTH_REFRESH_RATE_MS    | 5000             | Refresh rate for checking if engines are healthy |
-| KUBERNETES_PROXY_PORT            | 8001             | Port that mira will use to talk to kubernetes api server |
+| MIRA_API_PORT                    | 9100             | Port on which Mira will expose its REST API. |
+| MIRA_DISCOVERY_LABEL             | qix-engine       | Label key that Mira uses to identify engine instances. |
+| MIRA_MODE                        | swarm            | The operation mode of mira which can be local, swarm or kubernetes. |
+| QIX_ENGINE_API_PORT_LABEL        | qix-engine-port  | Label that Mira will look for on the engines specifying the port to use for communication. |
+| QIX_ENGINE_PORT                  | 9076             | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port. |
+| QIX_ENGINE_IMAGE_NAME            | qlikea/engine    | QIX Engine image name used to discover engines. |
+| ENGINE_DISCOVERY_REFRESH_RATE_MS | 1000             | Refresh rate for discovering engines. |
+| ENGINE_HEALTH_REFRESH_RATE_MS    | 5000             | Refresh rate for checking if engines are healthy. |
+| KUBERNETES_PROXY_PORT            | 8001             | Port that mira will use to talk to kubernetes api server. |
 
 ### Local Mode
 
@@ -68,7 +68,7 @@ which shall list two engine containers in JSON format.
 
 #### Labeling in local mode
 
-In _local_ mode, Mira assumes that the `mira-discovery-id` label is provided on Docker containers. Below is an example extract from a Docker compose file that would cause Mira to discover the `engine1` container.
+In _local_ mode, Mira assumes that the discovery label is provided on Docker containers. Below is an example extract from a Docker compose file that would cause Mira to discover the `engine1` container.
 
 ```yaml
 version: "3.1"
@@ -78,17 +78,17 @@ services:
     image: qlikea/mira
     ...
     environment:
-     - MIRA_DISCOVERY_IDS=qix-engine-prod
+     - MIRA_DISCOVERY_LABEL=qix-engine-prod
 
   engine1:
     image: qlikea/engine
     ...
     labels:
-      mira-discovery-id: qix-engine-prod
+      qix-engine-prod:
 
 ```
 
-Note that the `MIRA_DISCOVERY_IDS` environment variable provided will override the default value `qix-engine`. Omitting the environment variable is possible, but the `mira-discovery-id` is always needed and should tbe default value `qix-engine` in that case.
+Note that the `MIRA_DISCOVERY_LABEL` environment variable provided will override the default label `qix-engine`. Also note how the value can be omitted, Mira will still discover the engine instance.
 
 ### Swarm Mode
 
@@ -112,7 +112,7 @@ $ docker stack rm mira-stack
 
 #### Labeling in swarm mode
 
-In _swarm_ mode, Mira assumes that the `mira-discovery-id` label is provided on Docker containers. Below is an example extract from a Docker stack file that would cause Mira to discover both Engine replicas as two separate Engine instances of the `engine1` service.
+In _swarm_ mode, Mira assumes that the discovery label is provided on Docker containers. Below is an example extract from a Docker stack file that would cause Mira to discover both Engine replicas as two separate Engine instances of the `engine1` service.
 
 ```yaml
 version: "3.1"
@@ -121,13 +121,13 @@ services:
   mira:
     image: qlikea/mira
     environment:
-     - MIRA_DISCOVERY_IDS=qix-engine-dev
+     - MIRA_DISCOVERY_LABEL=qix-engine-dev
     ...
 
   engine1:
     image: qlikea/engine
     labels:
-      mira-discovery-id: qix-engine-dev
+      qix-engine-dev:
     deploy:
       replicas: 2
       placement:
@@ -189,7 +189,7 @@ Note that the example files here only provide a minimal setup in order to get Mi
 
 #### Labeling in kubernetes mode
 
-In _kubernetes_ mode, Mira assumes that the `mira-discovery-id` label is provided on pods hosting Engine containers. Below is an example extract from a Kubernetes deployment file for two Engine replicas where the label is set up so that Mira can discover them both.
+In _kubernetes_ mode, Mira assumes that the discovery label is provided on pods hosting Engine containers. Below is an example extract from a Kubernetes deployment file for two Engine replicas where the label is set up so that Mira can discover them both.
 
 ```yaml
 apiVersion: apps/v1beta1
@@ -201,7 +201,7 @@ spec:
   template:
     metadata:
       labels:
-        mira-discovery-id: qix-engine
+        qix-engine:
     spec:
       containers:
         ...
@@ -209,7 +209,7 @@ spec:
         ...      
 ```
 
-Note that in this case the default value of `qix-engine` is used and the Mira deployment does not need to specify the environment variable `MIRA_DISCOVERY_IDS`.
+Note that in this case the default value of `qix-engine` is used and the Mira deployment does not need to use the environment variable `MIRA_DISCOVERY_LABEL`.
 
 ### Non-Dockerized Node.js process
 
