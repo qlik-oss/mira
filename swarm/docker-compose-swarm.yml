@@ -20,7 +20,7 @@ services:
     ports:
       - "9176:9076"
     labels:
-      mira-discovery-id: qix-engine-dev
+      qix-engine-dev:
     deploy:
       replicas: 2
       placement:
@@ -31,7 +31,7 @@ services:
     ports:
       - "9276:9076"
     labels:
-      mira-discovery-id: qix-engine-dev
+      qix-engine-dev:
     deploy:
       replicas: 1
       placement:
