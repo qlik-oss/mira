@@ -15,7 +15,7 @@ describe('SwarmDockerClient', () => {
     it('should list two engines with matching discovery id', async () => {
       listTasksStub = sinon.stub(docker, 'listTasks', (opts, callback) => callback(undefined, specData.endpointsResponse));
       DockerClient.docker = docker;
-      const engines = await DockerClient.listEngines(['qix-engine']);
+      const engines = await DockerClient.listEngines('qix-engine');
       const rawEngines = engines.map(engine => ({
         properties: engine.properties,
         ipAddress: engine.ipAddress,

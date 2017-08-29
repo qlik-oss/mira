@@ -22,7 +22,7 @@ const logger = require('./logger/Logger').get();
   * Discovers engines and sets the timeout for periodical refreshing.
   */
 async function discover() {
-  const engines = await this.DockerClient.listEngines(Config.discoveryIds);
+  const engines = await this.DockerClient.listEngines(Config.discoveryLabel);
   const keys = engines.map(engine => engine.key);
   const keysToDelete = this.engineMap.difference(keys);
   keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });

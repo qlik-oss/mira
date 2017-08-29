@@ -78,7 +78,7 @@
         }
       ],
       "Labels": {
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "",
         "foo": "foo1",
         "bar": "bar1",
         "qix-engine-port": 9176
@@ -129,7 +129,7 @@
       "Labels": {
         "foo": "foo2",
         "bar": "bar2",
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "prod",
         "qix-engine-port": 9276
       },
       "State": "running",
@@ -162,7 +162,7 @@
   "miraOutput": [
     {
       "properties": {
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "",
         "foo": "foo1",
         "bar": "bar1",
         "qix-engine-port": 9176
@@ -174,7 +174,7 @@
       "properties": {
         "foo": "foo2",
         "bar": "bar2",
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "prod",
         "qix-engine-port": 9276
       },
       "ipAddress": "127.0.0.1",

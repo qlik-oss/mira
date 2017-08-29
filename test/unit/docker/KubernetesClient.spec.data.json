@@ -17,7 +17,7 @@
           "resourceVersion": "113204",
           "creationTimestamp": "2017-08-22T11:17:50Z",
           "labels": {
-            "com.qlik.mira.id": "qix-engine",
+            "qix-engine": "",
             "pod-template-hash": "4163433257",
             "service": "engine",
             "qix-engine-port": 9076
@@ -141,7 +141,7 @@
           "resourceVersion": "113232",
           "creationTimestamp": "2017-08-22T11:17:51Z",
           "labels": {
-            "com.qlik.mira.id": "qix-engine",
+            "qix-engine": "prod",
             "pod-template-hash": "4163433257",
             "service": "engine",
             "qix-engine-port": 9076
@@ -261,7 +261,7 @@
     {
       "properties": {
         "service": "engine",
-        "com.qlik.mira.id": "qix-engine",
+        "qix-engine": "",
         "pod-template-hash": "4163433257",
         "qix-engine-port": 9076
       },
@@ -270,7 +270,7 @@
     },
     {
       "properties": {
-        "com.qlik.mira.id": "qix-engine",
+        "qix-engine": "prod",
         "pod-template-hash": "4163433257",
         "service": "engine",
         "qix-engine-port": 9076

@@ -5,7 +5,7 @@ const defaultQixEnginePort = 9076;
 const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
-const defaultDiscoveryId = 'qix-engine';
+const defaultDiscoveryLabel = 'qix-engine';
 const defaultEngineAPIPortLabel = 'qix-engine-port';
 
 /**
@@ -32,13 +32,12 @@ class Config {
     logger.info(`Mira API port set to: ${Config.miraApiPort}`);
 
     /**
-     * @prop {string[]} discoveryIds - Array of identifiers used to discover QIX Engine Docker
-     *   instances. It is assumed that engines are labeled accordingly with the mira-discovery-id
-     *   label key.
+     * @prop {string} discoveryLabel - Label used to discover QIX Engine instances.
      * @static
      */
-    Config.discoveryIds = (process.env.MIRA_DISCOVERY_IDS || defaultDiscoveryId).replace(/\s+/g, '').split(',');
-    logger.info(`Discovery IDs set to: ${Config.discoveryIds}`);
+    Config.discoveryLabel = process.env.MIRA_DISCOVERY_LABEL ?
+      process.env.MIRA_DISCOVERY_LABEL.trim() : defaultDiscoveryLabel;
+    logger.info(`Discovery label set to: ${Config.discoveryLabel}`);
 
     /**
      * @prop {number} enginePort - The port to use for communicating with the QIX Engine.

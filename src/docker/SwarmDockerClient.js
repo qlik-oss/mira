@@ -28,14 +28,14 @@ function getIpAddress(task) {
   return ipAddr;
 }
 
-function getTasks(docker, discoveryIds) {
+function getTasks(docker, discoveryLabel) {
   return new Promise((resolve, reject) => {
     docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
       if (!err) {
         // We do filtering on the discovery label here, but this should be possible to do by
         // specifying a filter on labels above.
-        const filteredTasks = tasks.filter(task => discoveryIds.indexOf(
-          task.Spec.ContainerSpec.Labels['mira-discovery-id']) >= 0);
+        const filteredTasks = tasks.filter(
+          task => discoveryLabel in task.Spec.ContainerSpec.Labels);
         resolve(filteredTasks);
       } else {
         logger.error('Error when listing Docker Swarm tasks', err);
@@ -66,11 +66,11 @@ class SwarmDockerClient {
 
   /**
    * Lists engines.
-   * @param {string[]} discoveryIds - Array of engine discovery identifiers.
+   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(discoveryIds) {
-    const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryIds);
+  static async listEngines(discoveryLabel) {
+    const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);

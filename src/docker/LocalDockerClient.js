@@ -47,15 +47,15 @@ class LocalDockerClient {
 
   /**
    * Lists engines.
-   * @param {string[]} discoveryIds - Array of engine discovery identifiers.
+   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(discoveryIds) {
+  static async listEngines(discoveryLabel) {
     return new Promise((resolve, reject) => {
       LocalDockerClient.docker.listContainers((err, containers) => {
         if (!err) {
           const engineContainers = containers.filter(
-            container => discoveryIds.some(id => id === container.Labels['mira-discovery-id']));
+            container => discoveryLabel in container.Labels);
           const engineInfoEntries = engineContainers.map((container) => {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);

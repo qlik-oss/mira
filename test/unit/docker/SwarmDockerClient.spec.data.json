@@ -13,7 +13,7 @@
           "Image": "qlikea/engine:12.42.0",
           "Labels": {
             "com.docker.stack.namespace": "mira-stack",
-            "mira-discovery-id": "qix-engine",
+            "qix-engine": "",
             "foo": "foo1",
             "bar": "bar1",
             "qix-engine-port": 9076
@@ -155,7 +155,7 @@
           "Image": "qlikea/engine:12.42.0",
           "Labels": {
             "com.docker.stack.namespace": "mira-stack",
-            "mira-discovery-id": "qix-engine",
+            "qix-engine": "prod",
             "foo": "foo2",
             "bar": "bar2"
           },
@@ -287,7 +287,7 @@
   "miraOutput": [
     {
       "properties": {
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "",
         "com.docker.stack.namespace": "mira-stack", 
         "foo": "foo1",
         "bar": "bar1",
@@ -298,7 +298,7 @@
     },
     {
       "properties": {
-        "mira-discovery-id": "qix-engine",
+        "qix-engine": "prod",
         "com.docker.stack.namespace": "mira-stack",
         "foo": "foo2",
         "bar": "bar2"

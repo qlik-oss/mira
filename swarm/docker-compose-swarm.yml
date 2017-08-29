@@ -7,7 +7,7 @@ services:
       - "9100:9100"
     command: --mode swarm
     environment:
-     - DISCOVERY=qix-engine, qix-engine-dev
+     - MIRA_DISCOVERY_LABEL=qix-engine-dev
     deploy:
       mode: global
       placement:
@@ -20,7 +20,7 @@ services:
     ports:
       - "9176:9076"
     labels:
-      mira-discovery-id: qix-engine
+      mira-discovery-id: qix-engine-dev
     deploy:
       replicas: 2
       placement:

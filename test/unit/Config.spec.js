@@ -59,19 +59,19 @@ describe('Config', () => {
     });
   });
 
-  describe('#discoveryIds', () => {
+  describe('#discoveryLabel', () => {
     afterEach(() => {
-      delete process.env.MIRA_DISCOVERY_IDS;
+      delete process.env.MIRA_DISCOVERY_LABEL;
     });
 
     it('should have correct default value', () => {
-      expect(Config.discoveryIds).to.deep.equal(['qix-engine']);
+      expect(Config.discoveryLabel).to.equal('qix-engine');
     });
 
-    it('should have value as set by MIRA_DISCOVERY_IDS env var', () => {
-      process.env.MIRA_DISCOVERY_IDS = ' my-engine,   engine  , qlik-engine  ';
+    it('should have value as set by MIRA_DISCOVERY_LABEL env var', () => {
+      process.env.MIRA_DISCOVERY_LABEL = '  qlik-engine     ';
       Config.init();
-      expect(Config.discoveryIds).to.deep.equal(['my-engine', 'engine', 'qlik-engine']);
+      expect(Config.discoveryLabel).to.equal('qlik-engine');
     });
   });
 
