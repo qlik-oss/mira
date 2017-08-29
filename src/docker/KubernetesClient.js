@@ -1,13 +1,14 @@
 const http = require('http');
 const logger = require('../logger/Logger').get();
+const Config = require('../Config');
 
-function listEndpoints(port) {
+function kubeHttpGet(path) {
   return new Promise((resolve, reject) => {
     const host = 'localhost';
     http.get({
       host,
-      port,
-      path: '/api/v1/endpoints',
+      port: Config.kubernetesProxyPort,
+      path,
     }, (response) => {
       let body = '';
       response.on('data', (d) => {
@@ -15,7 +16,7 @@ function listEndpoints(port) {
       });
       response.on('error', (d) => {
         response.resume();
-        logger.error(`Kubernetes endpoints returned HTTP error: ${d}`);
+        logger.error(`Kubernetes ${path} returned HTTP error (response.on): ${d}`);
         reject(d);
       });
       response.on('end', () => {
@@ -26,7 +27,7 @@ function listEndpoints(port) {
         }
       });
     }).on('error', (d) => {
-      logger.error(`Kubernetes endpoints returned HTTP error: ${d}`);
+      logger.error(`Kubernetes ${path} returned HTTP error (get.on): ${d}`);
       reject('No connection to kubernetes');
     });
   });
@@ -38,25 +39,22 @@ function listEndpoints(port) {
 class KubernetesClient {
   /**
    * Lists engines.
+   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines() {
-    const endpointsData = await listEndpoints(KubernetesClient.proxyPort);
+  static async listEngines(discoveryLabel) {
+    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${discoveryLabel}`);
     const result = [];
 
-    endpointsData.items.forEach((endpoint) => {
-      endpoint.subsets.forEach((subset) => {
-        const qixPorts = subset.ports.filter(item => item.name === 'qix');
-        if (qixPorts.length > 0) { // The service has a qix port exposed
-          const port = qixPorts[0].port;
-          subset.addresses.forEach((address) => {
-            const properties = endpoint.metadata.labels || {};
-            const ipAddress = address.ip;
-            const key = `${ipAddress}:${port}`;
-            result.push({ key, properties, ipAddress, port });
-          });
-        }
-      });
+    pods.items.forEach((pod) => {
+      const ipAddress = pod.status.podIP;
+      if (ipAddress.length !== 0) {
+        const properties = pod.metadata.labels;
+        const port = properties[Config.enginePortLabel] ?
+          properties[Config.enginePortLabel] : Config.enginePort;
+        const key = `${ipAddress}:${port}`;
+        result.push({ key, properties, ipAddress, port });
+      }
     });
 
     return result;

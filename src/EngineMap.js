@@ -30,7 +30,7 @@ class EngineMap {
     if (!engine) { throw new Error('Invalid engine parameter'); }
     this.entries[key] = engine;
     engine.startHealthChecks();
-    logger.info(`New engine discovered at ${engine.ipAddress}:${engine.port}`);
+    logger.debug(`Engine map key added: ${key}`);
   }
 
   /**
@@ -44,7 +44,7 @@ class EngineMap {
         const engine = this.entries[key];
         engine.stopHealthChecks();
         delete this.entries[key];
-        logger.info(`Engine removed at ${engine.ipAddress}:${engine.port}`);
+        logger.debug(`Engine map key removed: ${key}`);
       }
     });
   }

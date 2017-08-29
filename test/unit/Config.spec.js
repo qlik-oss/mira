@@ -41,21 +41,37 @@ describe('Config', () => {
     });
   });
 
-  describe('#engineImageName', () => {
+  describe('#enginePortLabel', () => {
     afterEach(() => {
-      delete process.env.QIX_ENGINE_IMAGE_NAME;
+      delete process.env.QIX_ENGINE_API_PORT_LABEL;
     });
 
-    it('should have correct value', () => {
-      const expectedEngineImageName = 'qlikea/engine';
-      expect(Config.engineImageName).to.equal(expectedEngineImageName);
+    it('should have correct default value', () => {
+      const expectedEngineAPIPortLabel = 'qix-engine-port';
+      expect(Config.engineAPIPortLabel).to.equal(expectedEngineAPIPortLabel);
     });
 
-    it('should have value as set by QIX_ENGINE_IMAGE_NAME env var', () => {
-      const qixEngineImageName = 'dummy/engineimagename';
-      process.env.QIX_ENGINE_IMAGE_NAME = qixEngineImageName;
+    it('should have value as set by QIX_ENGINE_API_PORT_LABEL env var', () => {
+      const qixEngineAPIPortLabel = 'qix-engine-port-label-set-by-env';
+      process.env.QIX_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
       Config.init();
-      expect(Config.engineImageName).to.equal(qixEngineImageName);
+      expect(Config.engineAPIPortLabel).to.equal(qixEngineAPIPortLabel);
+    });
+  });
+
+  describe('#discoveryLabel', () => {
+    afterEach(() => {
+      delete process.env.MIRA_DISCOVERY_LABEL;
+    });
+
+    it('should have correct default value', () => {
+      expect(Config.discoveryLabel).to.equal('qix-engine');
+    });
+
+    it('should have value as set by MIRA_DISCOVERY_LABEL env var', () => {
+      process.env.MIRA_DISCOVERY_LABEL = '  qlik-engine     ';
+      Config.init();
+      expect(Config.discoveryLabel).to.equal('qlik-engine');
     });
   });
 

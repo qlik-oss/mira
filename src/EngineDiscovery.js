@@ -1,6 +1,7 @@
 const Config = require('./Config');
 const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
+const logger = require('./logger/Logger').get();
 
 /**
  * Engine container return specification.
@@ -18,6 +19,26 @@ const EngineEntry = require('./EngineEntry');
  */
 
 /**
+  * Discovers engines and sets the timeout for periodical refreshing.
+  */
+async function discover() {
+  const engines = await this.DockerClient.listEngines(Config.discoveryLabel);
+  const keys = engines.map(engine => engine.key);
+  const keysToDelete = this.engineMap.difference(keys);
+  keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
+  this.engineMap.delete(this.engineMap.difference(keys));
+  engines.forEach((engine) => {
+    if (!this.engineMap.has(engine.key)) {
+      const engineEntry = new EngineEntry(
+        engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
+      logger.info(`Engine discovered: ${engine.key}`, engine);
+      this.engineMap.add(engine.key, engineEntry);
+    }
+  });
+  setTimeout(discover.bind(this), this.discoveryRefreshRate);
+}
+
+/**
  * Class providing engine discovery operations such as to list available engine instances and
  * query for engine instances with certain properties.
  */
@@ -25,35 +46,17 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
-   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in
-   *  milliseconds.
+   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in milliseconds.
    * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
   constructor(DockerClient, discoveryRefreshRate, healthRefreshRate) {
+    this.discoveryRefreshRate = discoveryRefreshRate;
+    this.healthRefreshRate = healthRefreshRate;
     this.DockerClient = DockerClient;
     this.engineMap = new EngineMap();
 
     // Start discovery!
-    this.refresh(discoveryRefreshRate, healthRefreshRate);
-  }
-
-  /**
-   * Refreshes the list of discovered engines and sets the timeout for periodical refreshing.
-   * NOTE: This method shall not be called externally. It is only intended to be called from
-   * the constructor.
-   */
-  async refresh(discoveryRefreshRate, healthRefreshRate) {
-    const engines = await this.DockerClient.listEngines(Config.engineImageName);
-    const keys = engines.map(engine => engine.key);
-    this.engineMap.delete(this.engineMap.difference(keys));
-    engines.forEach((engine) => {
-      if (!this.engineMap.has(engine.key)) {
-        const engineEntry = new EngineEntry(
-          engine.properties, engine.ipAddress, engine.port, healthRefreshRate);
-        this.engineMap.add(engine.key, engineEntry);
-      }
-    });
-    setTimeout(this.refresh.bind(this), discoveryRefreshRate);
+    discover.call(this);
   }
 
   /**

@@ -8,13 +8,6 @@ function getProperties(task) {
   return Object.assign({}, task.Spec.ContainerSpec.Labels);
 }
 
-function getImageNameOfTask(task) {
-  const taskImageName = task.Spec.ContainerSpec.Image;
-  const semiColPos = taskImageName.indexOf(':');
-  const imageName = (semiColPos >= 0) ? taskImageName.substring(0, semiColPos) : taskImageName;
-  return imageName;
-}
-
 function getIpAddress(task) {
   let ipAddr;
 
@@ -35,11 +28,15 @@ function getIpAddress(task) {
   return ipAddr;
 }
 
-function getTasks(docker) {
+function getTasks(docker, discoveryLabel) {
   return new Promise((resolve, reject) => {
     docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
       if (!err) {
-        resolve(tasks);
+        // We do filtering on the discovery label here, but this should be possible to do by
+        // specifying a filter on labels above.
+        const filteredTasks = tasks.filter(
+          task => discoveryLabel in task.Spec.ContainerSpec.Labels);
+        resolve(filteredTasks);
       } else {
         logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);
@@ -69,17 +66,16 @@ class SwarmDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a
-   *   container is an engine instance.
+   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(engineImageName) {
-    const tasks = await getTasks(SwarmDockerClient.docker);
-    const engineTasks = tasks.filter(task => getImageNameOfTask(task) === engineImageName);
+  static async listEngines(discoveryLabel) {
+    const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);
-      const port = Config.enginePort;
+      const port = properties[Config.enginePortLabel] ?
+                   properties[Config.enginePortLabel] : Config.enginePort;
       const key = `${ipAddress}:${port}`;
       return { key, properties, ipAddress, port };
     });

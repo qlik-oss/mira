@@ -15,12 +15,7 @@ async function checkHealth() {
     logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
     this.properties.healthy = false;
   }
-  this.fetcherTimeOutId = setTimeout(
-    checkHealth.bind(this),
-    this.refreshRate,
-    this,
-    this.healthFetcher,
-    this.refreshRate);
+  this.fetcherTimeOutId = setTimeout(checkHealth.bind(this), this.refreshRate);
 }
 
 /**

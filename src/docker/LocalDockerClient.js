@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
 const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
+const Config = require('../Config');
 
 const localhostIp = '127.0.0.1';
 
@@ -46,21 +47,20 @@ class LocalDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} engineImageName - The Engine Docker image name used to determine if a
-   *   container is an engine instance.
+   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(engineImageName) {
+  static async listEngines(discoveryLabel) {
     return new Promise((resolve, reject) => {
       LocalDockerClient.docker.listContainers((err, containers) => {
         if (!err) {
           const engineContainers = containers.filter(
-            container => (container.Image.indexOf(engineImageName) === 0)
-              && (container.Names.length > 0));
+            container => discoveryLabel in container.Labels);
           const engineInfoEntries = engineContainers.map((container) => {
             const properties = getProperties(container);
             const ipAddress = getIpAddress(container);
-            const port = getPort(container);
+            const port = properties[Config.enginePortLabel] ?
+              properties[Config.enginePortLabel] : getPort(container);
             const key = `${ipAddress}:${port}`;
             return { key, properties, ipAddress, port };
           });
