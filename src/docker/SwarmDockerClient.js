@@ -74,8 +74,8 @@ class SwarmDockerClient {
     const engineInfoEntries = engineTasks.map((task) => {
       const properties = getProperties(task);
       const ipAddress = getIpAddress(task);
-      const port = properties[Config.enginePortLabel] ?
-                   parseInt(properties[Config.enginePortLabel], 10) : Config.enginePort;
+      const port = properties[Config.engineAPIPortLabel] ?
+                   parseInt(properties[Config.engineAPIPortLabel], 10) : Config.enginePort;
       const key = `${ipAddress}:${port}`;
       return { key, properties, ipAddress, port };
     });
