@@ -39,7 +39,7 @@ class Config {
      * @prop {number} enginePort - The port to use for communicating with the QIX Engine.
      * @static
      */
-    Config.enginePort = parseInt(process.env.QIX_ENGINE_PORT, 10);
+    Config.enginePort = parseInt(process.env.MIRA_ENGINE_API_PORT, 10);
     if (!Config.enginePort || isNaN(Config.enginePort)) {
       Config.enginePort = defaultQixEnginePort;
     }
@@ -50,7 +50,7 @@ class Config {
      *                                     with the QIX Engine if no port label has been found.
      * @static
      */
-    Config.engineAPIPortLabel = process.env.QIX_ENGINE_API_PORT_LABEL;
+    Config.engineAPIPortLabel = process.env.MIRA_ENGINE_API_PORT_LABEL;
     if (!Config.engineAPIPortLabel) {
       Config.engineAPIPortLabel = defaultEngineAPIPortLabel;
     }
@@ -62,7 +62,7 @@ class Config {
      *   detect new or removed engine instaces.
      * @static
      */
-    Config.engineDiscoveryRefreshRate = parseInt(process.env.ENGINE_DISCOVERY_REFRESH_RATE_MS, 10);
+    Config.engineDiscoveryRefreshRate = parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
     if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
       Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
     }
@@ -72,7 +72,7 @@ class Config {
      * @prop {number} engineHealthRefreshRate - The health check refresh rate in milliseconds.
      * @static
      */
-    Config.engineHealthRefreshRate = parseInt(process.env.ENGINE_HEALTH_REFRESH_RATE_MS, 10);
+    Config.engineHealthRefreshRate = parseInt(process.env.MIRA_ENGINE_HEALTH_REFRESH_RATE, 10);
     if (!Config.engineHealthRefreshRate || isNaN(Config.engineHealthRefreshRate)) {
       Config.engineHealthRefreshRate = defaultEngineHealthRefreshRate;
     }
@@ -83,7 +83,7 @@ class Config {
      *   kubernetes mode.
      * @static
      */
-    Config.kubernetesProxyPort = parseInt(process.env.KUBERNETES_PROXY_PORT, 10);
+    Config.kubernetesProxyPort = parseInt(process.env.MIRA_KUBERNETES_PROXY_PORT, 10);
     if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
       Config.kubernetesProxyPort = defaultKubernetesProxyPort;
     }
