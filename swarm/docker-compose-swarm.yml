@@ -5,8 +5,8 @@ services:
     image: qlikea/mira:latest
     ports:
       - "9100:9100"
-    command: --mode swarm
     environment:
+     - MIRA_MODE=swarm
      - MIRA_DISCOVERY_LABEL=qix-engine-dev
     deploy:
       mode: global
