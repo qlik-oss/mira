@@ -25,7 +25,7 @@ describe('Config', () => {
 
   describe('#enginePort', () => {
     afterEach(() => {
-      delete process.env.QIX_ENGINE_PORT;
+      delete process.env.MIRA_ENGINE_API_PORT;
     });
 
     it('should have correct default value', () => {
@@ -33,9 +33,9 @@ describe('Config', () => {
       expect(Config.enginePort).to.equal(expectedEnginePort);
     });
 
-    it('should have value as set by QIX_ENGINE_PORT env var', () => {
+    it('should have value as set by MIRA_ENGINE_API_PORT env var', () => {
       const qixEnginePort = 9777;
-      process.env.QIX_ENGINE_PORT = qixEnginePort.toString();
+      process.env.MIRA_ENGINE_API_PORT = qixEnginePort.toString();
       Config.init();
       expect(Config.enginePort).to.equal(qixEnginePort);
     });
@@ -43,7 +43,7 @@ describe('Config', () => {
 
   describe('#enginePortLabel', () => {
     afterEach(() => {
-      delete process.env.QIX_ENGINE_API_PORT_LABEL;
+      delete process.env.MIRA_ENGINE_API_PORT_LABEL;
     });
 
     it('should have correct default value', () => {
@@ -51,9 +51,9 @@ describe('Config', () => {
       expect(Config.engineAPIPortLabel).to.equal(expectedEngineAPIPortLabel);
     });
 
-    it('should have value as set by QIX_ENGINE_API_PORT_LABEL env var', () => {
+    it('should have value as set by MIRA_ENGINE_API_PORT_LABEL env var', () => {
       const qixEngineAPIPortLabel = 'qix-engine-port-label-set-by-env';
-      process.env.QIX_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
+      process.env.MIRA_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
       Config.init();
       expect(Config.engineAPIPortLabel).to.equal(qixEngineAPIPortLabel);
     });
