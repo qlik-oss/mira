@@ -51,12 +51,10 @@ jobs:
             RELEASE_PATTERN="v[0-9].*"
             if [[ -z "${CIRCLE_TAG}" || ! $CIRCLE_TAG =~ $RELEASE_PATTERN ]]; then
               VER+="-$CIRCLE_BUILD_NUM"
+              npm version $VER --no-git-tag-version
             fi
 
             echo "$VER" > ./version.txt
-            if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
-              npm version $VER --no-git-tag-version
-            fi
       - run:
           name: Build Docker image
           command: |
