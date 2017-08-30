@@ -45,7 +45,11 @@ jobs:
           name: Update version tag
           command: |
             set -e
-            VER=$(node -e "console.log(require('./package.json').version.replace(/-[0-9]+/, '-$CIRCLE_BUILD_NUM'))")
+            VER=$(node -e "console.log(require('./package.json').version)")
+            # If a git tag is not set then add the cci build number to the version.
+            if [[ -z "${CIRCLE_TAG}" ]]; then
+              VER+="-$CIRCLE_BUILD_NUM"
+            fi
             echo "$VER" > ./version.txt
             if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
               npm version $VER --no-git-tag-version
