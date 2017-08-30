@@ -50,8 +50,8 @@ class KubernetesClient {
       const ipAddress = pod.status.podIP;
       if (ipAddress.length !== 0) {
         const properties = pod.metadata.labels;
-        const port = properties[Config.enginePortLabel] ?
-                     parseInt(properties[Config.enginePortLabel], 10) : Config.enginePort;
+        const port = properties[Config.engineAPIPortLabel] ?
+                     parseInt(properties[Config.engineAPIPortLabel], 10) : Config.enginePort;
         const key = `${ipAddress}:${port}`;
         result.push({ key, properties, ipAddress, port });
       }
