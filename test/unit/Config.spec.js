@@ -93,6 +93,5 @@ describe('Config', () => {
       Config.init();
       expect(Config.mode).to.equal(miraMode);
     });
-
   });
 });
