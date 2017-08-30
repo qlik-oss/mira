@@ -46,10 +46,12 @@ jobs:
           command: |
             set -e
             VER=$(node -e "console.log(require('./package.json').version)")
-            # If a git tag is not set then add the cci build number to the version.
-            if [[ -z "${CIRCLE_TAG}" ]]; then
+            # If a git tag is not set or if the tag does not match release pattern e.g. v1.2.3, then add the cci build number to the version.
+            RELEASE_PATTERN="v[0-9].*"
+            if [[ -z "${CIRCLE_TAG}" || ! $CIRCLE_TAG =~ $RELEASE_PATTERN ]]; then
               VER+="-$CIRCLE_BUILD_NUM"
             fi
+
             echo "$VER" > ./version.txt
             if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
               npm version $VER --no-git-tag-version
