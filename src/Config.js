@@ -15,12 +15,8 @@ class Config {
   /**
    * Initializes the configuration.
    * This method must be called before any of the static properties of the class are available.
-   * @param {object} commandLineOptions - Options passed as command line arguments when starting
-   *   the service.
    */
-  static init(commandLineOptions) {
-    const options = commandLineOptions || {};
-
+  static init() {
     /**
      * @prop {number} miraApiPort - The TCP port the service shall expose its API on.
      * @static
@@ -97,9 +93,9 @@ class Config {
      * @prop {string} mode - The operation mode of mira which can be 'local' or 'swarm'.
      * @static
      */
-    Config.mode = options.mode || process.env.MIRA_MODE || 'swarm'; // swarm is the default value
+    Config.mode = process.env.MIRA_MODE || 'swarm'; // swarm is the default value
     if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes') {
-      logger.error('Incorrect operation mode. Use --mode option.');
+      logger.error('Incorrect operation mode. Supported modes are "local", "swarm" and "kubernetes"');
       process.exit(1);
     }
     logger.info(`Mira is running in ${Config.mode} mode`);

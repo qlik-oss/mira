@@ -5,8 +5,8 @@ services:
     image: qlikea/mira${TAG} # If TAG is not set docker image with tag 'latest' will be used.
     ports:
       - "9100:9100"
-    command: --mode local
     environment:
+     - MIRA_MODE=local
      - MIRA_DISCOVERY_LABEL=qix-engine-local
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

@@ -87,24 +87,11 @@ describe('Config', () => {
       expect(Config.mode).to.equal('swarm');
     });
 
-    it('should return same value as provided in initialization', () => {
-      Config.init({ mode: 'local' });
-      expect(Config.mode).to.equal('local');
-      Config.init({ mode: 'swarm' });
-      expect(Config.mode).to.equal('swarm');
-    });
-
     it('should be able to set by MIRA_MODE env var', () => {
       const miraMode = 'kubernetes';
       process.env.MIRA_MODE = miraMode;
       Config.init();
       expect(Config.mode).to.equal(miraMode);
-    });
-
-    it('but mode provided by command should have precedence', () => {
-      process.env.MIRA_MODE = 'kubernetes';
-      Config.init({ mode: 'local' });
-      expect(Config.mode).to.equal('local');
     });
   });
 });

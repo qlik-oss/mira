@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/qlik-ea/mira#readme",
   "dependencies": {
-    "command-line-args": "4.0.4",
     "containerized": "1.0.2",
     "dockerode": "2.4.3",
     "koa": "2.2.0",
