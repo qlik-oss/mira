@@ -62,7 +62,8 @@ class Config {
      *   detect new or removed engine instaces.
      * @static
      */
-    Config.engineDiscoveryRefreshRate = parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
+    Config.engineDiscoveryRefreshRate =
+    parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
     if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
       Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
     }
