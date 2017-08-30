@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const koaLoggerWinston = require('koa-logger-winston');
-const commandLineArgs = require('command-line-args');
 const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
 const path = require('path');
@@ -13,9 +12,8 @@ const getDockerClient = require('./docker/getDockerClient');
 const apiVersion = 'v1';
 const healthEndpoint = 'health';
 const enginesEndpoint = 'engines';
-const commandLineOptions = commandLineArgs([{ name: 'mode', type: String }], { partial: true });
 
-Config.init(commandLineOptions);
+Config.init();
 
 const app = new Koa();
 const router = new Router({ prefix: `/${apiVersion}` });

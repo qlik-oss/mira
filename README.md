@@ -49,7 +49,7 @@ The following environment variable can optionally be set for Mira
 
 ### Local Mode
 
-In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by providing the `--mode local` command line argument when starting the Mira Docker container or starting the Node.js process.
+In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by setting the `MIRA_MODE` environment variable to `local` when starting the Mira Docker container or starting the Node.js process.
 
 The recommended way to start Mira in _local_ mode is through a `docker-compose` file; for example
 
@@ -91,7 +91,7 @@ Note that the `MIRA_DISCOVERY_LABEL` environment variable provided will override
 
 ### Swarm Mode
 
-In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by providing the `--mode swarm` command line argument when starting the Mira Docker service.
+In _swarm_ mode, Mira assumes that all engines instances run as Docker Swarm services inside one single Docker Swarm cluster. _Swarm_ mode is set by setting the environment variable `MIRA_MODE` to `swarm` before starting the Mira Docker service.
 
 Mira _must_ be configured to run on a Swarm manager node, since it needs to communicate to a manager Docker Engine.
 
@@ -120,6 +120,7 @@ services:
   mira:
     image: qlikea/mira
     environment:
+     - MIRA_MODE=swarm
      - MIRA_DISCOVERY_LABEL=qix-engine-dev
     ...
 
@@ -140,7 +141,7 @@ Labeling outside the `deploy:` scope also has the benefit of that the labeling s
 
 ### Kubernetes Mode
 
-In _kubernetes_ mode, Mira assumes that all engine instances are run as Kubernetes pods and that the engines are exposed as Kubernetes services with _named_ ports. _Kubernetes_ mode is set by providing the `--mode kubernetes` command line argument when starting the Mira pod.
+In _kubernetes_ mode, Mira assumes that all engine instances are run as Kubernetes pods and that the engines are exposed as Kubernetes services with _named_ ports. _Kubernetes_ mode is set by setting the `MIRA_MODE` environmentvariable to `kubernetes` before starting the Mira pod.
 
 Since Mira needs to communicate with the Kubernetes API server, a `kubectl` proxy should be set up in the Kubernetes deployment. A convenient way to do this is to bundle the `kubectl` proxy as a container in the same pod as the Mira container. In this way, Mira can reach the proxy on `localhost`.
 
@@ -215,7 +216,7 @@ Note that in this case the default value of `qix-engine` is used and the Mira de
 For convenience and development purposes, Mira can be started as a non-Dockerized Node.js process. The _local_ and _swarm_ modes described above, still apply.
 
 ```sh
-$ npm start -- --mode local
+$ npm start
 ```
 
 ## Development
