@@ -10,14 +10,14 @@ describe('Mira in kubernetes mode', () => {
   let server;
 
   beforeEach(() => {
-    nock('http://localhost:8001').get('/api/v1/endpoints').times(10).reply(200, specData.endpointsResponse);
+    nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').times(10).reply(200, specData.endpointsResponse);
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 
   it('should translate the kubernetes endpoints list to a mira engine list', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res).to.be.json;
-    expect(res.body.length).to.equal(3);
+    expect(res.body.length).to.equal(2);
   });
 
   afterEach(() => {

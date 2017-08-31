@@ -20,7 +20,7 @@ describe('Mira in docker swarm mode', () => {
   it('should translate the docker swarm endpoints list to a mira engine list', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res).to.be.json;
-    expect(res.body.length).to.equal(3);
+    expect(res.body.length).to.equal(2);
   });
 
   afterEach(() => {
