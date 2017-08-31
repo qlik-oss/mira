@@ -24,6 +24,9 @@ jobs:
             npm run test:unit
       - store_artifacts:
           path: ./coverage
+      - run:
+          name: Run Component Tests
+          command: npm run test:component
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:

@@ -245,7 +245,7 @@ $ docker build -t qlikea/mira:mytag .
 
 ### Testing
 
-#### Running Unit Tests
+#### Unit Tests
 
 Unit tests run as part of the Circle CI build. To run unit tests locally
 
@@ -257,7 +257,32 @@ Test coverage lcov and html report will be stored at `./coverage`. In Circle CI 
 
 #### Component Tests
 
-_This section remains to be written._
+The component tests executes Mira as a Node.js process and are divided into test suites for each [operation mode](#operation-modes). Each suite is also part of the job pipeline in Circle CI.
+
+To run component tests for all operation modes
+
+```sh
+$ npm install
+$ npm run test:component
+```
+
+There is also separate npm tasks for running each mode. To run only component tests for local docker mode
+
+```sh
+$ npm run test:component:local
+```
+
+and for docker swarm
+
+```sh
+$ npm run test:component:swarm
+```
+
+and for kubernetes
+
+```sh
+$ npm run test:component:kubernetes
+```
 
 #### Integration Tests
 

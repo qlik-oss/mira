@@ -1,6 +1,6 @@
 const Docker = require('dockerode');
 const DockerClient = require('../../../src/docker/LocalDockerClient');
-const specData = require('./LocalDockerClient.spec.data.json');
+const specData = require('./../../test-data/LocalDockerClient.spec.data.json');
 
 const docker = new Docker();
 

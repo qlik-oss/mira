@@ -7,6 +7,10 @@
     "start": "node ./src/index.js",
     "test": "npm run test:unit",
     "test:unit": "aw-test-coverage -- ./test/unit",
+    "test:component": "npm run test:component:local && npm run test:component:swarm && npm run test:component:kubernetes",
+    "test:component:local": "env MIRA_MODE=local aw-test-runner ./test/component/local",
+    "test:component:swarm": "env MIRA_MODE=swarm aw-test-runner ./test/component/swarm",
+    "test:component:kubernetes": "env MIRA_MODE=kubernetes aw-test-runner ./test/component/kubernetes",
     "test:integration": "aw-test-runner ./test/integration/integration-local.spec.js",
     "lint": "eslint .",
     "lint-fix": "eslint --fix ."
