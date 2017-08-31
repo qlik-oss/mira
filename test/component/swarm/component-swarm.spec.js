@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 describe('Mira in docker swarm mode', () => {
   let server;
 
-  before(() => {
+  beforeEach(() => {
     // Mock docker.sock
     nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
       .reply(200, specData.endpointsResponse);
@@ -19,10 +19,15 @@ describe('Mira in docker swarm mode', () => {
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 
-  it('should translate the docker swarm endpoints list to a mira engine list', async () => {
+  it('GET /engines should translate the docker swarm endpoints list to a mira engine list', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res).to.be.json;
     expect(res.body.length).to.equal(2);
+  });
+
+  it('GET /health should return OK', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/health');
+    expect(res.statusCode).to.equal(200);
   });
 
   afterEach(() => {

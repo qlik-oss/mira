@@ -25,3 +25,10 @@ describe('GET /engines', () => {
     expect(res.body[1].properties).to.include.keys('mem.allocated', 'cpu.total');
   });
 });
+
+describe('GET /health', () => {
+  it('should return OK', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/health');
+    expect(res.statusCode).to.equal(200);
+  });
+});
