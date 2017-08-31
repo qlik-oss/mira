@@ -11,6 +11,9 @@ describe('Mira in kubernetes mode', () => {
 
   beforeEach(() => {
     nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').times(10).reply(200, specData.endpointsResponse);
+    // Engine healthcheck mocks
+    nock(`http://${specData.miraOutput[0].ipAddress}:${specData.miraOutput[0].port}`).get('/healthcheck').times(10).reply(200, {});
+    nock(`http://${specData.miraOutput[1].ipAddress}:${specData.miraOutput[1].port}`).get('/healthcheck').times(10).reply(200, {});
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 

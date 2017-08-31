@@ -11,9 +11,11 @@ describe('Mira in docker swarm mode', () => {
   let server;
 
   before(() => {
-    nock('http://localhost:8001').filteringPath(() => '/')
-      .get('/').times(10)
+    // Mock docker.sock
+    nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
       .reply(200, specData.endpointsResponse);
+    nock(`http://${specData.miraOutput[0].ipAddress}:${specData.miraOutput[0].port}`).get('/healthcheck').times(10).reply(200, {});
+    nock(`http://${specData.miraOutput[1].ipAddress}:${specData.miraOutput[1].port}`).get('/healthcheck').times(10).reply(200, {});
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 

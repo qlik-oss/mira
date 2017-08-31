@@ -257,7 +257,26 @@ Test coverage lcov and html report will be stored at `./coverage`. In Circle CI 
 
 #### Component Tests
 
-_This section remains to be written._
+The component tests executes mira as a Node.js process and are divided into test suites for each [operation mode](#operation modes). Each suite is also part of the pipeline in Circle CI.
+
+To run component tests for local mode:
+
+```sh
+$ npm install
+$ npm run test:component:local
+```
+
+and for docker swarm:
+
+```sh
+$ npm run test:component:swarm
+```
+
+and for kubernetes:
+
+```sh
+$ npm run test:component:kubernetes
+```
 
 #### Integration Tests
 
