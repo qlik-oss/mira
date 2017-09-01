@@ -14,10 +14,15 @@ describe('Mira in local docker mode with no engines', () => {
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 
-  it('should return an empty engine list', async () => {
+  it('GET /engines should return an empty engine list', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res).to.be.json;
     expect(res.body.length).to.equal(0);
+  });
+
+  it('GET /health should return OK', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/health');
+    expect(res.statusCode).to.equal(200);
   });
 
   after(() => {
