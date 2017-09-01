@@ -32,3 +32,11 @@ describe('GET /health', () => {
     expect(res.statusCode).to.equal(200);
   });
 });
+
+describe('GET /openapi', () => {
+  it('should return OK and the swagger ui', async () => {
+    const res = await chai.request(miraEndpoint).get('/openapi');
+    expect(res.statusCode).to.equal(200);
+    expect(res.type).to.equal('text/html');
+  });
+});
