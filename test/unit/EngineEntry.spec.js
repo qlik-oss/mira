@@ -6,16 +6,17 @@ describe('EngineEntry', () => {
   let entry;
   let healthFetcher;
   let fetchStub;
+  const healthOk = { status: 'ok' };
 
   beforeEach(() => {
     healthFetcher = new EngineHealthFetcher({ get: () => { } });
-    fetchStub = sinon.stub(healthFetcher, 'fetch', async () => Promise.resolve({}));
-    entry = new EngineEntry({ a: 'foo', b: 'bar' }, '10.10.10.10', 9999, 10, healthFetcher);
+    fetchStub = sinon.stub(healthFetcher, 'fetch', async () => Promise.resolve(healthOk));
+    entry = new EngineEntry({ engine: { health: {} } }, '10.10.10.10', 9999, 10, healthFetcher);
   });
 
   describe('#constructor()', () => {
     it('should construct with arguments', () => {
-      expect(entry.properties).to.deep.equal({ a: 'foo', b: 'bar' });
+      expect(entry.properties).to.deep.equal({ engine: { health: {} } });
       expect(entry.ipAddress).to.equal('10.10.10.10');
       expect(entry.port).to.equal(9999);
       expect(entry.refreshRate).to.equal(10);
@@ -28,8 +29,7 @@ describe('EngineEntry', () => {
       await sleep(30);  // Should make room for at least two time-outs.
       expect(fetchStub.callCount >= 2).to.be.true;
       expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/healthcheck');
-      console.log(entry.properties.healthy);
-      expect(entry.properties.healthy).to.be.true;
+      expect(entry.properties.engine.health.status).to.equal('ok');
     });
 
     it('should be possible to restart', async () => {
@@ -69,8 +69,6 @@ describe('EngineEntry', () => {
 
     it('should handle arrays', () => {
       entry.properties.numb = 23;
-      expect(entry.satisfies({ a: ['dummy', 'foo'] })).to.be.true;
-      expect(entry.satisfies({ a: ['dummy', 'bar'] })).to.be.false;
       expect(entry.satisfies({ numb: [21, 22, 23] })).to.be.true;
       expect(entry.satisfies({ numb: ['21', '22', '23'] })).to.be.false;
     });

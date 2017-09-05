@@ -27,12 +27,12 @@ async function discover() {
   const keysToDelete = this.engineMap.difference(keys);
   keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
   this.engineMap.delete(this.engineMap.difference(keys));
-  engines.forEach((engine) => {
-    if (!this.engineMap.has(engine.key)) {
+  engines.forEach((item) => {
+    if (!this.engineMap.has(item.key)) {
       const engineEntry = new EngineEntry(
-        engine.properties, engine.ipAddress, engine.port, this.healthRefreshRate);
-      logger.info(`Engine discovered: ${engine.key}`, engine);
-      this.engineMap.add(engine.key, engineEntry);
+        item, item.engine.ip, item.engine.port, this.healthRefreshRate);
+      logger.info(`Engine discovered: ${item.key}`);
+      this.engineMap.add(item.key, engineEntry);
     }
   });
   setTimeout(discover.bind(this), this.discoveryRefreshRate);
@@ -61,22 +61,16 @@ class EngineDiscovery {
 
   /**
    * Lists available engine instances.
-   * @param {object} [properties] - Optional properties a returned engine must have.
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
-  async list(properties) {
-    let engines;
+  async list() {
+    const engines = this.engineMap.all();
 
-    if (!properties) {
-      engines = this.engineMap.all();
-    } else {
-      engines = this.engineMap.filter(properties);
-    }
-
-    return engines.map(engine => ({
-      properties: engine.properties,
-      ipAddress: engine.ipAddress,
-      port: engine.port,
+    return engines.map(item => ({
+      engine: item.engine,
+      local: item.local,
+      swarm: item.swarm,
+      kubernetes: item.kubernetes,
     }));
   }
 }
