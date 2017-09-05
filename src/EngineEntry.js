@@ -12,7 +12,7 @@ async function checkHealth() {
     JSONUtils.flatten(health, this.properties.engine.health);
   } catch (err) {
     logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
-    this.properties.engine.health = {};
+    this.properties.engine.health = undefined;
   }
   this.fetcherTimeOutId = setTimeout(checkHealth.bind(this), this.refreshRate);
 }

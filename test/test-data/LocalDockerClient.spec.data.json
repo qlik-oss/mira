@@ -163,7 +163,6 @@
     {
       "engine": {
         "ip": "127.0.0.1",
-        "host": "",
         "port": 9176,
         "labels": {
           "qix-engine": "",
@@ -176,7 +175,6 @@
     {
       "engine": {
         "ip": "127.0.0.1",
-        "host": "",
         "port": 9276,
         "labels": {
           "foo": "foo2",
