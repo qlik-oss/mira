@@ -28,6 +28,20 @@ describe('Mira in kubernetes mode', () => {
     expect(res.statusCode).to.equal(200);
   });
 
+  it('the kubernetes property should be set and hold the container info', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/engines');
+    expect(res.body[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
+    expect(res.body[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
+  });
+
+  it('and local and swarm properties should not be set', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/engines');
+    expect(res.body[0].local).to.be.undefined;
+    expect(res.body[0].swarm).to.be.undefined;
+    expect(res.body[1].local).to.be.undefined;
+    expect(res.body[1].swarm).to.be.undefined;
+  });
+
   afterEach(() => {
     server.close();
     delete require.cache[require.resolve('../../../src/index')];
