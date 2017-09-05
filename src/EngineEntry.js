@@ -60,47 +60,6 @@ class EngineEntry {
   stopHealthChecks() {
     clearTimeout(this.fetcherTimeOutId);
   }
-
-  /**
-   * Checks if the properties of the engine {@link EngineEntry#properties} satisfies the property
-   * constraints given by the parameter.
-   * @param {object} constraints - Property constraints checked.
-   * @returns {boolean} True, if the constraints are satisfied.
-   */
-  satisfies(constraints) {
-    let retval = true;
-    const keys = Object.keys(constraints);
-
-    keys.forEach((key) => {
-      if (retval) {
-        const expected = constraints[key];
-        const actual = this.properties[key];
-
-        if (typeof actual === 'undefined') {
-          retval = false;
-        } else if (Array.isArray(expected)) {
-          retval = (expected.indexOf(actual) !== -1);
-        } else if (typeof expected === 'boolean' || typeof actual === 'boolean') {
-          retval = expected.toString().toLowerCase() === actual.toString().toLowerCase();
-        } else if ((typeof expected === 'string')
-          && (expected.indexOf('>') === 0)
-          && !isNaN(expected.substring(1))) {
-          const expectedNumber = expected.substring(1);
-          retval = (actual > expectedNumber);
-        } else if (typeof expected === 'string' &&
-          expected.indexOf('<') === 0 &&
-          !isNaN(expected.substring(1))) {
-          const expectedNumber = expected.substring(1);
-          retval = actual < expectedNumber;
-          // eslint-disable-next-line eqeqeq
-        } else if (actual != expected) {
-          retval = false;
-        }
-      }
-    });
-
-    return retval;
-  }
 }
 
 module.exports = EngineEntry;

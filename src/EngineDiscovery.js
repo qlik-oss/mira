@@ -67,10 +67,10 @@ class EngineDiscovery {
     const engines = this.engineMap.all();
 
     return engines.map(item => ({
-      engine: item.engine,
-      local: item.local,
-      swarm: item.swarm,
-      kubernetes: item.kubernetes,
+      engine: item.properties.engine,
+      local: item.properties.local,
+      swarm: item.properties.swarm,
+      kubernetes: item.properties.kubernetes,
     }));
   }
 }
