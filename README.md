@@ -20,7 +20,7 @@ Mira is distributed as a Docker image built from source in this repository and i
 
 Mira's REST API is described in the [api-doc.yml](./doc/api-doc.yml) [OpenAPI](https://www.openapis.org/) document.
 
-Mira exposes its REAT API on port `9100`. This port is built into the Docker image and exposed using the `EXPOSE` Dockerfile command.
+Mira exposes its REST API on port `9100`. This port is built into the Docker image and exposed using the `EXPOSE` Dockerfile command.
 
 ## Discovery
 
