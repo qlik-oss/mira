@@ -21,8 +21,8 @@ describe('GET /engines', () => {
   });
   it('and should include info about allocated memory and total cpu', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].engine.health).to.include.keys('mem.allocated', 'cpu.total');
-    expect(res.body[1].engine.health).to.include.keys('mem.allocated', 'cpu.total');
+    expect(res.body[0].engine.health).to.include.keys('mem', 'cpu');
+    expect(res.body[1].engine.health).to.include.keys('mem', 'cpu');
   });
 });
 
