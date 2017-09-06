@@ -30,7 +30,7 @@ async function discover() {
   engines.forEach((item) => {
     if (!this.engineMap.has(item.key)) {
       const engineEntry = new EngineEntry(
-        item, item.engine.ip, item.engine.port, this.healthRefreshRate);
+        item, this.healthRefreshRate);
       logger.info(`Engine discovered: ${item.key}`);
       this.engineMap.add(item.key, engineEntry);
     }

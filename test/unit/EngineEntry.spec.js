@@ -11,14 +11,12 @@ describe('EngineEntry', () => {
   beforeEach(() => {
     healthFetcher = new EngineHealthFetcher({ get: () => { } });
     fetchStub = sinon.stub(healthFetcher, 'fetch', async () => Promise.resolve(healthOk));
-    entry = new EngineEntry({ engine: {} }, '10.10.10.10', 9999, 10, healthFetcher);
+    entry = new EngineEntry({ engine: { ip: '10.10.10.10', port: 9999 } }, 10, healthFetcher);
   });
 
   describe('#constructor()', () => {
     it('should construct with arguments', () => {
-      expect(entry.properties).to.deep.equal({ engine: {} });
-      expect(entry.ipAddress).to.equal('10.10.10.10');
-      expect(entry.port).to.equal(9999);
+      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9999 } });
       expect(entry.refreshRate).to.equal(10);
     });
   });

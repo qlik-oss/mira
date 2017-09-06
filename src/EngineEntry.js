@@ -1,6 +1,5 @@
 const logger = require('./logger/Logger').get();
 const EngineHealthFetcher = require('./EngineHealthFetcher');
-const JSONUtils = require('./utils/JSONUtils');
 
 /**
  * Helper for periodical health checking.
@@ -8,11 +7,10 @@ const JSONUtils = require('./utils/JSONUtils');
  */
 async function checkHealth() {
   try {
-    const health = await this.healthFetcher.fetch(this.ipAddress, this.port, '/healthcheck');
-    this.properties.engine.health = this.properties.engine.health || {};
-    JSONUtils.flatten(health, this.properties.engine.health);
+    const health = await this.healthFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
+    this.properties.engine.health = health;
   } catch (err) {
-    logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
+    logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
     this.properties.engine.health = undefined;
   }
   this.fetcherTimeOutId = setTimeout(checkHealth.bind(this), this.refreshRate);
@@ -21,8 +19,6 @@ async function checkHealth() {
 /**
  * Engine entry class definition.
  * @prop {object} properties - Properties of the engine instance.
- * @prop {string} ipAddress - The IP address of the engine.
- * @prop {number} port - The port of the engine.
  * @prop {number} refreshRate - The health check refresh rate in milliseconds.
  * @prop {EngineHealthFetcher} healthFetcher - The health fetcher to use.
  *   Optional and mainly used for testing; if not supplied, a default
@@ -32,17 +28,13 @@ class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
    * @param {object} properties - Properties of the engine instance.
-   * @param {string} ipAddress - The IP address of the engine.
-   * @param {number} port - The port of the engine.
    * @param {number} refreshRate - The health check refresh rate in milliseconds.
    * @param {EngineHealthFetcher} healthFetcher - The helth fetcher to use.
    *   Optional and mainly used for testing; if not supplied, a default
    *   implementation will be used.
    */
-  constructor(properties, ipAddress, port, refreshRate, healthFetcher) {
+  constructor(properties, refreshRate, healthFetcher) {
     this.properties = properties;
-    this.ipAddress = ipAddress;
-    this.port = port;
     this.refreshRate = refreshRate;
     this.healthFetcher = healthFetcher || new EngineHealthFetcher();
   }
