@@ -9,6 +9,7 @@ async function checkHealth() {
   try {
     const health = await this.healthFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
     this.properties.engine.health = health;
+    this.properties.engine.lastRefreshed = new Date().toISOString();
   } catch (err) {
     logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
     this.properties.engine.health = undefined;
