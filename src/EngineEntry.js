@@ -9,6 +9,7 @@ const JSONUtils = require('./utils/JSONUtils');
 async function checkHealth() {
   try {
     const health = await this.healthFetcher.fetch(this.ipAddress, this.port, '/healthcheck');
+    this.properties.engine.health = this.properties.engine.health || {};
     JSONUtils.flatten(health, this.properties.engine.health);
   } catch (err) {
     logger.warn(`Engine health check failed on ${this.ipAddress}:${this.port}`);
