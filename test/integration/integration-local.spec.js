@@ -15,14 +15,14 @@ describe('GET /engines', () => {
   });
   it('and both engines should be running on the same port but with different IPs', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].port).to.equal(9076);
-    expect(res.body[1].port).to.equal(9076);
-    expect(res.body[0].ipAddress).to.not.equal(res.body[1].ipAddress);
+    expect(res.body[0].engine.port).to.equal(9076);
+    expect(res.body[1].engine.port).to.equal(9076);
+    expect(res.body[0].engine.ip).to.not.equal(res.body[1].engine.ip);
   });
   it('and should include info about allocated memory and total cpu', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].properties).to.include.keys('mem.allocated', 'cpu.total');
-    expect(res.body[1].properties).to.include.keys('mem.allocated', 'cpu.total');
+    expect(res.body[0].engine.health).to.include.keys('mem', 'cpu');
+    expect(res.body[1].engine.health).to.include.keys('mem', 'cpu');
   });
 });
 

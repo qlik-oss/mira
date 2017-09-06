@@ -7,10 +7,6 @@ const localhostIp = '127.0.0.1';
 
 let dockerode = new Docker();
 
-function getProperties(container) {
-  return Object.assign({}, container.Labels);
-}
-
 function getIpAddress(container) {
   if (containerized()) {
     const firstKey = Object.keys(container.NetworkSettings.Networks)[0];
@@ -56,13 +52,14 @@ class LocalDockerClient {
         if (!err) {
           const engineContainers = containers.filter(
             container => discoveryLabel in container.Labels);
-          const engineInfoEntries = engineContainers.map((container) => {
-            const properties = getProperties(container);
-            const ipAddress = getIpAddress(container);
-            const port = properties[Config.engineAPIPortLabel] ?
-                         parseInt(properties[Config.engineAPIPortLabel], 10) : getPort(container);
-            const key = `${ipAddress}:${port}`;
-            return { key, properties, ipAddress, port };
+          const engineInfoEntries = engineContainers.map((local) => {
+            const engine = {
+              ip: getIpAddress(local),
+              port: local.Labels[Config.engineAPIPortLabel] ? parseInt(local.Labels[Config.engineAPIPortLabel], 10) : getPort(local),
+              labels: local.Labels,
+            };
+            const key = `${engine.ip}:${engine.port}`;
+            return { key, engine, local };
           });
           resolve(engineInfoEntries);
         } else {

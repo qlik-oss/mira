@@ -4,7 +4,7 @@ const Config = require('../Config');
 
 let dockerode = new Docker();
 
-function getProperties(task) {
+function getLabels(task) {
   return Object.assign({}, task.Spec.ContainerSpec.Labels);
 }
 
@@ -72,12 +72,14 @@ class SwarmDockerClient {
   static async listEngines(discoveryLabel) {
     const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
-      const properties = getProperties(task);
-      const ipAddress = getIpAddress(task);
-      const port = properties[Config.engineAPIPortLabel] ?
-                   parseInt(properties[Config.engineAPIPortLabel], 10) : Config.enginePort;
-      const key = `${ipAddress}:${port}`;
-      return { key, properties, ipAddress, port };
+      const labels = getLabels(task);
+      const engine = {
+        ip: getIpAddress(task),
+        port: labels[Config.engineAPIPortLabel] ? parseInt(labels[Config.engineAPIPortLabel], 10) : Config.enginePort,
+        labels,
+      };
+      const key = `${engine.ip}:${engine.port}`;
+      return { key, engine, swarm: task };
     });
     return engineInfoEntries;
   }
