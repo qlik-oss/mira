@@ -17,29 +17,33 @@ describe('Mira in kubernetes mode', () => {
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 
-  it('GET /engines should translate the kubernetes endpoints list to a mira engine list', async () => {
-    const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res).to.be.json;
-    expect(res.body.length).to.equal(2);
+  describe('GET /engines', () => {
+    it('should translate the kubernetes endpoints list to a mira engine list', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
+      expect(res).to.be.json;
+      expect(res.body.length).to.equal(2);
+    });
+
+    it('should set the kubernetes property to holding the container info', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
+      expect(res.body[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
+      expect(res.body[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
+    });
+
+    it('should return the local and swarm properties as undefined', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
+      expect(res.body[0].local).to.be.undefined;
+      expect(res.body[0].swarm).to.be.undefined;
+      expect(res.body[1].local).to.be.undefined;
+      expect(res.body[1].swarm).to.be.undefined;
+    });
   });
 
-  it('GET /health should return OK', async () => {
-    const res = await chai.request(miraEndpoint).get('/v1/health');
-    expect(res.statusCode).to.equal(200);
-  });
-
-  it('the kubernetes property should be set and hold the container info', async () => {
-    const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
-    expect(res.body[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
-  });
-
-  it('and local and swarm properties should not be set', async () => {
-    const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].local).to.be.undefined;
-    expect(res.body[0].swarm).to.be.undefined;
-    expect(res.body[1].local).to.be.undefined;
-    expect(res.body[1].swarm).to.be.undefined;
+  describe('GET /health', () => {
+    it('should return OK', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/health');
+      expect(res.statusCode).to.equal(200);
+    });
   });
 
   afterEach(() => {

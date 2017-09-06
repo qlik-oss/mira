@@ -31,7 +31,7 @@ describe('SwarmDockerClient', () => {
       expect(engines.length === 0).to.be.true;
     });
 
-    it('the swarm property should be set and hold the container info', async () => {
+    it('should set the the swarm property to hold the container info', async () => {
       listTasksStub = sinon.stub(docker, 'listTasks', (opts, callback) => callback(undefined, specData.endpointsResponse));
       const engines = await DockerClient.listEngines('qix-engine');
       expect(listTasksStub).to.be.called.once;
@@ -39,7 +39,7 @@ describe('SwarmDockerClient', () => {
       expect(engines[1].swarm).to.deep.equal(specData.endpointsResponse[1]);
     });
 
-    it('and local and kubernetes properties should not be set', async () => {
+    it('should not set the local and kubernetes properties', async () => {
       listTasksStub = sinon.stub(docker, 'listTasks', (opts, callback) => callback(undefined, specData.endpointsResponse));
       const engines = await DockerClient.listEngines('qix-engine');
       expect(listTasksStub).to.be.called.once;
