@@ -286,25 +286,29 @@
   ],
   "miraOutput": [
     {
-      "properties": {
-        "qix-engine": "",
-        "com.docker.stack.namespace": "mira-stack", 
-        "foo": "foo1",
-        "bar": "bar1",
-        "qix-engine-port": "9076"
-      },
-      "ipAddress": "10.0.1.9",
-      "port": 9076
+      "engine": {
+        "ip": "10.0.1.9",
+        "port": 9076,
+        "labels": {
+          "qix-engine": "",
+          "com.docker.stack.namespace": "mira-stack",
+          "foo": "foo1",
+          "bar": "bar1",
+          "qix-engine-port": "9076"
+        }
+      }
     },
     {
-      "properties": {
-        "qix-engine": "prod",
-        "com.docker.stack.namespace": "mira-stack",
-        "foo": "foo2",
-        "bar": "bar2"
-      },
-      "ipAddress": "10.0.1.3",
-      "port": 9076
+      "engine": {
+        "ip": "10.0.1.3",
+        "port": 9076,
+        "labels": {
+          "qix-engine": "prod",
+          "com.docker.stack.namespace": "mira-stack",
+          "foo": "foo2",
+          "bar": "bar2"
+        }
+      }
     }
   ]
 }

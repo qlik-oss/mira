@@ -259,24 +259,28 @@
   },
   "miraOutput": [
     {
-      "properties": {
-        "service": "engine",
-        "qix-engine": "",
-        "pod-template-hash": "4163433257",
-        "qix-engine-port": "9076"
-      },
-      "ipAddress": "172.17.0.4",
-      "port": 9076
+      "engine": {
+        "ip": "172.17.0.4",
+        "port": 9076,
+        "labels": {
+          "service": "engine",
+          "qix-engine": "",
+          "pod-template-hash": "4163433257",
+          "qix-engine-port": "9076"
+        }
+      }
     },
     {
-      "properties": {
-        "qix-engine": "prod",
-        "pod-template-hash": "4163433257",
-        "service": "engine",
-        "qix-engine-port": "9076"
-      },
-      "ipAddress": "172.17.0.5",
-      "port": 9076
+      "engine": {
+        "ip": "172.17.0.5",
+        "port": 9076,
+        "labels": {
+          "qix-engine": "prod",
+          "pod-template-hash": "4163433257",
+          "service": "engine",
+          "qix-engine-port": "9076"
+        }
+      }
     }
   ]
 }
