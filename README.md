@@ -22,30 +22,38 @@ _This section remains to be written._
 
 ## Discovery
 
-Engine discovery in Mira is based on labeling. Mira assumes that Engine container according some simple rules. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
+Engine discovery in Mira is based on labeling. Mira assumes that Engine containers are labeled according some simple rules. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
 
-Labeling uses a key-value pair. Mira searches for a specific label key to identify engines. By default, this label key is `qix-engine` but can be configured using the `MIRA_DISCOVERY_LABEL` environment variable. Note that Mira only looks at the label key and ignores its value. The values can even be omitted.
+### Discovery Labeling
+
+Mira searches for a specific label key to identify an engine instance. By default, this label key is `qix-engine` but can be configured using the `MIRA_DISCOVERY_LABEL` environment variable. Note that Mira only looks at the label key and ignores its value. The values can even be omitted.
+
+### Port Labeling
+
+In addition to the disovery label described above, Mira also identifies labels on an engine instance to determine which ports it serves the QIX API (websocket) on, and which port it serves the `/metrics` endpoint on. By default, Mira identifies and uses the values of the labels `qix-engine-api-port` and `qix-engine-metrics-port`. These label keys can be configured using the environment variables `MIRA_ENGINE_API_PORT_LABEL` and `MIRA_ENGINE_METRICS_PORT_LABEL` respectibely.
+
+If an engine instance does not have these labels set, Mira defaults to setting the QIX API port to `9076` and the `/metrics` port to `9090`
 
 ## Operation Modes
 
 Mira supports different operation modes. The operation mode determines what operations Mira uses to discover QIX Engine instances. This depends on
 1. The orchestration environment in which QIX Engine instances are running. This environment must be explicitly provided when starting Mira. Currently _local_, _swarm_, and _kubernetes_ environments are supported.
-2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
+1. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Environment Variables
 
 The following environment variable can optionally be set for Mira
 
-| Name                                  | Default value    | Description |
-|---------------------------------------|------------------|-------------|
-| MIRA_API_PORT                         | 9100             | Port on which Mira will expose its REST API. |
-| MIRA_DISCOVERY_LABEL                  | qix-engine       | Label key that Mira uses to identify engine instances. |
-| MIRA_MODE                             | swarm            | The operation mode of mira which can be local, swarm or kubernetes. |
-| MIRA_ENGINE_API_PORT_LABEL            | qix-engine-port  | Label that Mira will look for on the engines specifying the port to use for communication. |
-| MIRA_ENGINE_API_PORT                  | 9076             | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port. |
-| MIRA_ENGINE_DISCOVERY_REFRESH_RATE    | 1000             | Refresh rate for discovering engines. |
-| MIRA_ENGINE_HEALTH_REFRESH_RATE       | 5000             | Refresh rate for checking if engines are healthy. |
-| MIRA_KUBERNETES_PROXY_PORT            | 8001             | Port that mira will use to talk to kubernetes api server. |
+| Name                                  | Default value           | Description |
+|---------------------------------------|-------------------------|-------------|
+| MIRA_API_PORT                         | 9100                    | Port on which Mira will expose its REST API. |
+| MIRA_DISCOVERY_LABEL                  | qix-engine              | Label key that Mira uses to identify engine instances. |
+| MIRA_MODE                             | swarm                   | The operation mode of mira which can be local, swarm or kubernetes. |
+| MIRA_ENGINE_API_PORT_LABEL            | qix-engine-api-port     | Label that Mira will use to determine the QIX API (websocket) port. |
+| MIRA_ENGINE_METRICS_PORT_LABEL        | qix-engine-metrics-port | Label that Mira will use to determine the `/metrics` port. |
+| MIRA_ENGINE_DISCOVERY_REFRESH_RATE    | 1000                    | Refresh rate for discovering engines. |
+| MIRA_ENGINE_HEALTH_REFRESH_RATE       | 5000                    | Refresh rate for checking if engines are healthy. |
+| MIRA_KUBERNETES_PROXY_PORT            | 8001                    | Port that mira will use to talk to kubernetes api server. |
 
 ### Local Mode
 
