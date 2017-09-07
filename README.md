@@ -18,7 +18,9 @@ Mira is distributed as a Docker image built from source in this repository and i
 
 ## API
 
-_This section remains to be written._
+Mira's REST API is described in the [api-doc.yml](./doc/api-doc.yml) [OpenAPI](https://www.openapis.org/) document.
+
+Mira exposes its REST API on port `9100`. This port is built into the Docker image and exposed using the `EXPOSE` Dockerfile command.
 
 ## Discovery
 
@@ -47,7 +49,6 @@ The following environment variable can optionally be set for Mira
 | Name                                  | Default value           | Description |
 |---------------------------------------|-------------------------|-------------|
 | MIRA_MODE                             | swarm                   | The operation mode of mira which can be local, swarm or kubernetes. |
-| MIRA_API_PORT                         | 9100                    | Port on which Mira will expose its REST API. |
 | MIRA_DISCOVERY_LABEL                  | qix-engine              | Label key that Mira uses to identify engine instances. |
 | MIRA_ENGINE_API_PORT_LABEL            | qix-engine-api-port     | Label that Mira will use to determine the QIX API (websocket) port. |
 | MIRA_ENGINE_METRICS_PORT_LABEL        | qix-engine-metrics-port | Label that Mira will use to determine the `/metrics` port. |
