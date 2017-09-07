@@ -32,7 +32,7 @@ Mira searches for a specific label key to identify an engine instance. By defaul
 
 ### Port Labeling
 
-In addition to the disovery label described above, Mira also identifies labels on an engine instance to determine which ports it serves the QIX API (websocket) on, and which port it serves the `/metrics` endpoint on. By default, Mira identifies and uses the values of the labels `qix-engine-api-port` and `qix-engine-metrics-port`. These label keys can be configured using the environment variables `MIRA_ENGINE_API_PORT_LABEL` and `MIRA_ENGINE_METRICS_PORT_LABEL` respectibely.
+In addition to the disovery label described above, Mira also identifies labels on an engine instance to determine which ports it serves the QIX API (websocket) on, and which port it serves the `/metrics` endpoint on. By default, Mira identifies and uses the values of the labels `qix-engine-api-port` and `qix-engine-metrics-port`. These label keys can be configured using the environment variables `MIRA_ENGINE_API_PORT_LABEL` and `MIRA_ENGINE_METRICS_PORT_LABEL` respectively.
 
 If an engine instance does not have these labels set, Mira defaults to setting the QIX API port to `9076` and the `/metrics` port to `9090`
 
