@@ -26,4 +26,5 @@ services:
       - "9276:9076"
     labels:
       qix-engine-local:
+      qix-engine-api-port: "9076"
       qix-engine-metrics-port: "9090"

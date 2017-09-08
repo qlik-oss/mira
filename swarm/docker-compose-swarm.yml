@@ -19,6 +19,8 @@ services:
     image: qlikea/engine:12.48.0
     labels:
       qix-engine-dev:
+      qix-engine-api-port: "9076"
+      qix-engine-metrics-port: "9090"
     deploy:
       replicas: 2
       placement:
@@ -28,6 +30,8 @@ services:
     image: qlikea/engine:12.48.0
     labels:
       qix-engine-dev:
+      qix-engine-api-port: "9076"
+      qix-engine-metrics-port: "9090"
     deploy:
       replicas: 1
       placement:
