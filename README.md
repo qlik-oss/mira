@@ -18,38 +18,47 @@ Mira is distributed as a Docker image built from source in this repository and i
 
 ## API
 
-_This section remains to be written._
+Mira's REST API is described in the [api-doc.yml](./doc/api-doc.yml) [OpenAPI](https://www.openapis.org/) document.
+
+Mira exposes its REST API on port `9100`. This port is built into the Docker image and exposed using the `EXPOSE` [Dockerfile](./Dockerfile) command.
 
 ## Discovery
 
-Engine discovery in Mira is based on labeling. Mira assumes that Engine container according some simple rules. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
+Engine discovery in Mira is based on labeling. Mira assumes that Engine containers are labeled according some simple rules. Engines that are not labeled, will not be discovered and returned by Mira. Depending on which operation mode Mira runs in (see below) the entities that need to be labeled differs. Since the supported orchestration platforms have similar support, this does not vary too much and it should be fairly easy to translate labeling from one to the other.
 
-Labeling uses a key-value pair. Mira searches for a specific label key to identify engines. By default, this label key is `qix-engine` but can be configured using the `MIRA_DISCOVERY_LABEL` environment variable. Note that Mira only looks at the label key and ignores its value. The values can even be omitted.
+### Discovery Labeling
+
+Mira searches for a specific label key to identify an engine instance. By default, this label key is `qix-engine` but can be configured using the `MIRA_DISCOVERY_LABEL` environment variable. Note that Mira only looks at the label key and ignores its value. The values can even be omitted.
+
+### Port Labeling
+
+In addition to the disovery label described above, Mira also identifies labels on an engine instance to determine which ports it serves the QIX API (websocket) on, and which port it serves the `/metrics` endpoint on. By default, Mira identifies and uses the values of the labels `qix-engine-api-port` and `qix-engine-metrics-port`. These label keys can be configured using the environment variables `MIRA_ENGINE_API_PORT_LABEL` and `MIRA_ENGINE_METRICS_PORT_LABEL` respectively.
+
+If an engine instance does not have these labels set, Mira defaults to setting the QIX API port to `9076` and the `/metrics` port to `9090`
 
 ## Operation Modes
 
 Mira supports different operation modes. The operation mode determines what operations Mira uses to discover QIX Engine instances. This depends on
 1. The orchestration environment in which QIX Engine instances are running. This environment must be explicitly provided when starting Mira. Currently _local_, _swarm_, and _kubernetes_ environments are supported.
-2. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
+1. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Environment Variables
 
 The following environment variable can optionally be set for Mira
 
-| Name                                  | Default value    | Description |
-|---------------------------------------|------------------|-------------|
-| MIRA_API_PORT                         | 9100             | Port on which Mira will expose its REST API. |
-| MIRA_DISCOVERY_LABEL                  | qix-engine       | Label key that Mira uses to identify engine instances. |
-| MIRA_MODE                             | swarm            | The operation mode of mira which can be local, swarm or kubernetes. |
-| MIRA_ENGINE_API_PORT_LABEL            | qix-engine-port  | Label that Mira will look for on the engines specifying the port to use for communication. |
-| MIRA_ENGINE_API_PORT                  | 9076             | Port that Mira will use for QIX Engine communication if it does not find a label on the engine specyfing the port. |
-| MIRA_ENGINE_DISCOVERY_REFRESH_RATE    | 1000             | Refresh rate for discovering engines. |
-| MIRA_ENGINE_HEALTH_REFRESH_RATE       | 5000             | Refresh rate for checking if engines are healthy. |
-| MIRA_KUBERNETES_PROXY_PORT            | 8001             | Port that mira will use to talk to kubernetes api server. |
+| Name                                  | Default value           | Description |
+|---------------------------------------|-------------------------|-------------|
+| MIRA_MODE                             | swarm                   | The operation mode of Mira which can be `local`, `swarm` or `kubernetes`. |
+| MIRA_DISCOVERY_LABEL                  | qix-engine              | Label key that Mira uses to identify engine instances. |
+| MIRA_ENGINE_API_PORT_LABEL            | qix-engine-api-port     | Label that Mira will use to determine the QIX API (websocket) port. |
+| MIRA_ENGINE_METRICS_PORT_LABEL        | qix-engine-metrics-port | Label that Mira will use to determine the `/metrics` port. |
+| MIRA_ENGINE_DISCOVERY_REFRESH_RATE    | 1000                    | Refresh rate in milliseconds for discovering engines. |
+| MIRA_ENGINE_HEALTH_REFRESH_RATE       | 5000                    | Refresh rate in milliseconds for checking if engines are healthy. |
+| MIRA_KUBERNETES_PROXY_PORT            | 8001                    | Port that mira will use to talk to kubernetes api server. |
 
 ### Local Mode
 
-In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _Local_ mode is set by setting the `MIRA_MODE` environment variable to `local` when starting the Mira Docker container or starting the Node.js process.
+In _local_ mode, Mira assumes that all engine instances run as Docker containers on the `localhost` Docker Engine, without any orchestration platform such as Docker Swarm or Kubernetes. _local_ mode is set by setting the `MIRA_MODE` environment variable to `local` when starting the Mira Docker container or starting the Node.js process.
 
 The recommended way to start Mira in _local_ mode is through a `docker-compose` file; for example
 
@@ -67,7 +76,7 @@ which shall list two engine containers in JSON format.
 
 #### Labeling in local mode
 
-In _local_ mode, Mira assumes that the discovery label is provided on Docker containers. Below is an example extract from a Docker compose file that would cause Mira to discover the `engine1` container.
+In _local_ mode, Mira assumes that labels are provided on Docker containers. Below is an example extract from a Docker compose file with all labels applicable to Mira present.
 
 ```yaml
 version: "3.1"
@@ -76,18 +85,20 @@ services:
   mira:
     image: qlikea/mira
     ...
-    environment:
-     - MIRA_DISCOVERY_LABEL=qix-engine-prod
 
   engine1:
     image: qlikea/engine
     ...
     labels:
-      qix-engine-prod: ""
+      qix-engine: ""
+      qix-engine-api-port: "9076"
+      qix-engine-metrics-port: "9090"
 
 ```
 
-Note that the `MIRA_DISCOVERY_LABEL` environment variable provided will override the default label `qix-engine`. Also note how the value can be omitted, Mira will still discover the engine instance.
+- The `qix-engine` label tells Mira that `engine1` is a QIX Engine container.
+- The `qix-engine-api-port` tells Mira that the QIX API is exposed on port `9076` (the default). Omitting this label is possible, in which case Mira defaults to `9076`.
+- The `qix-engine-metrics-port` tells Mira that the `/metrics` port is exposed on port `9090` (the default). Omitting this labels is possible, in which case Mira defaults to `9090`.
 
 ### Swarm Mode
 
@@ -111,7 +122,7 @@ $ docker stack rm mira-stack
 
 #### Labeling in swarm mode
 
-In _swarm_ mode, Mira assumes that the discovery label is provided on Docker containers. Below is an example extract from a Docker stack file that would cause Mira to discover both Engine replicas as two separate Engine instances of the `engine1` service.
+In _swarm_ mode, Mira assumes that labels are provided on Docker containers. Below is an example extract from a Docker stack file that would cause Mira to discover both Engine replicas as two separate Engine instances of the `engine1` service.
 
 ```yaml
 version: "3.1"
@@ -121,13 +132,15 @@ services:
     image: qlikea/mira
     environment:
      - MIRA_MODE=swarm
-     - MIRA_DISCOVERY_LABEL=qix-engine-dev
     ...
 
   engine1:
     image: qlikea/engine
     labels:
-      qix-engine-dev: ""
+      qix-engine: ""
+      qix-engine-api-port: "9076"
+      qix-engine-metrics-port: "9090"
+
     deploy:
       replicas: 2
       placement:
@@ -135,7 +148,7 @@ services:
 
 ```
 
-Note that in Docker Swarm, the label must be set on container level, _outside_ the `deploy:` scope. Setting the label in the `deploy:` scope causes the label to be set on the service only, and not on each individual container (task) of the service. Only labeling the service will not make Mira discover the engines.
+Note that in Docker Swarm, the labels must be set on container level, _outside_ the `deploy:` scope. Setting the labels in the `deploy:` scope causes the labels to be set on the service only, and not on each individual container (task) of the service. Only labeling the service will not make Mira discover the engines.
 
 Labeling outside the `deploy:` scope also has the benefit of that the labeling scheme for _local_ and _swarm_ mode becomes similar.
 
@@ -202,6 +215,8 @@ spec:
     metadata:
       labels:
         qix-engine: ""
+        qix-engine-api-port: "9076"
+        qix-engine-metrics-port: "9090"
     spec:
       containers:
         ...
@@ -209,7 +224,7 @@ spec:
         ...      
 ```
 
-Note that in this case the default value of `qix-engine` is used and the Mira deployment does not need to use the environment variable `MIRA_DISCOVERY_LABEL`.
+**NOTE** - Mira does not support hosting multiple engine containers inside the same pod, since they would get the same IP address and port.
 
 ### Non-Dockerized Node.js process
 
