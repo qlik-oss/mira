@@ -39,20 +39,20 @@ class EngineEntry {
     this.refreshRate = refreshRate;
     this.healthFetcher = healthFetcher || new EngineHealthFetcher();
 
-    // Set api port and metrics port of the engine
+    // Set api and metrics port of the engine
     const labels = this.properties.labels || {};
 
     if (labels[Config.engineAPIPortLabel]) {
       this.properties.engine.port = parseInt(labels[Config.engineAPIPortLabel], 10);
     } else {
-      logger.warn(`Engine entry missing label: ${Config.engineAPIPortLabel}`);
+      logger.warn(`Engine entry missing api port label: ${Config.engineAPIPortLabel}, defaulting to port: ${Config.defaultEngineAPIPort}`);
       this.properties.engine.port = Config.defaultEngineAPIPort;
     }
 
     if (labels[Config.engineMetricsPortLabel]) {
       this.properties.engine.metricsPort = parseInt(labels[Config.engineMetricsPortLabel], 10);
     } else {
-      logger.warn(`Engine entry missing label: ${Config.engineMetricsPortLabel}`);
+      logger.warn(`Engine entry missing metrics port label: ${Config.engineMetricsPortLabel}, defaulting to port: ${Config.defaultEngineMetricsPort}`);
       this.properties.engine.metricsPort = Config.defaultEngineMetricsPort;
     }
   }

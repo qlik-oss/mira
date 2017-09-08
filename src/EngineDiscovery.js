@@ -6,16 +6,10 @@ const logger = require('./logger/Logger').get();
 /**
  * Engine container return specification.
  * @typedef {object} EngineReturnSpec
- * @prop {object} properties - Properties of the engine container.
- * @prop {object} ipAddress - IP address on which the engine container can be reached.
- * @prop {number} port - Port number on which the engine container can be reached.
- */
-
-/**
- * Network class definition.
- * @typedef {object} Network
- * @prop {string} name - Network name.
- * @prop {string[]} addresses - Array of IP addresses.
+ * @prop {object} engine - Properties of the engine container.
+ * @prop {object} local - Complete container response if running in local docker mode, otherwise undefined.
+ * @prop {object} swarm - Complete container response if running in docker swarm mode, otherwise undefined.
+ * @prop {object} kubernetes - Complete container response if running in kubernetes mode, otherwise undefined.
  */
 
 /**
@@ -31,7 +25,7 @@ async function discover() {
     if (!this.engineMap.has(item.key)) {
       const engineEntry = new EngineEntry(
         item, this.healthRefreshRate);
-      logger.info(`Engine discovered: ${item.key}`);
+      logger.info(`Engine discovered: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port}`);
       this.engineMap.add(item.key, engineEntry);
     }
   });
