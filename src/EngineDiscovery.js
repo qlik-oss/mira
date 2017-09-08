@@ -7,6 +7,9 @@ const logger = require('./logger/Logger').get();
  * Engine container return specification.
  * @typedef {object} EngineReturnSpec
  * @prop {object} engine - Properties of the engine container.
+ * @prop {string} engine.ip - Internal IP address to the engine container.
+ * @prop {number} engine.port - API port of the engine container.
+ * @prop {number} engine.metricsPort - Metrics port of the engine container.
  * @prop {object} local - Complete container response if running in local docker mode, otherwise undefined.
  * @prop {object} swarm - Complete container response if running in docker swarm mode, otherwise undefined.
  * @prop {object} kubernetes - Complete container response if running in kubernetes mode, otherwise undefined.

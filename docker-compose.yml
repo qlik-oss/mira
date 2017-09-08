@@ -7,7 +7,6 @@ services:
       - "9100:9100"
     environment:
      - MIRA_MODE=local
-     - MIRA_DISCOVERY_LABEL=qix-engine-local
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -16,15 +15,11 @@ services:
     ports:
       - "9176:9076"
     labels:
-      qix-engine-local:
-      qix-engine-api-port: "9076"
-      qix-engine-metrics-port: "9090"
+      qix-engine:
 
   engine2:
     image: qlikea/engine:12.48.0
     ports:
       - "9276:9076"
     labels:
-      qix-engine-local:
-      qix-engine-api-port: "9076"
-      qix-engine-metrics-port: "9090"
+      qix-engine:

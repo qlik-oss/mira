@@ -1,6 +1,8 @@
 const logger = require('./logger/Logger').get();
 
 const defaultMiraApiPort = 9100;
+const defaultEngineAPIPort = 9076;
+const defaultEngineMetricsPort = 9090;
 const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
@@ -40,7 +42,7 @@ class Config {
       *   if not defined with MIRA_ENGINE_API_PORT_LABEL.
       * @static
       */
-    Config.defaultEngineAPIPort = 9076;
+    Config.defaultEngineAPIPort = defaultEngineAPIPort;
 
     /**
      * @prop {string} engineAPIPortLabel - The label specifying the port to use for communicating with the QIX engine
@@ -57,7 +59,7 @@ class Config {
       *   if not defined with MIRA_ENGINE_METRICS_PORT_LABEL.
       * @static
       */
-    Config.defaultEngineMetricsPort = 9090;
+    Config.defaultEngineMetricsPort = defaultEngineMetricsPort;
 
     /**
      * @prop {string} engineMetricsPortLabel - The label specifying the port to use for fetching metrics from the QIX engine.
