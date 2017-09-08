@@ -23,31 +23,20 @@ describe('Config', () => {
     });
   });
 
-  describe('#enginePort', () => {
-    afterEach(() => {
-      delete process.env.MIRA_ENGINE_API_PORT;
-    });
-
+  describe('#defaultEngineAPIPort', () => {
     it('should have correct default value', () => {
       const expectedEnginePort = 9076;
-      expect(Config.enginePort).to.equal(expectedEnginePort);
-    });
-
-    it('should have value as set by MIRA_ENGINE_API_PORT env var', () => {
-      const qixEnginePort = 9777;
-      process.env.MIRA_ENGINE_API_PORT = qixEnginePort.toString();
-      Config.init();
-      expect(Config.enginePort).to.equal(qixEnginePort);
+      expect(Config.defaultEngineAPIPort).to.equal(expectedEnginePort);
     });
   });
 
-  describe('#enginePortLabel', () => {
+  describe('#engineAPIPortLabel', () => {
     afterEach(() => {
       delete process.env.MIRA_ENGINE_API_PORT_LABEL;
     });
 
     it('should have correct default value', () => {
-      const expectedEngineAPIPortLabel = 'qix-engine-port';
+      const expectedEngineAPIPortLabel = 'qix-engine-api-port';
       expect(Config.engineAPIPortLabel).to.equal(expectedEngineAPIPortLabel);
     });
 
@@ -56,6 +45,31 @@ describe('Config', () => {
       process.env.MIRA_ENGINE_API_PORT_LABEL = qixEngineAPIPortLabel;
       Config.init();
       expect(Config.engineAPIPortLabel).to.equal(qixEngineAPIPortLabel);
+    });
+  });
+
+  describe('#defaultEngineMetricsPort', () => {
+    it('should have correct default value', () => {
+      const expectedEngineMetricsPort = 9090;
+      expect(Config.defaultEngineMetricsPort).to.equal(expectedEngineMetricsPort);
+    });
+  });
+
+  describe('#engineMetricsPortLabel', () => {
+    afterEach(() => {
+      delete process.env.MIRA_ENGINE_METRICS_PORT_LABEL;
+    });
+
+    it('should have correct default value', () => {
+      const expectedEngineMetricsPortLabel = 'qix-engine-metrics-port';
+      expect(Config.engineMetricsPortLabel).to.equal(expectedEngineMetricsPortLabel);
+    });
+
+    it('should have value as set by MIRA_ENGINE_METRICS_PORT_LABEL env var', () => {
+      const qixEngineMetricsPortLabel = 'qix-engine-metrics-port-label-set-by-env';
+      process.env.MIRA_ENGINE_METRICS_PORT_LABEL = qixEngineMetricsPortLabel;
+      Config.init();
+      expect(Config.engineMetricsPortLabel).to.equal(qixEngineMetricsPortLabel);
     });
   });
 

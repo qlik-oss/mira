@@ -1,12 +1,12 @@
 const logger = require('./logger/Logger').get();
 
 const defaultMiraApiPort = 9100;
-const defaultQixEnginePort = 9076;
 const defaultEngineDiscoveryRefreshRate = 1000;
 const defaultEngineHealthRefreshRate = 5000;
 const defaultKubernetesProxyPort = 8001;
 const defaultDiscoveryLabel = 'qix-engine';
-const defaultEngineAPIPortLabel = 'qix-engine-port';
+const defaultEngineAPIPortLabel = 'qix-engine-api-port';
+const defaultEngineMetricsPortLabel = 'qix-engine-metrics-port';
 
 /**
  * Class representing the configuration options for running the service.
@@ -36,18 +36,13 @@ class Config {
     logger.info(`Discovery label set to: ${Config.discoveryLabel}`);
 
     /**
-     * @prop {number} enginePort - The port to use for communicating with the QIX Engine.
-     * @static
-     */
-    Config.enginePort = parseInt(process.env.MIRA_ENGINE_API_PORT, 10);
-    if (!Config.enginePort || isNaN(Config.enginePort)) {
-      Config.enginePort = defaultQixEnginePort;
-    }
-    logger.info(`Engine port set to: ${Config.enginePort}`);
+      * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the QIX Engine if not defined with MIRA_ENGINE_API_PORT_LABEL.
+      * @static
+      */
+    Config.defaultEngineAPIPort = 9076;
 
     /**
-     * @prop {string} engineAPIPortLabel - The port to use for communicating
-     *                                     with the QIX Engine if no port label has been found.
+     * @prop {string} engineAPIPortLabel - The label specifying the port to use for communicating with the QIX engine
      * @static
      */
     Config.engineAPIPortLabel = process.env.MIRA_ENGINE_API_PORT_LABEL;
@@ -57,13 +52,29 @@ class Config {
     logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
 
     /**
+      * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the QIX Engine metrics if not defined with MIRA_ENGINE_METRICS_PORT_LABEL.
+      * @static
+      */
+    Config.defaultEngineMetricsPort = 9090;
+
+    /**
+     * @prop {string} engineMetricsPortLabel - The port to use for retrieving the QIX Engine container metrics if no port label has been found.
+     * @static
+     */
+    Config.engineMetricsPortLabel = process.env.MIRA_ENGINE_METRICS_PORT_LABEL;
+    if (!Config.engineMetricsPortLabel) {
+      Config.engineMetricsPortLabel = defaultEngineMetricsPortLabel;
+    }
+    logger.info(`QIX Engine Metrics port label set to: ${Config.engineMetricsPortLabel}`);
+
+    /**
      * @prop {number} engineDiscoveryRefreshRate - The engine discovery refresh rate in
      *   milliseconds. This is how often Mira triggers engine discovery scans towards the system to
      *   detect new or removed engine instaces.
      * @static
      */
     Config.engineDiscoveryRefreshRate =
-    parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
+      parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
     if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
       Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
     }

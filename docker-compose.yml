@@ -12,15 +12,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine:12.42.0
+    image: qlikea/engine:12.48.0
     ports:
       - "9176:9076"
     labels:
       qix-engine-local:
+      qix-engine-api-port: "9076"
+      qix-engine-metrics-port: "9090"
 
   engine2:
-    image: qlikea/engine:12.42.0
+    image: qlikea/engine:12.48.0
     ports:
       - "9276:9076"
     labels:
       qix-engine-local:
+      qix-engine-metrics-port: "9090"

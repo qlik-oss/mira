@@ -164,24 +164,14 @@
       "engine": {
         "ip": "127.0.0.1",
         "port": 9176,
-        "labels": {
-          "qix-engine": "",
-          "foo": "foo1",
-          "bar": "bar1",
-          "qix-engine-port": "9176"
-        }
+        "metricsPort": 9090
       }
     },
     {
       "engine": {
         "ip": "127.0.0.1",
         "port": 9276,
-        "labels": {
-          "foo": "foo2",
-          "bar": "bar2",
-          "qix-engine": "prod",
-          "qix-engine-port": "9276"
-        }
+        "metricsPort": 9090
       }
     }
   ]

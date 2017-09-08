@@ -20,10 +20,9 @@ describe('EngineDiscovery', () => {
   });
 
   describe('#list()', () => {
-    const port = 9076;
-    const engine1 = { key: 'e1', engine: { ip: '10.0.0.1', port } };
-    const engine2 = { key: 'e2', engine: { ip: '10.0.0.2', port } };
-    const engine3 = { key: 'e3', engine: { ip: '10.0.0.3', port } };
+    const engine1 = { key: 'e1', engine: { ip: '10.0.0.1' } };
+    const engine2 = { key: 'e2', engine: { ip: '10.0.0.2' } };
+    const engine3 = { key: 'e3', engine: { ip: '10.0.0.3' } };
     const engines1 = [engine1, engine2];
     const engines2 = [engine2, engine3];
 

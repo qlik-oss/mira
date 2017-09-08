@@ -49,11 +49,9 @@ class KubernetesClient {
       const labels = pod.metadata.labels;
       const engine = {
         ip: pod.status.podIP,
-        port: labels[Config.engineAPIPortLabel] ? parseInt(labels[Config.engineAPIPortLabel], 10) : Config.enginePort,
-        labels,
       };
-      const key = `${engine.ip}:${engine.port}`;
-      return { key, engine, kubernetes: pod };
+      const key = pod.metadata.uid;
+      return { key, engine, kubernetes: pod, labels };
     });
 
     return engineInfoEntries;

@@ -7,7 +7,7 @@ const logger = require('./logger/Logger').get();
  * Engine container return specification.
  * @typedef {object} EngineReturnSpec
  * @prop {object} properties - Properties of the engine container.
- * @prop {string} ipAddress - IP address on which the engine container can be reached.
+ * @prop {object} ipAddress - IP address on which the engine container can be reached.
  * @prop {number} port - Port number on which the engine container can be reached.
  */
 

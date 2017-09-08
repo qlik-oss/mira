@@ -1,6 +1,5 @@
 const Docker = require('dockerode');
 const logger = require('../logger/Logger').get();
-const Config = require('../Config');
 
 let dockerode = new Docker();
 
@@ -75,11 +74,9 @@ class SwarmDockerClient {
       const labels = getLabels(task);
       const engine = {
         ip: getIpAddress(task),
-        port: labels[Config.engineAPIPortLabel] ? parseInt(labels[Config.engineAPIPortLabel], 10) : Config.enginePort,
-        labels,
       };
-      const key = `${engine.ip}:${engine.port}`;
-      return { key, engine, swarm: task };
+      const key = task.ID;
+      return { key, engine, swarm: task, labels };
     });
     return engineInfoEntries;
   }
