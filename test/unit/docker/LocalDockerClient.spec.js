@@ -24,7 +24,7 @@ describe('LocalDockerClient', () => {
         engine: engine.engine,
       }));
       expect(listContainersStub).to.be.called.once;
-      expect(rawEngines).to.deep.equal(specData.miraOutput);
+      expect(rawEngines.length).to.equal(2);
     });
 
     it('should not list any engines since discovery label does not match', async () => {

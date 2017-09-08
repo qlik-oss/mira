@@ -1,5 +1,6 @@
 const logger = require('./logger/Logger').get();
 const EngineHealthFetcher = require('./EngineHealthFetcher');
+const Config = require('./Config');
 
 /**
  * Helper for periodical health checking.
@@ -37,6 +38,23 @@ class EngineEntry {
     this.properties = properties;
     this.refreshRate = refreshRate;
     this.healthFetcher = healthFetcher || new EngineHealthFetcher();
+
+    // Set api and metrics port of the engine
+    const labels = this.properties.labels || {};
+
+    if (labels[Config.engineAPIPortLabel]) {
+      this.properties.engine.port = parseInt(labels[Config.engineAPIPortLabel], 10);
+    } else {
+      logger.info(`Engine entry missing api port label: ${Config.engineAPIPortLabel}, defaulting to port: ${Config.defaultEngineAPIPort}`);
+      this.properties.engine.port = Config.defaultEngineAPIPort;
+    }
+
+    if (labels[Config.engineMetricsPortLabel]) {
+      this.properties.engine.metricsPort = parseInt(labels[Config.engineMetricsPortLabel], 10);
+    } else {
+      logger.info(`Engine entry missing metrics port label: ${Config.engineMetricsPortLabel}, defaulting to port: ${Config.defaultEngineMetricsPort}`);
+      this.properties.engine.metricsPort = Config.defaultEngineMetricsPort;
+    }
   }
 
   /**

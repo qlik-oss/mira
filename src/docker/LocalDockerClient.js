@@ -1,7 +1,6 @@
 const Docker = require('dockerode');
 const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
-const Config = require('../Config');
 
 const localhostIp = '127.0.0.1';
 
@@ -13,13 +12,6 @@ function getIpAddress(container) {
     return container.NetworkSettings.Networks[firstKey].IPAddress;
   }
   return localhostIp;
-}
-
-function getPort(container) {
-  if (containerized()) {
-    return container.Ports[0].PrivatePort;
-  }
-  return container.Ports[0].PublicPort;
 }
 
 /**
@@ -53,13 +45,12 @@ class LocalDockerClient {
           const engineContainers = containers.filter(
             container => discoveryLabel in container.Labels);
           const engineInfoEntries = engineContainers.map((local) => {
+            const labels = local.Labels;
             const engine = {
               ip: getIpAddress(local),
-              port: local.Labels[Config.engineAPIPortLabel] ? parseInt(local.Labels[Config.engineAPIPortLabel], 10) : getPort(local),
-              labels: local.Labels,
             };
-            const key = `${engine.ip}:${engine.port}`;
-            return { key, engine, local };
+            const key = local.Id;
+            return { key, engine, local, labels };
           });
           resolve(engineInfoEntries);
         } else {

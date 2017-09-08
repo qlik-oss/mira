@@ -289,25 +289,14 @@
       "engine": {
         "ip": "10.0.1.9",
         "port": 9076,
-        "labels": {
-          "qix-engine": "",
-          "com.docker.stack.namespace": "mira-stack",
-          "foo": "foo1",
-          "bar": "bar1",
-          "qix-engine-port": "9076"
-        }
+        "metricsPort": 9090
       }
     },
     {
       "engine": {
         "ip": "10.0.1.3",
         "port": 9076,
-        "labels": {
-          "qix-engine": "prod",
-          "com.docker.stack.namespace": "mira-stack",
-          "foo": "foo2",
-          "bar": "bar2"
-        }
+        "metricsPort": 9090
       }
     }
   ]
