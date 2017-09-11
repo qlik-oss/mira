@@ -40,7 +40,7 @@ describe('Mira in local docker mode with two engines', () => {
       const res = await chai.request(miraEndpoint).get('/v1/engines');
       expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
       expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
-      expect(res.body[0].engine.status).to.equal('ok');
+      expect(res.body[0].engine.status).to.equal('OK');
     });
 
     it('should not set the swarm and kubernetes properties', async () => {

@@ -31,8 +31,8 @@ describe('GET /engines', () => {
   });
   it('should include a status for health and metrics', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
-    expect(res.body[0].engine.status).to.equal('ok');
-    expect(res.body[1].engine.status).to.equal('ok');
+    expect(res.body[0].engine.status).to.equal('OK');
+    expect(res.body[1].engine.status).to.equal('OK');
   });
 });
 

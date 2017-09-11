@@ -52,7 +52,7 @@ describe('EngineEntry', () => {
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
         expect(entry.properties.engine.health).to.deep.equal(healthOk);
-        expect(entry.properties.engine.status).to.equal('ok');
+        expect(entry.properties.engine.status).to.equal('OK');
       });
 
       it('should fetch metrics periodically', async () => {
@@ -61,7 +61,7 @@ describe('EngineEntry', () => {
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/metrics');
         expect(entry.properties.engine.metrics).to.deep.equal(metrics);
-        expect(entry.properties.engine.status).to.equal('ok');
+        expect(entry.properties.engine.status).to.equal('OK');
       });
 
       it('should be possible to restart', async () => {
@@ -90,7 +90,7 @@ describe('EngineEntry', () => {
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
         expect(entry.properties.engine.health).to.be.undefined;
-        expect(entry.properties.engine.status).to.equal('unhealthy');
+        expect(entry.properties.engine.status).to.equal('UNHEALTHY');
       });
 
       it('should set metrics to undefined and status to noMetrics if metrics fails', async () => {
@@ -104,7 +104,7 @@ describe('EngineEntry', () => {
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/metrics');
         expect(entry.properties.engine.health).to.deep.equal(healthOk);
         expect(entry.properties.engine.metrics).to.be.undefined;
-        expect(entry.properties.engine.status).to.equal('noMetrics');
+        expect(entry.properties.engine.status).to.equal('NO_METRICS');
       });
     });
   });
