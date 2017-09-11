@@ -29,6 +29,7 @@
   "dependencies": {
     "containerized": "1.0.2",
     "dockerode": "2.4.3",
+    "fs-extra": "4.0.1",
     "koa": "2.2.0",
     "koa-logger-winston": "0.0.2",
     "koa-router": "7.1.1",

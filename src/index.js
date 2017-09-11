@@ -7,7 +7,7 @@ const logger = require('./logger/Logger').get();
 const Config = require('./Config');
 const EngineDiscovery = require('./EngineDiscovery');
 const getDockerClient = require('./docker/getDockerClient');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const apiVersion = 'v1';
 const healthEndpoint = 'health';
@@ -50,7 +50,7 @@ const options = {
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
 const swaggerSpec = swaggerJSDoc(options);
-fs.writeFileSync('./doc/api-doc.json', JSON.stringify(swaggerSpec));
+fs.ensureDir('./doc').then(() => fs.writeJsonSync('./doc/api-doc.json', swaggerSpec));
 
 /*
  * Service bootstrapping
