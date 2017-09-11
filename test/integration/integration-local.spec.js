@@ -1,6 +1,5 @@
 const chaiHttp = require('chai-http');
 const chaiSubset = require('chai-subset');
-//const sleep = require('../test-utils/sleep');
 
 const testHost = process.env.TEST_HOST || 'localhost';
 const miraEndpoint = `http://${testHost}:9100`;
