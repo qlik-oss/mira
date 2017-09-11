@@ -27,9 +27,13 @@ describe('GET /engines', () => {
   });
   it('should include metrics', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
-    console.log(JSON.stringify(res.body));
-    expect(res.body[0].engine.metrics).to.include.keys('mem', 'cpu');
-    expect(res.body[1].engine.health).to.include.keys('mem', 'cpu');
+    expect(res.body[0].engine.metrics).to.not.be.empty;
+    expect(res.body[1].engine.metrics).to.not.be.empty;
+  });
+  it('should include a status for health and metrics', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/engines');
+    expect(res.body[0].engine.status).to.equal('ok');
+    expect(res.body[1].engine.status).to.equal('ok');
   });
 });
 

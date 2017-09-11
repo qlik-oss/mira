@@ -27,7 +27,7 @@ class EngineHealthFetcher {
    */
   fetch(host, port, path) {
     return new Promise((resolve, reject) => {
-      this.http.get({ host, port, path }, (response) => {
+      this.http.get({ host, port, path, headers: { Accept: 'application/json' } }, (response) => {
         let body = '';
         response.on('data', (d) => {
           body += d;
@@ -39,9 +39,6 @@ class EngineHealthFetcher {
         });
         response.on('end', () => {
           try {
-            if (path === '/metrics') {
-              resolve(body);
-            }
             resolve(JSON.parse(body));
           } catch (err) {
             logger.warn(`Engine health check returned invalid JSON: ${err}`);
