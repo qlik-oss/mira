@@ -81,7 +81,8 @@
         "qix-engine": "",
         "foo": "foo1",
         "bar": "bar1",
-        "qix-engine-port": "9176"
+        "qix-engine-api-port": "9176",
+        "qix-engine-metrics-port": "9090"
       },
       "State": "running",
       "Status": "Up About a minute",
@@ -130,7 +131,8 @@
         "foo": "foo2",
         "bar": "bar2",
         "qix-engine": "prod",
-        "qix-engine-port": "9276"
+        "qix-engine-api-port": "9276",
+        "qix-engine-metrics-port": "9090"
       },
       "State": "running",
       "Status": "Up About a minute",

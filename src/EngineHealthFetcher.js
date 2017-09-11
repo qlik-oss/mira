@@ -39,6 +39,9 @@ class EngineHealthFetcher {
         });
         response.on('end', () => {
           try {
+            if (path === '/metrics') {
+              resolve(body);
+            }
             resolve(JSON.parse(body));
           } catch (err) {
             logger.warn(`Engine health check returned invalid JSON: ${err}`);

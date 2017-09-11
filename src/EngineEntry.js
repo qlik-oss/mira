@@ -7,12 +7,24 @@ const Config = require('./Config');
  * An {@link EngineEntry} object must be bound as this before calling.
  */
 async function checkHealth() {
+  let health;
+  let metrics;
   try {
-    const health = await this.healthFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
+    health = await this.healthFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
     this.properties.engine.health = health;
+    metrics = await this.healthFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
+    this.properties.engine.metrics = metrics;
+    this.properties.engine.status = 'ok';
   } catch (err) {
-    logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
-    this.properties.engine.health = undefined;
+    if (!health) {
+      logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+      this.properties.engine.health = undefined;
+      this.properties.engine.status = 'unhealthy';
+    } else if (!metrics) {
+      logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
+      this.properties.engine.metrics = undefined;
+      this.properties.engine.status = 'noMetrics';
+    }
   }
   this.fetcherTimeOutId = setTimeout(checkHealth.bind(this), this.refreshRate);
 }
