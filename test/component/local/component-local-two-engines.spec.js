@@ -42,6 +42,7 @@ describe('Mira in local docker mode with two engines', () => {
   after(() => {
     server.close();
     delete require.cache[require.resolve('../../../src/index')];
+    delete require.cache[require.resolve('../../../src/Routes')];
     nock.cleanAll();
   });
 });
