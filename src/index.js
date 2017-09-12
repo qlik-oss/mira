@@ -22,7 +22,7 @@ const swaggerDefinition = {
   info: {
     title: 'A QIX Engine discovery service for Qlik Elastic',
     version: '0.0.1',
-    description: 'REST API for discovering QIX Engines running in Docker containers. Different modes exist, local mode, swarm and kubernetes mode.',
+    description: 'REST API for discovering QIX Engines running in Docker containers. Different modes exist, local, swarm and kubernetes mode.',
   },
   host: 'localhost:9100',
   schemes: ['http'],
