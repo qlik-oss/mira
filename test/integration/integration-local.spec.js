@@ -13,16 +13,26 @@ describe('GET /engines', () => {
     expect(res).to.be.json;
     expect(res.body.length).to.equal(2);
   });
-  it('and both engines should be running on the same port but with different IPs', async () => {
+  it('should return engines running on the same port but with different IPs', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res.body[0].engine.port).to.equal(9076);
     expect(res.body[1].engine.port).to.equal(9076);
     expect(res.body[0].engine.ip).to.not.equal(res.body[1].engine.ip);
   });
-  it('and should include info about allocated memory and total cpu', async () => {
+  it('should include health with info about allocated memory and total cpu', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res.body[0].engine.health).to.include.keys('mem', 'cpu');
     expect(res.body[1].engine.health).to.include.keys('mem', 'cpu');
+  });
+  it('should include metrics', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/engines');
+    expect(res.body[0].engine.metrics).to.not.be.empty;
+    expect(res.body[1].engine.metrics).to.not.be.empty;
+  });
+  it('should include a status for health and metrics', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/engines');
+    expect(res.body[0].engine.status).to.equal('OK');
+    expect(res.body[1].engine.status).to.equal('OK');
   });
 });
 

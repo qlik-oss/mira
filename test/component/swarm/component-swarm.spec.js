@@ -1,6 +1,7 @@
 const chaiHttp = require('chai-http');
 const nock = require('nock');
 const specData = require('../../test-data/SwarmDockerClient.spec.data.json');
+const sleep = require('../../test-utils/sleep');
 
 const miraEndpoint = 'http://localhost:9100';
 process.env.DOCKER_HOST = 'http://localhost:8001';
@@ -10,13 +11,16 @@ chai.use(chaiHttp);
 describe('Mira in docker swarm mode', () => {
   let server;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Mock docker.sock
     nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
       .reply(200, specData.endpointsResponse);
-    nock(`http://${specData.miraOutput[0].ipAddress}:${specData.miraOutput[0].port}`).get('/healthcheck').times(10).reply(200, {});
-    nock(`http://${specData.miraOutput[1].ipAddress}:${specData.miraOutput[1].port}`).get('/healthcheck').times(10).reply(200, {});
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
+    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
     server = require('../../../src/index'); // eslint-disable-line global-require
+    await sleep(30); // Sleep to make room for status checks to succeed
   });
 
   describe('GET /engines', () => {
@@ -30,6 +34,13 @@ describe('Mira in docker swarm mode', () => {
       const res = await chai.request(miraEndpoint).get('/v1/engines');
       expect(res.body[0].swarm).to.deep.equal(specData.endpointsResponse[0]);
       expect(res.body[1].swarm).to.deep.equal(specData.endpointsResponse[1]);
+    });
+
+    it('should set the health and metrics properties', async () => {
+      const res = await chai.request(miraEndpoint).get('/v1/engines');
+      expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
+      expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
+      expect(res.body[0].engine.status).to.equal('OK');
     });
 
     it('should return the local and swarm properties as undefined', async () => {
