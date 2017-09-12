@@ -90,4 +90,4 @@ router.get(`/${enginesEndpoint}`, async (ctx) => { ctx.body = await engineDiscov
 *       - NO_METRICS
 */
 
-export default router;
+module.exports = router;
