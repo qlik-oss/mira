@@ -21,7 +21,7 @@ describe('Mira in local docker mode with two engines', () => {
       nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
       nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
       server = require('../../../src/index'); // eslint-disable-line global-require
-      await sleep(30);
+      await sleep(30); // Sleep to make room for status checks to succeed
     });
 
     it('should return a list with two engines', async () => {

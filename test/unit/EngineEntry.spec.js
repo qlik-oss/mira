@@ -36,7 +36,7 @@ describe('EngineEntry', () => {
     });
   });
 
-  describe('#startHealthChecks()', () => {
+  describe('#startStatusChecks()', () => {
     describe('with healthy engines', () => {
       beforeEach(() => {
         healthFetcher = new EngineHealthFetcher({ get: () => { } });
@@ -47,7 +47,7 @@ describe('EngineEntry', () => {
       });
 
       it('should fetch health periodically', async () => {
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);  // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
@@ -56,7 +56,7 @@ describe('EngineEntry', () => {
       });
 
       it('should fetch metrics periodically', async () => {
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);  // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/metrics');
@@ -65,12 +65,12 @@ describe('EngineEntry', () => {
       });
 
       it('should be possible to restart', async () => {
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);
         const callCount = fetchStub.callCount;
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);
-        entry.stopHealthChecks();
+        entry.stopStatusChecks();
         expect(fetchStub.callCount > callCount).to.be.true;
       });
     });
@@ -85,7 +85,7 @@ describe('EngineEntry', () => {
         fetchStub = sinon.stub(healthFetcher, 'fetch');
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').throws('Not feeling so good!');
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);  // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
@@ -97,7 +97,7 @@ describe('EngineEntry', () => {
         fetchStub = sinon.stub(healthFetcher, 'fetch');
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').throws('Too busy!');
-        entry.startHealthChecks();
+        entry.startStatusChecks();
         await sleep(30);  // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
@@ -109,7 +109,7 @@ describe('EngineEntry', () => {
     });
   });
 
-  describe('#stopHealthChecks()', () => {
+  describe('#stopStatusChecks()', () => {
     beforeEach(() => {
       healthFetcher = new EngineHealthFetcher({ get: () => { } });
       fetchStub = sinon.stub(healthFetcher, 'fetch');
@@ -118,9 +118,9 @@ describe('EngineEntry', () => {
       entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
     });
     it('should stop fetching health', async () => {
-      entry.startHealthChecks();
+      entry.startStatusChecks();
       await sleep(50);
-      entry.stopHealthChecks();
+      entry.stopStatusChecks();
       const countAfterStop1 = fetchStub.callCount;
       await sleep(50);
       const countAfterStop2 = fetchStub.callCount;
@@ -128,10 +128,10 @@ describe('EngineEntry', () => {
     });
 
     it('should be possible to call twice', async () => {
-      entry.startHealthChecks();
+      entry.startStatusChecks();
       await sleep(50);
-      entry.stopHealthChecks();
-      entry.stopHealthChecks();
+      entry.stopStatusChecks();
+      entry.stopStatusChecks();
     });
   });
 

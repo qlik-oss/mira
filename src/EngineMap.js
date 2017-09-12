@@ -29,7 +29,7 @@ class EngineMap {
     if (this.has(key)) { throw new Error('Key already exists'); }
     if (!engine) { throw new Error('Invalid engine parameter'); }
     this.entries[key] = engine;
-    engine.startHealthChecks();
+    engine.startStatusChecks();
     logger.debug(`Engine map key added: ${key}`);
   }
 
@@ -42,7 +42,7 @@ class EngineMap {
     keys.forEach((key) => {
       if (this.has(key)) {
         const engine = this.entries[key];
-        engine.stopHealthChecks();
+        engine.stopStatusChecks();
         delete this.entries[key];
         logger.debug(`Engine map key removed: ${key}`);
       }

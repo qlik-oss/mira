@@ -20,7 +20,7 @@ describe('Mira in docker swarm mode', () => {
     nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
     nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
     server = require('../../../src/index'); // eslint-disable-line global-require
-    await sleep(30);
+    await sleep(30); // Sleep to make room for status checks to succeed
   });
 
   describe('GET /engines', () => {

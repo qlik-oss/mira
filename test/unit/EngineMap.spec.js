@@ -1,6 +1,6 @@
 const EngineMap = require('../../src/EngineMap');
 
-const getEntry = () => ({ startHealthChecks: sinon.stub(), stopHealthChecks: sinon.stub() });
+const getEntry = () => ({ startStatusChecks: sinon.stub(), stopStatusChecks: sinon.stub() });
 
 describe('EngineMap', () => {
   let engineMap;
@@ -32,8 +32,8 @@ describe('EngineMap', () => {
     engineMap.add('a', entry1);
     engineMap.add('b', entry2);
     engineMap.delete(['a', 'b']);
-    expect(entry1.stopHealthChecks.calledOnce).to.equal(true);
-    expect(entry2.stopHealthChecks.calledOnce).to.equal(true);
+    expect(entry1.stopStatusChecks.calledOnce).to.equal(true);
+    expect(entry2.stopStatusChecks.calledOnce).to.equal(true);
     expect(engineMap.entries.a).to.equal(undefined);
     expect(engineMap.entries.b).to.equal(undefined);
   });
