@@ -1,5 +1,5 @@
 const logger = require('./logger/Logger').get();
-const EngineHealthFetcher = require('./EngineHealthFetcher');
+const EngineStatusFetcher = require('./EngineStatusFetcher');
 const Config = require('./Config');
 
 /**
@@ -33,7 +33,7 @@ async function checkStatus() {
  * Engine entry class definition.
  * @prop {object} properties - Properties of the engine instance.
  * @prop {number} refreshRate - The status check refresh rate in milliseconds.
- * @prop {EngineHealthFetcher} statusFetcher - The health fetcher to use.
+ * @prop {EngineStatusFetcher} statusFetcher - The status fetcher to use.
  *   Optional and mainly used for testing; if not supplied, a default
  *   implementation will be used.
  */
@@ -42,14 +42,14 @@ class EngineEntry {
    * Creates new {@link EngineEntry} object.
    * @param {object} properties - Properties of the engine instance.
    * @param {number} refreshRate - The health check refresh rate in milliseconds.
-   * @param {EngineHealthFetcher} statusFetcher - The helth fetcher to use.
+   * @param {EngineStatusFetcher} statusFetcher - The status fetcher to use.
    *   Optional and mainly used for testing; if not supplied, a default
    *   implementation will be used.
    */
   constructor(properties, refreshRate, statusFetcher) {
     this.properties = properties;
     this.refreshRate = refreshRate;
-    this.statusFetcher = statusFetcher || new EngineHealthFetcher();
+    this.statusFetcher = statusFetcher || new EngineStatusFetcher();
 
     // Set api and metrics port of the engine
     const labels = this.properties.labels || {};

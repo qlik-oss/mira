@@ -1,14 +1,14 @@
 const EngineDiscovery = require('./EngineDiscovery');
-const getDockerClient = require('./docker/getDockerClient');
+const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
 const Router = require('koa-router');
 
 const apiVersion = 'v1';
 const router = new Router({ prefix: `/${apiVersion}` });
 
-const DockerClient = getDockerClient(Config.mode);
+const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
-  DockerClient,
+  OrchestrationClient,
   Config.engineDiscoveryRefreshRate,
   Config.engineHealthRefreshRate);
 
