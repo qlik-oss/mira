@@ -44,4 +44,3 @@ const server = app.listen(Config.miraApiPort);
 logger.info(`Listening on port ${Config.miraApiPort}`);
 
 module.exports = server;
-

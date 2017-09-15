@@ -74,13 +74,13 @@ router.get(`/${enginesEndpoint}`, async (ctx) => { ctx.body = await engineDiscov
 *         $ref: '#/definitions/engineInfo'
 *       local:
 *         type: object
-*         description: Entire container response if running in local docker mode.
+*         description: Container information in verbatim format as returned by the Docker Engine Remote API.
 *       swarm:
 *         type: object
-*         description: Entire container response if running in docker swarm mode.
+*         description: Task information in verbatim format as returned by the Docker Engine Remote API.
 *       kubernetes:
 *         type: object
-*         description: Entire container response if running in kubernetes mode.
+*         description: Pod information in verbatim format as returned by the Kubernetes API.
 *   containerStatus:
 *     type: string
 *     description: Status of the QIX Engine.
