@@ -7,7 +7,7 @@ const KubernetesClient = require('./KubernetesClient');
  * @param {string} mode - Service operation mode.
  * @returns {OrchestrationClient} The orchestration client implementation.
  */
-function getOrchestationClient(mode) {
+function getOrchestrationClient(mode) {
   switch (mode) {
     case 'local':
       return LocalDockerClient;
@@ -20,4 +20,4 @@ function getOrchestationClient(mode) {
   }
 }
 
-module.exports = getOrchestationClient;
+module.exports = getOrchestrationClient;

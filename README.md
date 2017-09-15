@@ -114,10 +114,10 @@ Mira _must_ be configured to run on a Swarm manager node, since it needs to comm
 To start Mira in _swarm_ mode, `docker stack` can be used; for example
 
 ```sh
-$ docker stack deploy -c docker-compose-swarm.yml --with-registry-auth mira-stack
+$ docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-stack
 ```
 
-The file [docker-compose-swarm.yml](./swarm/docker-compose-swarm.yml) shows an example of this. It assumed that a Docker Swarm cluster is already created with at least one manager, and that the Docker CLI client is configured to issue commands towards the manager node. All Swarm services in the example file are configured to run on manager nodes.
+The file [docker-compose-swarm.yml](./examples/swarm/docker-compose-swarm.yml) shows an example of this. It assumed that a Docker Swarm cluster is already created with at least one manager, and that the Docker CLI client is configured to issue commands towards the manager node. All Swarm services in the example file are configured to run on manager nodes.
 
 To remove the stack, run
 
@@ -171,7 +171,7 @@ To start Mira in _kubernetes_ mode, the `kubectl` command line tool can be used.
 $ kubectl apply -f mira-deployment.yml
 ```
 
-The file [mira-deployment.yml](./k8s/mira-deployment.yml) shows an example. Note how the deployment also bundles the `kubectl` proxy into the same pod. Since Kubernetes must be able to pull Docker images, the deployment file assumes that Kubernetes is configured with Docker Hub registry credentials in a secret named `dockerhub`.
+The file [mira-deployment.yml](./examples/kubernetes/mira-deployment.yml) shows an example. Note how the deployment also bundles the `kubectl` proxy into the same pod. Since Kubernetes must be able to pull Docker images, the deployment file assumes that Kubernetes is configured with Docker Hub registry credentials in a secret named `dockerhub`.
 
 Normally the Mira REST API shall also be exposed as a service. Preferably, this can also be done by applying the service configuration as a YML file; for example
 
@@ -179,7 +179,7 @@ Normally the Mira REST API shall also be exposed as a service. Preferably, this 
 $ kubectl apply -f mira-service.yml
 ```
 
-The file [mira-service.yml](./k8s/mira-service.yml) show an example of this where Mira's default port 9100 is exposed outside the cluster as port 31000 (using the `NodePort` type). Assuming `minikube` is used to create the cluster, the Mira health check should now be possible to reach.
+The file [mira-service.yml](./examples/kubernetes/mira-service.yml) show an example of this where Mira's default port 9100 is exposed outside the cluster as port 31000 (using the `NodePort` type). Assuming `minikube` is used to create the cluster, the Mira health check should now be possible to reach.
 
 ```sh
 $ curl http://$(minikube ip):31000/v1/health
@@ -191,13 +191,13 @@ In order for Mira to discover QIX Engine instances in the cluster, a Kubernetes 
 $ kubectl apply -f engine-deployment.yml
 ```
 
-The file [engine-deployment.yml](./k8s/engine-deployment.yml) shows an example of a deployment of two engine pod replicas. However, this is not enough for Mira to be able to discover the two engine instances. For this to happen, the engines need to be exposed as services with named ports. For example
+The file [engine-deployment.yml](./examples/kubernetes/engine-deployment.yml) shows an example of a deployment of two engine pod replicas. However, this is not enough for Mira to be able to discover the two engine instances. For this to happen, the engines need to be exposed as services with named ports. For example
 
 ```sh
 $ kubectl apply -f engine-service.yml
 ```
 
-The file [engine-service.yml](./k8s/engine-service.yml) show as example of how the engine pods are exposed as a service with a named port, `qix`. Each engine replica will appear in the _endpoints_ object that will be related to the service and Mira uses this information to list the engine instances. This list should now be possible to retrieve with
+The file [engine-service.yml](./examples/kubernetes/engine-service.yml) show as example of how the engine pods are exposed as a service with a named port, `qix`. Each engine replica will appear in the _endpoints_ object that will be related to the service and Mira uses this information to list the engine instances. This list should now be possible to retrieve with
 
 ```sh
 $ curl http://$(minikube ip):31000/v1/engines
