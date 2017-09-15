@@ -1,27 +1,17 @@
 const Koa = require('koa');
-const Router = require('koa-router');
 const koaLoggerWinston = require('koa-logger-winston');
 const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
 const path = require('path');
 const logger = require('./logger/Logger').get();
 const Config = require('./Config');
-const EngineDiscovery = require('./EngineDiscovery');
-const getDockerClient = require('./docker/getDockerClient');
-
-const apiVersion = 'v1';
-const healthEndpoint = 'health';
-const enginesEndpoint = 'engines';
 
 Config.init();
 
+const router = require('./Routes');
+
 const app = new Koa();
-const router = new Router({ prefix: `/${apiVersion}` });
-const DockerClient = getDockerClient(Config.mode);
-const engineDiscovery = new EngineDiscovery(
-  DockerClient,
-  Config.engineDiscoveryRefreshRate,
-  Config.engineHealthRefreshRate);
+
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
 function onUnhandledError(err) {
@@ -42,10 +32,6 @@ process.on('SIGTERM', () => {
 
 process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
-
-router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
-
-router.get(`/${enginesEndpoint}`, async (ctx) => { ctx.body = await engineDiscovery.list(); });
 
 app
   .use(swagger2koa.ui(document, '/openapi'))
