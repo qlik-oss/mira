@@ -3,11 +3,11 @@ const SwarmDockerClient = require('./SwarmDockerClient');
 const KubernetesClient = require('./KubernetesClient');
 
 /**
- * Gets a Docker client implementation for the provided operation mode.
+ * Gets an orchestration client implementation for the provided operation mode.
  * @param {string} mode - Service operation mode.
- * @returns {DockerClient} The Docker client implementation.
+ * @returns {OrchestrationClient} The orchestration client implementation.
  */
-function getDockerClient(mode) {
+function getOrchestrationClient(mode) {
   switch (mode) {
     case 'local':
       return LocalDockerClient;
@@ -20,4 +20,4 @@ function getDockerClient(mode) {
   }
 }
 
-module.exports = getDockerClient;
+module.exports = getOrchestrationClient;

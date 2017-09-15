@@ -2,11 +2,11 @@ const defaultHttp = require('http');
 const logger = require('./logger/Logger').get();
 
 /**
- * Class providing the ability to fetch health-check status from an engine.
+ * Class providing the ability to fetch health and metrics from an engine.
  */
-class EngineHealthFetcher {
+class EngineStatusFetcher {
   /**
-   * Creates new {@link EngineHealthFetcher} object.
+   * Creates new {@link EngineStatusFetcher} object.
    * @param {object} http - HTTP client to use.
    *   Interface must comply with standard Node.js http module.
    */
@@ -53,4 +53,4 @@ class EngineHealthFetcher {
   }
 }
 
-module.exports = EngineHealthFetcher;
+module.exports = EngineStatusFetcher;

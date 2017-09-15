@@ -1,5 +1,5 @@
 const EngineEntry = require('../../src/EngineEntry');
-const EngineHealthFetcher = require('../../src/EngineHealthFetcher');
+const EngineStatusFetcher = require('../../src/EngineStatusFetcher');
 const sleep = require('../test-utils/sleep');
 
 describe('EngineEntry', () => {
@@ -11,7 +11,7 @@ describe('EngineEntry', () => {
 
   describe('#constructor()', () => {
     beforeEach(() => {
-      healthFetcher = new EngineHealthFetcher({ get: () => { } });
+      healthFetcher = new EngineStatusFetcher({ get: () => { } });
       fetchStub = sinon.stub(healthFetcher, 'fetch');
       fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
       fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
@@ -39,7 +39,7 @@ describe('EngineEntry', () => {
   describe('#startStatusChecks()', () => {
     describe('with healthy engines', () => {
       beforeEach(() => {
-        healthFetcher = new EngineHealthFetcher({ get: () => { } });
+        healthFetcher = new EngineStatusFetcher({ get: () => { } });
         fetchStub = sinon.stub(healthFetcher, 'fetch');
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
@@ -77,7 +77,7 @@ describe('EngineEntry', () => {
 
     describe('with unhealthy engines', () => {
       beforeEach(() => {
-        healthFetcher = new EngineHealthFetcher({ get: () => { } });
+        healthFetcher = new EngineStatusFetcher({ get: () => { } });
         entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
       });
 
@@ -111,7 +111,7 @@ describe('EngineEntry', () => {
 
   describe('#stopStatusChecks()', () => {
     beforeEach(() => {
-      healthFetcher = new EngineHealthFetcher({ get: () => { } });
+      healthFetcher = new EngineStatusFetcher({ get: () => { } });
       fetchStub = sinon.stub(healthFetcher, 'fetch');
       fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(async () => Promise.resolve(healthOk));
       fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(async () => Promise.resolve(metrics));
