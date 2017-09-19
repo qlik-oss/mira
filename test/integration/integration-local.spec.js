@@ -43,6 +43,15 @@ describe('GET /health', () => {
   });
 });
 
+describe('GET /metrics', () => {
+  it('should return mira own metrics', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/metrics');
+    expect(res.statusCode).to.equal(200);
+    expect(res.type).to.equal('application/json');
+    expect(res.body.length).to.not.equal(0);
+  });
+});
+
 describe('GET /openapi', () => {
   it('should return OK and the swagger ui', async () => {
     const res = await chai.request(miraEndpoint).get('/openapi');
