@@ -2,6 +2,7 @@ const EngineDiscovery = require('./EngineDiscovery');
 const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
 const Router = require('koa-router');
+const prom = require('prom-client');
 
 const apiVersion = 'v1';
 const router = new Router({ prefix: `/${apiVersion}` });
@@ -12,7 +13,12 @@ const engineDiscovery = new EngineDiscovery(
   Config.engineDiscoveryRefreshRate,
   Config.engineHealthRefreshRate);
 
+// Collect default prometheus metrics every 10 seconds
+const collectDefaultMetrics = prom.collectDefaultMetrics;
+collectDefaultMetrics();
+
 const healthEndpoint = 'health';
+const metricsEndpoint = 'metrics';
 const enginesEndpoint = 'engines';
 
 /**
@@ -25,6 +31,22 @@ const enginesEndpoint = 'engines';
 *         description: OK
 */
 router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = 'OK'; });
+
+/**
+* @swagger
+* /metrics:
+*   get:
+*     description: Returns metrics of the Mira service
+*     produces:
+*       - application/json
+*     responses:
+*       200:
+*         description: successful operation
+*         schema:
+*           type: array
+*           description: Default prometheus client metrics
+*/
+router.get(`/${metricsEndpoint}`, async (ctx) => { ctx.body = prom.register.getMetricsAsJSON(); });
 
 /**
   * @swagger

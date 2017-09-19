@@ -24,12 +24,12 @@ describe('GET /engines', () => {
     expect(res.body[0].engine.health).to.include.keys('mem', 'cpu');
     expect(res.body[1].engine.health).to.include.keys('mem', 'cpu');
   });
-  it('should include metrics', async () => {
+  it('should include metrics for each engine', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res.body[0].engine.metrics).to.not.be.empty;
     expect(res.body[1].engine.metrics).to.not.be.empty;
   });
-  it('should include a status for health and metrics', async () => {
+  it('should include a status for health and metrics of each engine', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/engines');
     expect(res.body[0].engine.status).to.equal('OK');
     expect(res.body[1].engine.status).to.equal('OK');
@@ -40,6 +40,15 @@ describe('GET /health', () => {
   it('should return OK', async () => {
     const res = await chai.request(miraEndpoint).get('/v1/health');
     expect(res.statusCode).to.equal(200);
+  });
+});
+
+describe('GET /metrics', () => {
+  it('should return Miras own metrics', async () => {
+    const res = await chai.request(miraEndpoint).get('/v1/metrics');
+    expect(res.statusCode).to.equal(200);
+    expect(res.type).to.equal('application/json');
+    expect(res.body.length).to.not.equal(0);
   });
 });
 
