@@ -320,6 +320,16 @@ $ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 
+### Releasing
+
+To create a release for Mira we use the npm version scripts described [here](https://docs.npmjs.com/cli/version). A ```preversion``` and a ```version``` script has been defined in the [package.json](./package.json). If the OpenAPI specification has been changed it will be part of the release commit created.
+
+```sh
+$ npm version <new version>
+```
+
+The commit will by default get a git tag with the version number e.g. ```v0.0.3```. It will be up to the developer to push the release commit to master and also to add any description to the release in github.
+
 ### Coding Guidelines
 
 JavaScript code shall be developed according the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
