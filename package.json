@@ -14,7 +14,9 @@
     "test:integration": "aw-test-runner ./test/integration/integration-local.spec.js",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "generate-openapi": "node ./node_modules/swagger-jsdoc/bin/swagger-jsdoc.js ./src/Routes.js -d SwaggerDef.js -o ./doc/api-doc.yml"
+    "generate-openapi": "swagger-jsdoc ./src/Routes.js -d SwaggerDef.js -o ./doc/api-doc.yml",
+    "preversion": "npm run lint && npm run test:unit && npm run test:component",
+    "version": "npm run generate-openapi && git add ./doc/api-doc.yml"
   },
   "repository": {
     "type": "git",

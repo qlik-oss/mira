@@ -320,6 +320,25 @@ $ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 
+### Releasing
+
+To create a release for Mira we use the npm version scripts described [here](https://docs.npmjs.com/cli/version). A ```preversion``` and a ```version``` script has been defined in the [package.json](./package.json). If the OpenAPI specification has been changed it will be part of the release commit created.
+
+1. Bump the version:
+```sh
+$ npm version <new version>
+```
+
+The commit will by default get a git tag with the version number e.g. ```v0.0.3```.
+
+2. Push the release commit to master by typing:
+
+```sh
+$ git push --follow-tags
+```
+
+3. Go to [Releases](https://github.com/qlik-ea/mira/releases) and draft a new release. Choose the tag that was created in step 1, and add any description or release notes that is suitable.
+
 ### Coding Guidelines
 
 JavaScript code shall be developed according the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
