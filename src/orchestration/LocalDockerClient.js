@@ -40,11 +40,9 @@ class LocalDockerClient {
    */
   static async listEngines(discoveryLabel) {
     return new Promise((resolve, reject) => {
-      LocalDockerClient.docker.listContainers((err, containers) => {
+      LocalDockerClient.docker.listContainers({ filters: { label: [discoveryLabel] } }, (err, containers) => {
         if (!err) {
-          const engineContainers = containers.filter(
-            container => discoveryLabel in container.Labels);
-          const engineInfoEntries = engineContainers.map((local) => {
+          const engineInfoEntries = containers.map((local) => {
             const labels = local.Labels;
             const engine = {
               ip: getIpAddress(local),
