@@ -14,7 +14,8 @@ describe('Mira in local docker mode with two engines', () => {
   describe('GET /engines', () => {
     beforeEach(async () => {
       // Mock docker.sock
-      nock('http://localhost:8001').get('/containers/json').times(10).reply(200, specData.endpointsResponse);
+      nock('http://localhost:8001').filteringPath(/\/containers\/json?.*/g, '/containers/json').get('/containers/json').times(10)
+        .reply(200, specData.endpointsResponse);
       // Engine healthcheck mocks
       nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
       nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
@@ -32,8 +33,8 @@ describe('Mira in local docker mode with two engines', () => {
 
     it('should return the local property holding the container info', async () => {
       const res = await chai.request(miraEndpoint).get('/v1/engines');
-      expect(res.body[0].local).to.deep.equal(specData.endpointsResponse[1]);
-      expect(res.body[1].local).to.deep.equal(specData.endpointsResponse[2]);
+      expect(res.body[0].local).to.deep.equal(specData.endpointsResponse[0]);
+      expect(res.body[1].local).to.deep.equal(specData.endpointsResponse[1]);
     });
 
     it('should set the health and metrics properties', async () => {

@@ -10,7 +10,8 @@ describe('Mira in local docker mode with no engines', () => {
   let server;
 
   before(() => {
-    nock('http://localhost:8001').get('/containers/json').times(10).reply(200, []);
+    nock('http://localhost:8001').filteringPath(/\/containers\/json?.*/g, '/containers/json').get('/containers/json').times(10)
+      .reply(200, []);
     server = require('../../../src/index'); // eslint-disable-line global-require
   });
 

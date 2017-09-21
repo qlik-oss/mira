@@ -73,6 +73,10 @@ describe('EngineEntry', () => {
         entry.stopStatusChecks();
         expect(fetchStub.callCount > callCount).to.be.true;
       });
+
+      afterEach(() => {
+        entry.stopStatusChecks();
+      });
     });
 
     describe('with unhealthy engines', () => {
@@ -105,6 +109,10 @@ describe('EngineEntry', () => {
         expect(entry.properties.engine.health).to.deep.equal(healthOk);
         expect(entry.properties.engine.metrics).to.be.undefined;
         expect(entry.properties.engine.status).to.equal('NO_METRICS');
+      });
+
+      afterEach(() => {
+        entry.stopStatusChecks();
       });
     });
   });
