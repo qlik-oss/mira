@@ -320,6 +320,12 @@ $ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 
+As part of the integration tests the OpenAPI specification is also validated against the actual API implementation using [dredd](https://github.com/apiaryio/dredd). If you want to only execute the dredd test:
+
+```sh
+$ npm run test:integration:dredd
+```
+
 ### Releasing
 
 To create a release for Mira we use the npm version scripts described [here](https://docs.npmjs.com/cli/version). A ```preversion``` and a ```version``` script has been defined in the [package.json](./package.json). If the OpenAPI specification has been changed it will be part of the release commit created.
