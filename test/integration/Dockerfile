@@ -10,6 +10,7 @@ WORKDIR /test/
 
 # Bundle test and depencencies
 COPY package.json ./
+COPY doc ./doc/
 COPY node_modules ./node_modules/
 COPY test/integration ./test/integration/
 
