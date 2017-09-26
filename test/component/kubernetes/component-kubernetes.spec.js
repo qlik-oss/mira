@@ -56,7 +56,7 @@ describe('Mira in kubernetes mode', () => {
 
   describe('GET /health', () => {
     it('should return OK', (done) => {
-      request(app.listen()).get('/v1/health').expect(20).end(done);
+      request(app.listen()).get('/v1/health').expect(200).end(done);
     });
   });
 
