@@ -13,12 +13,14 @@ describe('Mira in local docker mode with no engines', () => {
     await sleep(1000);
   });
 
-  it('GET /engines should return an empty engine list', (done) => {
-    request(app.listen()).get('/v1/engines').expect([]).end(done);
+  it('GET /engines should return an empty engine list', async () => {
+    const res = await request(app.listen()).get('/v1/engines');
+    expect(res.body.length).to.equal(0);
   });
 
-  it('GET /health should return OK', (done) => {
-    request(app.listen()).get('/v1/health').expect(200).end(done);
+  it('GET /health should return OK', async () => {
+    const res = await request(app.listen()).get('/v1/health');
+    expect(res.statusCode).to.equal(200);
   });
 
   after(() => nock.cleanAll());
