@@ -23,7 +23,6 @@ describe('Mira in docker swarm mode', () => {
   describe('GET /engines', () => {
     it('should translate the docker swarm endpoints list to a mira engine list', async () => {
       const res = await request(app.listen()).get('/v1/engines');
-      expect(res).to.be.json;
       expect(res.body.length).to.equal(2);
     });
 

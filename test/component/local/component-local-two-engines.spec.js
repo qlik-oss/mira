@@ -24,7 +24,6 @@ describe('Mira in local docker mode with two engines', () => {
 
     it('should return a list with two engines', async () => {
       const res = await request(app.listen()).get('/v1/engines');
-      expect(res).to.be.json;
       expect(res.body.length).to.equal(2);
     });
 

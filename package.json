@@ -6,11 +6,11 @@
   "scripts": {
     "start": "node ./src/index.js",
     "test": "npm run test:unit",
-    "test:unit": "aw-test-coverage -- ./test/unit",
+    "test:unit": "aw-test-runner cover ./test/unit",
     "test:component": "npm run test:component:local && npm run test:component:swarm && npm run test:component:kubernetes",
-    "test:component:local": "env MIRA_MODE=local aw-test-runner ./test/component/local",
-    "test:component:swarm": "env MIRA_MODE=swarm aw-test-runner ./test/component/swarm",
-    "test:component:kubernetes": "env MIRA_MODE=kubernetes aw-test-runner ./test/component/kubernetes",
+    "test:component:local": "cross-env NODE_ENV=test MIRA_MODE=local aw-test-runner ./test/component/local",
+    "test:component:swarm": "cross-env NODE_ENV=test MIRA_MODE=swarm aw-test-runner ./test/component/swarm",
+    "test:component:kubernetes": "cross-env NODE_ENV=test MIRA_MODE=kubernetes aw-test-runner ./test/component/kubernetes",
     "test:integration": "npm run test:integration:local && npm run test:integration:dredd",
     "test:integration:local": "aw-test-runner ./test/integration/integration-local.spec.js",
     "test:integration:dredd": "aw-test-runner ./test/integration/integration-dredd.spec.js",
@@ -43,15 +43,13 @@
     "winston": "2.3.1"
   },
   "devDependencies": {
-    "after-work.js": "2.0.0",
-    "chai-http": "3.0.0",
-    "chai-subset": "1.5.0",
+    "after-work.js": "3.0.1",
+    "cross-env": "5.0.5",
     "dredd": "4.5.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb-base": "11.1.3",
     "eslint-plugin-import": "2.2.0",
     "nock": "9.0.14",
-    "sinon-as-promised": "4.0.3",
     "superagent": "3.5.2",
     "supertest": "3.0.0",
     "swagger-jsdoc": "1.9.7"

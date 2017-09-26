@@ -39,8 +39,7 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-// Only start server if launched from Node.js, and not when loaded by another module i.e. used in component tests.
-if (!module.parent) {
+if (process.env.NODE_ENV !== 'test') {
   app.listen(Config.miraApiPort);
   logger.info(`Listening on port ${Config.miraApiPort}`);
 }
