@@ -1,18 +1,15 @@
-const chaiHttp = require('chai-http');
 const nock = require('nock');
 const specData = require('../../test-data/LocalDockerClient.spec.data.json');
+const request = require('supertest');
 const sleep = require('../../test-utils/sleep');
 
-const miraEndpoint = 'http://localhost:9100';
 process.env.DOCKER_HOST = 'http://localhost:8001';
 
-chai.use(chaiHttp);
-
 describe('Mira in local docker mode with two engines', () => {
-  let server;
+  let app;
 
   describe('GET /engines', () => {
-    beforeEach(async () => {
+    before(async () => {
       // Mock docker.sock
       nock('http://localhost:8001').filteringPath(/\/containers\/json?.*/g, '/containers/json').get('/containers/json').times(10)
         .reply(200, specData.endpointsResponse);
@@ -21,42 +18,46 @@ describe('Mira in local docker mode with two engines', () => {
       nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
       nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
       nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
-      server = require('../../../src/index'); // eslint-disable-line global-require
-      await sleep(30); // Sleep to make room for status checks to succeed
+      app = require('../../../src/index'); // eslint-disable-line global-require
+      await sleep(1000); // allow atleast 1 discovery
     });
 
-    it('should return a list with two engines', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/engines');
-      expect(res).to.be.json;
-      expect(res.body.length).to.equal(2);
+    it('should return a list with two engines', (done) => {
+      request(app.listen()).get('/v1/engines').expect('Content-Type', /json/).expect(200)
+        .end((err, res) => {
+          expect(res).to.be.json;
+          expect(res.body.length).to.equal(2);
+          done();
+        });
     });
 
-    it('should return the local property holding the container info', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/engines');
-      expect(res.body[0].local).to.deep.equal(specData.endpointsResponse[0]);
-      expect(res.body[1].local).to.deep.equal(specData.endpointsResponse[1]);
+    it('should return the local property holding the container info', (done) => {
+      request(app.listen()).get('/v1/engines').end((err, res) => {
+        expect(res.body[0].local).to.deep.equal(specData.endpointsResponse[0]);
+        expect(res.body[1].local).to.deep.equal(specData.endpointsResponse[1]);
+        done();
+      });
     });
 
-    it('should set the health and metrics properties', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/engines');
-      expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
-      expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
-      expect(res.body[0].engine.status).to.equal('OK');
+    it('should set the health and metrics properties', (done) => {
+      request(app.listen()).get('/v1/engines').end((err, res) => {
+        expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
+        expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
+        expect(res.body[0].engine.status).to.equal('OK');
+        done();
+      });
     });
 
-    it('should not set the swarm and kubernetes properties', async () => {
-      const res = await chai.request(miraEndpoint).get('/v1/engines');
-      expect(res.body[0].swarm).to.be.undefined;
-      expect(res.body[0].kubernetes).to.be.undefined;
-      expect(res.body[1].swarm).to.be.undefined;
-      expect(res.body[1].kubernetes).to.be.undefined;
+    it('should not set the swarm and kubernetes properties', (done) => {
+      request(app.listen()).get('/v1/engines').end((err, res) => {
+        expect(res.body[0].swarm).to.be.undefined;
+        expect(res.body[0].kubernetes).to.be.undefined;
+        expect(res.body[1].swarm).to.be.undefined;
+        expect(res.body[1].kubernetes).to.be.undefined;
+        done();
+      });
     });
 
-    afterEach(() => {
-      server.close();
-      delete require.cache[require.resolve('../../../src/index')];
-      delete require.cache[require.resolve('../../../src/Routes')];
-      nock.cleanAll();
-    });
+    after(() => nock.cleanAll());
   });
 });

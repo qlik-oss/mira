@@ -39,8 +39,10 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-const server = app.listen(Config.miraApiPort);
+// Only start server if launched from Node.js, and not when loaded by another module i.e. used in component tests.
+if (!module.parent) {
+  app.listen(Config.miraApiPort);
+  logger.info(`Listening on port ${Config.miraApiPort}`);
+}
 
-logger.info(`Listening on port ${Config.miraApiPort}`);
-
-module.exports = server;
+module.exports = app;

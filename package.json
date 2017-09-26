@@ -53,6 +53,7 @@
     "nock": "9.0.14",
     "sinon-as-promised": "4.0.3",
     "superagent": "3.5.2",
+    "supertest": "^3.0.0",
     "swagger-jsdoc": "1.9.7"
   },
   "engines": {
