@@ -59,10 +59,7 @@ describe('Mira in docker swarm mode', () => {
 
   describe('GET /health', () => {
     it('should return OK', (done) => {
-      request(app.listen()).get('/v1/health').end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
+      request(app.listen()).get('/v1/health').expect(200).end(done);
     });
   });
 
