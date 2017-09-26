@@ -6,7 +6,7 @@ const request = require('supertest');
 describe('Mira in kubernetes mode', () => {
   let app;
 
-  beforeEach(async () => {
+  before(async () => {
     nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').times(10).reply(200, specData.endpointsResponse);
     // Engine healthcheck mocks
     nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
@@ -63,5 +63,5 @@ describe('Mira in kubernetes mode', () => {
     });
   });
 
-  afterEach(() => nock.cleanAll());
+  after(() => nock.cleanAll());
 });
