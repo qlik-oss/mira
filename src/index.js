@@ -11,6 +11,7 @@ Config.init();
 const router = require('./Routes');
 
 const app = new Koa();
+let server;
 
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
@@ -24,7 +25,7 @@ function onUnhandledError(err) {
  */
 
 process.on('SIGTERM', () => {
-  app.close(() => {
+  server.close(() => {
     logger.info('Process exiting on SIGTERM');
     process.exit(0);
   });
@@ -40,7 +41,7 @@ app
   .use(router.allowedMethods());
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(Config.miraApiPort);
+  server = app.listen(Config.miraApiPort);
   logger.info(`Listening on port ${Config.miraApiPort}`);
 }
 

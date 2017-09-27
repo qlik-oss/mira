@@ -57,14 +57,14 @@ class EngineEntry {
     if (labels[Config.engineAPIPortLabel]) {
       this.properties.engine.port = parseInt(labels[Config.engineAPIPortLabel], 10);
     } else {
-      logger.info(`Engine entry missing api port label: ${Config.engineAPIPortLabel}, defaulting to port: ${Config.defaultEngineAPIPort}`);
+      logger.debug(`Engine entry missing api port label: ${Config.engineAPIPortLabel}, defaulting to port: ${Config.defaultEngineAPIPort}`);
       this.properties.engine.port = Config.defaultEngineAPIPort;
     }
 
     if (labels[Config.engineMetricsPortLabel]) {
       this.properties.engine.metricsPort = parseInt(labels[Config.engineMetricsPortLabel], 10);
     } else {
-      logger.info(`Engine entry missing metrics port label: ${Config.engineMetricsPortLabel}, defaulting to port: ${Config.defaultEngineMetricsPort}`);
+      logger.debug(`Engine entry missing metrics port label: ${Config.engineMetricsPortLabel}, defaulting to port: ${Config.defaultEngineMetricsPort}`);
       this.properties.engine.metricsPort = Config.defaultEngineMetricsPort;
     }
   }

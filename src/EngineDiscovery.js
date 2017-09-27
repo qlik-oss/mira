@@ -28,7 +28,7 @@ async function discover() {
     if (!this.engineMap.has(item.key)) {
       const engineEntry = new EngineEntry(
         item, this.healthRefreshRate);
-      logger.info(`Engine discovered: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port}`);
+      logger.info(`Engine discovered at address: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port} with key: ${item.key}`);
       this.engineMap.add(item.key, engineEntry);
     }
   });
