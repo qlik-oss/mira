@@ -10,7 +10,7 @@ describe('EngineDiscovery', () => {
 
   describe('#constructor()', () => {
     it('should construct and start periodical discovery scans', async () => {
-      const listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines', () => []);
+      const listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns([]);
       const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 5000);
       await sleep(50);
       expect(engineDiscovery).to.not.be.null;
@@ -27,7 +27,7 @@ describe('EngineDiscovery', () => {
     const engines2 = [engine2, engine3];
 
     it('should list all discovered engines', async () => {
-      let listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines', () => engines1);
+      let listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
       const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
       await sleep(50);
       let listedEngines = await engineDiscovery.list();
@@ -39,7 +39,7 @@ describe('EngineDiscovery', () => {
       expect(listedEngine2.engine).to.deep.equal(engine2.engine);
 
       listEnginesStub.restore();
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines', () => engines2);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
       await sleep(50);
       listedEngines = await engineDiscovery.list();
 

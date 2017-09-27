@@ -39,8 +39,9 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-const server = app.listen(Config.miraApiPort);
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(Config.miraApiPort);
+  logger.info(`Listening on port ${Config.miraApiPort}`);
+}
 
-logger.info(`Listening on port ${Config.miraApiPort}`);
-
-module.exports = server;
+module.exports = app;
