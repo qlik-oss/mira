@@ -28,7 +28,7 @@ describe('Mira in local docker mode with no engines', () => {
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text).to.be.a('string');
-  })
+  });
 
   it('GET /metrics should return metrics in json format if accept header is set to json', async () => {
     const res = await request(app.listen()).get('/v1/metrics').set('Accept', 'application/json').expect('Content-Type', 'application/json; charset=utf-8');
