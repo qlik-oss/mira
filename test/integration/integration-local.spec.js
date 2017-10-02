@@ -42,7 +42,7 @@ describe('GET /metrics', () => {
   it('should return Miras own metrics', async () => {
     const res = await request(miraEndpoint).get('/v1/metrics');
     expect(res.statusCode).to.equal(200);
-    expect(res.type).to.equal('application/json');
+    expect(res.type).to.equal('text/plain');
     expect(res.body.length).to.not.equal(0);
   });
 });
