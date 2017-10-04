@@ -2,11 +2,9 @@ version: "3.1"
 
 services:
   mira:
-    image: qlikea/mira:latest
+    image: qlikea/mira${TAG} # If TAG is not set docker image with tag 'latest' will be used.
     ports:
       - "9100:9100"
-    environment:
-     - MIRA_MODE=swarm
     deploy:
       mode: global
       placement:
@@ -15,19 +13,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine:12.48.0
+    image: qlikea/engine:12.63.0
     labels:
       qix-engine:
     deploy:
       replicas: 2
-      placement:
-        constraints: [node.role == manager]
-
-  engine2:
-    image: qlikea/engine:12.48.0
-    labels:
-      qix-engine:
-    deploy:
-      replicas: 1
       placement:
         constraints: [node.role == manager]

@@ -1,5 +1,7 @@
 version: 2
 jobs:
+
+  # Job for build src, run unit & component test and build docker image
   build:
     docker:
       - image: node:8
@@ -86,3 +88,40 @@ jobs:
               docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
             fi
             docker push $DOCKER_REPO
+
+  # Job for testing Mira in docker swarm
+  swarm:
+    machine: true
+    working_directory: ~/mira
+    steps:
+      - checkout
+      - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Spin up core in a local docker swarm
+          command: |
+            docker swarm init
+            # Spin up a local setup with the previously built docker image.
+            VER=$(cat ./version.txt)
+            TAG=:${VER} docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
+            sleep 60 # Sleep for 60 seconds to let the services start
+      - run:
+          name: Check health of services
+          command: |
+            # Check mira health
+            curl -fs http://localhost:9100/v1/health
+      - run:
+          name: Remove deployment and leave swarm
+          command: |
+            docker stack rm mira-swarm
+            docker swarm leave --force
+
+workflows:
+  version: 2
+    build_and_test:
+      jobs:
+        - build
+        - swarm:
+            requires:
+              - build
