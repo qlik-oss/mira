@@ -167,6 +167,7 @@ jobs:
   # Job for pushing docker image to docker hub
   deploy:
     docker:
+    - image: node:8
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikea/mira
