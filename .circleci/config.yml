@@ -110,12 +110,18 @@ jobs:
             # Spin up a local setup with the previously built docker image.
             VER=$(cat /tmp/workspace/version.txt)
             TAG=:${VER} docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
-            sleep 60 # Sleep for 60 seconds to let the services start
       - run:
-          name: Check health of services
+          name: Check health of the Mira service
           command: |
-            # Check mira health
-            curl -fs http://localhost:9100/v1/health
+            echo "Waiting for Swarm to wake up..."
+            SWARM_IS_DOWN="true"
+
+            while [ "$SWARM_IS_DOWN" == "true" ]; do
+              SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
+              sleep 1
+            done
+
+            echo "Mira is up and running!"
       - run:
           name: Remove deployment and leave swarm
           command: |
@@ -180,6 +186,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
+      - setup_remote_docker
       - run:
           name: Install Docker client
           command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
