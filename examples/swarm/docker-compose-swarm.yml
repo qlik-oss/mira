@@ -12,11 +12,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  engine1:
-    image: qlikea/engine:12.63.0
+  qix-engine:
+    image: qlikea/engine:12.67.0
+    ports:
+      - 9076:9076
+      - 9090:9090
     labels:
-      qix-engine:
-    deploy:
-      replicas: 2
-      placement:
-        constraints: [node.role == manager]
+      qix-engine: ""
