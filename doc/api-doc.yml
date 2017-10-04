@@ -6,6 +6,7 @@ info:
     modes exist, local, swarm and kubernetes mode.
 host: 'localhost:9100'
 produces:
+  - text/plain; charset=utf-8
   - application/json; charset=utf-8
 schemes:
   - http

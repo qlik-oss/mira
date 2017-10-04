@@ -46,7 +46,13 @@ router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = {}; });
 *           type: array
 *           description: Default prometheus client metrics
 */
-router.get(`/${metricsEndpoint}`, async (ctx) => { ctx.body = prom.register.getMetricsAsJSON(); });
+router.get(`/${metricsEndpoint}`, async (ctx) => {
+  if (ctx.accepts('text')) {
+    ctx.body = prom.register.metrics();
+  } else {
+    ctx.body = prom.register.getMetricsAsJSON();
+  }
+});
 
 /**
   * @swagger
