@@ -98,7 +98,7 @@ jobs:
           at: /tmp/workspace
       - run:
           name: Import previously built docker image
-          command: docker import /tmp/workspace/mira_image.tar
+          command: docker load < /tmp/workspace/mira_image.tar
       - checkout
       - run:
           name: Login to Docker
@@ -133,7 +133,7 @@ jobs:
           at: /tmp/workspace
       - run:
           name: Import previously built docker image
-          command: docker import /tmp/workspace/mira_image.tar
+          command: docker load < /tmp/workspace/mira_image.tar
       - checkout
       - run:
           name: Install Kubectl
@@ -176,7 +176,8 @@ jobs:
           at: /tmp/workspace
       - run:
           name: Import previously built docker image
-          command: docker import /tmp/workspace/mira_image.tar
+          command: docker load < /tmp/workspace/mira_image.tar
+      - checkout
       - run:
           name: Install Docker client
           command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
