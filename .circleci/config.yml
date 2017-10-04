@@ -179,13 +179,13 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run:
-          name: Import previously built docker image
-          command: docker load < /tmp/workspace/mira_image.tar
       - checkout
       - run:
           name: Install Docker client
           command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
+      - run:
+          name: Import previously built docker image
+          command: docker load < /tmp/workspace/mira_image.tar
       - run:
           name: Login to Docker
           command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
