@@ -59,17 +59,19 @@ jobs:
               npm version $VER --no-git-tag-version
             fi
 
-            echo "$VER" > ./version.txt
+            mkdir -p workspace
+            echo "$VER" > workspace/version.txt
       - run:
-          name: Build Docker image
+          name: Build Docker image and save to workspace
           command: |
-            VER=$(cat ./version.txt)
+            VER=$(cat workspace/version.txt)
             docker build -t $DOCKER_REPO:$VER .
+            docker save $DOCKER_REPO:$VER -o workspace/mira_image.tar
       - run:
           name: Run integration tests on a local setup
           command: |
             # Spin up a local setup with the previously built docker image.
-            VER=$(cat ./version.txt)
+            VER=$(cat workspace/version.txt)
             TAG=:${VER} docker-compose up -d
             # Find IP address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
@@ -80,20 +82,23 @@ jobs:
             docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
             # Execute tests
             docker run --rm test/test-integration
-      - deploy:
-          name: Push image to Docker Hub
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              VER=$(cat ./version.txt)
-              docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
-            fi
-            docker push $DOCKER_REPO
+      # Persist to workspace so other jobs in the workflow can reuse artifacts
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - version.txt
+            - mira_image.tar
 
   # Job for testing Mira in docker swarm
   swarm:
     machine: true
     working_directory: ~/mira
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker import /tmp/workspace/mira_image.tar
       - checkout
       - run:
           name: Login to Docker
@@ -103,7 +108,7 @@ jobs:
           command: |
             docker swarm init
             # Spin up a local setup with the previously built docker image.
-            VER=$(cat ./version.txt)
+            VER=$(cat /tmp/workspace/version.txt)
             TAG=:${VER} docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
             sleep 60 # Sleep for 60 seconds to let the services start
       - run:
@@ -124,6 +129,11 @@ jobs:
       CHANGE_MINIKUBE_NONE_USER: true
     working_directory: ~/mira
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker import /tmp/workspace/mira_image.tar
       - checkout
       - run:
           name: Install Kubectl
@@ -154,6 +164,33 @@ jobs:
           name: Kubernetes delete mira
           command: sudo kubectl delete -f ./examples/kubernetes/
 
+  # Job for pushing docker image to docker hub
+  deploy:
+    docker:
+    working_directory: ~/mira
+    environment:
+      DOCKER_REPO: qlikea/mira
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker import /tmp/workspace/mira_image.tar
+      - run:
+          name: Install Docker client
+          command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
+      - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      -run:
+          name: Push image to Docker Hub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              VER=$(cat tmp/workspace/version.txt)
+              docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
+            fi
+            docker push $DOCKER_REPO
+
 workflows:
   version: 2
   build_and_test:
@@ -165,3 +202,8 @@ workflows:
       - kubernetes:
           requires:
             - build
+      - deploy:
+          requires:
+            - build
+            - swarm
+            - kubernetes
