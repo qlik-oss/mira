@@ -148,12 +148,15 @@ jobs:
           command: |
             sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
             sudo minikube update-context
+            sleep 10
       - run:
           name: Add docker credentials as kubernetes secret
           command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
       - run:
           name: Kubernetes plain mira
-          command: sudo kubectl create -f ./examples/kubernetes/
+          command: |
+            sudo kubectl create -f ./examples/kubernetes/
+            sudo kubectl set image deployment/mira mira=$DOCKER_REPO:$VER
       - run:
           name: Check health of services
           command: |

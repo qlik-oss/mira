@@ -1,21 +1,26 @@
-apiVersion: apps/v1beta1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: engine-deployment
+  name: engine
+  labels:
+    app: engine
+  annotations:
+    prometheus.io/scrape: "true"
 spec:
   replicas: 2
   template:
     metadata:
       labels:
+        app: engine
         service: engine
         qix-engine:
     spec:
       containers:
       - name: engine
-        image: qlikea/engine:12.61.0
+        image: "qlikea/engine:12.66.0"
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9076
         - containerPort: 9090
-      restartPolicy: Always
       imagePullSecrets:
-        - name: dockerhub
+      - name: dockerhub
