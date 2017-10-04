@@ -117,11 +117,51 @@ jobs:
             docker stack rm mira-swarm
             docker swarm leave --force
 
+  # Job for testing Mira in kubernetes
+  kubernetes:
+    machine: true
+    environment:
+      CHANGE_MINIKUBE_NONE_USER: true
+    working_directory: ~/mira
+    steps:
+      - checkout
+      - run:
+          name: Install Kubectl
+          command: |
+            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+      - run:
+          name: Install Minikube
+          command: |
+            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+      - run:
+          name: Start Minikube
+          command: |
+            sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
+            sudo minikube update-context
+      - run:
+          name: Add docker credentials as kubernetes secret
+          command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
+      - run:
+          name: Kubernetes plain mira
+          command: sudo kubectl create -f ./examples/kubernetes/
+      - run:
+          name: Check health of services
+          command: |
+            # Check mira health
+            MIRA_URL=$(sudo minikube service mira --url)
+            curl -fs "$MIRA_URL/v1/health"
+      - run:
+          name: Kubernetes delete mira
+          command: sudo kubectl delete -f ./examples/kubernetes/
+
 workflows:
   version: 2
-    build_and_test:
-      jobs:
-        - build
-        - swarm:
-            requires:
-              - build
+  build_and_test:
+    jobs:
+      - build
+      - swarm:
+          requires:
+            - build
+      - kubernetes:
+          requires:
+            - build
