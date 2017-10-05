@@ -16,6 +16,5 @@ services:
     image: qlikea/engine:12.67.0
     ports:
       - 9076:9076
-      - 9090:9090
     labels:
       qix-engine: ""
