@@ -1,5 +1,7 @@
 version: 2
 jobs:
+
+  # Job for build src, run unit & component test and build docker image
   build:
     docker:
       - image: node:8
@@ -57,17 +59,19 @@ jobs:
               npm version $VER --no-git-tag-version
             fi
 
-            echo "$VER" > ./version.txt
+            mkdir -p workspace
+            echo "$VER" > workspace/version.txt
       - run:
-          name: Build Docker image
+          name: Build Docker image and save to workspace
           command: |
-            VER=$(cat ./version.txt)
+            VER=$(cat workspace/version.txt)
             docker build -t $DOCKER_REPO:$VER .
+            docker save $DOCKER_REPO:$VER -o workspace/mira_image.tar
       - run:
           name: Run integration tests on a local setup
           command: |
             # Spin up a local setup with the previously built docker image.
-            VER=$(cat ./version.txt)
+            VER=$(cat workspace/version.txt)
             TAG=:${VER} docker-compose up -d
             # Find IP address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
@@ -78,11 +82,142 @@ jobs:
             docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
             # Execute tests
             docker run --rm test/test-integration
-      - deploy:
+      # Persist to workspace so other jobs in the workflow can reuse artifacts
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - version.txt
+            - mira_image.tar
+
+  # Job for testing Mira in docker swarm
+  swarm:
+    machine: true
+    working_directory: ~/mira
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker load < /tmp/workspace/mira_image.tar
+      - checkout
+      - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Spin up core in a local docker swarm
+          command: |
+            docker swarm init
+            # Spin up a local setup with the previously built docker image.
+            VER=$(cat /tmp/workspace/version.txt)
+            TAG=:${VER} docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
+      - run:
+          name: Check health of the Mira service
+          command: |
+            echo "Waiting for Swarm to wake up..."
+            SWARM_IS_DOWN="true"
+
+            while [ "$SWARM_IS_DOWN" == "true" ]; do
+              SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
+              sleep 1
+            done
+
+            echo "Mira is up and running!"
+      - run:
+          name: Remove deployment and leave swarm
+          command: |
+            docker stack rm mira-swarm
+            docker swarm leave --force
+
+  # Job for testing Mira in kubernetes
+  kubernetes:
+    machine: true
+    environment:
+      CHANGE_MINIKUBE_NONE_USER: true
+      DOCKER_REPO: qlikea/mira
+    working_directory: ~/mira
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker load < /tmp/workspace/mira_image.tar
+      - checkout
+      - run:
+          name: Install Kubectl
+          command: |
+            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+      - run:
+          name: Install Minikube
+          command: |
+            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+      - run:
+          name: Start Minikube
+          command: |
+            sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
+            sudo minikube update-context
+            sleep 10
+      - run:
+          name: Add docker credentials as kubernetes secret
+          command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
+      - run:
+          name: Kubernetes plain mira
+          command: |
+            VER=$(cat /tmp/workspace/version.txt)
+            sudo kubectl create -f ./examples/kubernetes/
+            sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
+      - run:
+          name: Check health of services
+          command: |
+            # Check mira health
+            MIRA_URL=$(sudo minikube service mira --url)
+            curl -fs "$MIRA_URL/v1/health"
+      - run:
+          name: Kubernetes delete mira
+          command: sudo kubectl delete -f ./examples/kubernetes/
+
+  # Job for pushing docker image to docker hub
+  deploy:
+    docker:
+    - image: node:8
+    working_directory: ~/mira
+    environment:
+      DOCKER_REPO: qlikea/mira
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker client
+          command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
+      - run:
+          name: Import previously built docker image
+          command: docker load < /tmp/workspace/mira_image.tar
+      - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
           name: Push image to Docker Hub
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              VER=$(cat ./version.txt)
+              VER=$(cat /tmp/workspace/version.txt)
               docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
             fi
             docker push $DOCKER_REPO
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - build
+      - swarm:
+          requires:
+            - build
+      - kubernetes:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
+            - swarm
+            - kubernetes

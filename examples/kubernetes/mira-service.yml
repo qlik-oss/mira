@@ -1,11 +1,15 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: mira-service
+  name: mira
+  labels:
+    app: mira
 spec:
-  selector:
-    service: mira
+  type: NodePort
   ports:
     - port: 9100
-      nodePort: 31000
-  type: NodePort
+      targetPort: 9100
+      protocol: TCP
+      name: http
+  selector:
+    app: mira
