@@ -53,12 +53,12 @@ jobs:
             TAG=$(git describe --exact-match 2> /dev/null)
             set -e
             VER=$(node -e "console.log(require('./package.json').version)")
-            echo "TAG: $TAG"
-            echo "VER: $VER"
             if [[ ! $TAG =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
               VER+="-$CIRCLE_BUILD_NUM"
               npm version $VER --no-git-tag-version
             fi
+            echo "TAG: $TAG"
+            echo "VER: $VER"
             mkdir -p workspace
             echo "$VER" > workspace/version.txt
       - run:
