@@ -57,8 +57,6 @@ jobs:
               VER+="-$CIRCLE_BUILD_NUM"
               npm version $VER --no-git-tag-version
             fi
-            echo "TAG: $TAG"
-            echo "VER: $VER"
             mkdir -p workspace
             echo "$VER" > workspace/version.txt
       - run:
