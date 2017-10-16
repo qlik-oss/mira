@@ -47,18 +47,16 @@ jobs:
             curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
       - run:
-          name: Update version tag
+          name: Update version
           command: |
-            set +e
-            TAG=$(git describe --exact-match 2> /dev/null)
             set -e
-            VER=$(node -e "console.log(require('./package.json').version)")
-            if [[ ! $TAG =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-              VER+="-$CIRCLE_BUILD_NUM"
-              npm version $VER --no-git-tag-version
-            fi
+            VER=$(node -e "console.log(require('./package.json').version.replace(/-[0-9]+/, '-$CIRCLE_BUILD_NUM'))")
             mkdir -p workspace
             echo "$VER" > workspace/version.txt
+            echo "VER=$VER"
+            if (echo $VER | egrep -- '-[0-9]+$' 1> /dev/null); then
+              npm version $VER --no-git-tag-version
+            fi
       - run:
           name: Build Docker image and save to workspace
           command: |
@@ -173,8 +171,8 @@ jobs:
           name: Kubernetes delete mira
           command: sudo kubectl delete -f ./examples/kubernetes/
 
-  # Job for pushing docker image to docker hub
-  deploy:
+  # Job for publishing Docker image to Docker hub
+  publish:
     docker:
     - image: node:8
     working_directory: ~/mira
@@ -214,7 +212,7 @@ workflows:
       - kubernetes:
           requires:
             - build
-      - deploy:
+      - publish:
           requires:
             - build
             - swarm
