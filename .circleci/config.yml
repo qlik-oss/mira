@@ -171,8 +171,8 @@ jobs:
           name: Kubernetes delete mira
           command: sudo kubectl delete -f ./examples/kubernetes/
 
-  # Job for pushing docker image to docker hub
-  deploy:
+  # Job for publishing Docker image to Docker hub
+  publish:
     docker:
     - image: node:8
     working_directory: ~/mira
@@ -212,7 +212,7 @@ workflows:
       - kubernetes:
           requires:
             - build
-      - deploy:
+      - publish:
           requires:
             - build
             - swarm
