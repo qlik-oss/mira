@@ -1,10 +1,5 @@
 #!/bin/bash
-# The purpose of this script is to bump up (increment) the version number
-# of a release and commit the changes to git with the tag
-#
-# Run this script in the branch we want to tag/up_version
-# ported from qlik-trial/deployment-tools/release_tag.sh
-#
+
 set -e
 
 REPO=qlik-ea/mira
@@ -31,67 +26,6 @@ function check_release_type() {
     echo "Invalid RELEASE_TYPE specified"
     exit 1
   fi
-}
-
-function disable_status_checks() {
-
-  echo "Temporarily disabling required pull request reviews."
-  export orig_pr_reviews=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_pull_request_reviews" \
-    -s -X GET -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json")
-  export patch_org_pr_reviews=$(echo $orig_pr_reviews | jq '{
-    dismiss_stale_reviews,
-    require_code_owner_reviews,
-    dismissal_restrictions:
-    (if has("dismissal_restrictions") then
-      .dismissal_restrictions | {
-        users: (if has("users") then .users | reduce.[] as $user([];. + [$user.login]) else [] end),
-        teams: (if has("teams") then .teams | reduce.[] as $team([];. + [$team.slug]) else [] end)
-      }
-    else {} end)
-  }')
-
-  delete_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_pull_request_reviews" \
-    -s -X DELETE -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json")
-
-  echo "Temporarily disabling status checks contexts"
-  export orig_contexts=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_status_checks/contexts" \
-    -s -X GET -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json")
-
-  put_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_status_checks/contexts" \
-    -s -X PUT -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -d '[]')
-
-  echo "Temporarily disabling required required status checks."
-  export orig_status_checks=$(curl "https://api.github.com/repos/$REPO/branches/master/protection" \
-    -s -X GET -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json")
-  disabled_status_checks=$(echo $orig_status_checks | jq '.enforce_admins=false')
-  patch_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection" \
-    -s -X D -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -d "${disabled_status_checks}")
-}
-
-function enable_status_checks() {
-  echo "Restoring required pull request reviews."
-  patch_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_pull_request_reviews" \
-    -s -X PATCH -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -d "${patch_org_pr_reviews}")
-  echo "Restoring required status checks."
-  patch_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection" \
-    -s -X PATCH -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -d "${orig_status_checks}")
-  echo "Restoring status checks contexts."
-  put_result=$(curl "https://api.github.com/repos/$REPO/branches/master/protection/required_status_checks/contexts" \
-    -s -X PUT -H "Authorization: token $GITHUB_API_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -d "${orig_contexts}")
 }
 
 function generate_change_log() {
@@ -154,8 +88,6 @@ esac
 RELEASE_VERSION="${RELEASE_PARTS[0]}.${RELEASE_PARTS[1]}.${RELEASE_PARTS[2]}"
 echo "Current version is: ${VERSION}, releasing ${RELEASE_VERSION}"
 
-disable_status_checks
-
 # If the current version is a pre-release, bump it to a release first.
 if (echo $VERSION | egrep -- '-[0-9A-Za-z.-]+$' 1> /dev/null ); then
   if [ -n "$USING_NPM" ]; then
@@ -189,7 +121,4 @@ elif [ -n "$USING_VERSIONFILE" ]; then
 fi
 
 generate_change_log
-
-enable_status_checks
-
 echo "Done."
