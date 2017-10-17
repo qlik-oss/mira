@@ -3,13 +3,15 @@
 # of a release and commit the changes to git with the tag
 #
 # Run this script in the branch we want to tag/up_version
-# ported from qlik-trial/ deployment-tools/release_tag.sh
+# ported from qlik-trial/deployment-tools/release_tag.sh
 #
 set -e
 
+REPO=qlik-ea/mira
+
 function pre_flight_checks() {
-  if [ -z "${REPO}" ]; then
-    echo "env.REPO is not set!"
+  if [[ ! -z $(git status --porcelain) ]]; then
+    echo "There are uncommitted changes. Please make sure branch is clean."
     exit 1
   fi
 
@@ -110,13 +112,6 @@ function set_github_tokens() {
 ## Now do the thing
 pre_flight_checks
 check_release_type
-
-CLONE_URL=https://${GITHUB_API_TOKEN}@github.com/${REPO}
-echo "Cloning repo: ${REPO}"
-
-git clone ${CLONE_URL} repo
-cd repo
-
 set_github_tokens
 
 if [ -f package.json ]; then
