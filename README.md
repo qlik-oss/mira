@@ -328,8 +328,6 @@ $ npm run test:integration:dredd
 
 ### Releasing
 
-### Releasing
-
 The helper script [release.sh](./release.sh) provides a convenient way to release a new version of the service and to automatically bump versions as needed.
 
 Check usage information in [release.sh](./release.sh) on how to perform the release and version bumping by running:
