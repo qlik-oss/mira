@@ -1,6 +1,6 @@
 {
   "name": "mira",
-  "version": "0.0.3-0",
+  "version": "0.0.3",
   "description": "QIX Engine Discovery Service",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "npm run test:unit",
     "test:unit": "aw-test-runner cover ./test/unit",
     "test:component": "npm run test:component:local && npm run test:component:swarm && npm run test:component:kubernetes",
-    "test:component:local": "cross-env NODE_ENV=test MIRA_MODE=local aw-test-runner ./test/component/local --timeout 5000" ,
+    "test:component:local": "cross-env NODE_ENV=test MIRA_MODE=local aw-test-runner ./test/component/local --timeout 5000",
     "test:component:swarm": "cross-env NODE_ENV=test MIRA_MODE=swarm aw-test-runner ./test/component/swarm",
     "test:component:kubernetes": "cross-env NODE_ENV=test MIRA_MODE=kubernetes aw-test-runner ./test/component/kubernetes",
     "test:integration": "npm run test:integration:local && npm run test:integration:dredd",
