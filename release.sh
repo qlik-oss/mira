@@ -12,15 +12,13 @@ function print_usage {
   echo "  -?, -h, --help  - Prints this usage information."
   echo
   echo "Environment variables:"
-  echo "  - GITHUB_API_TOKEN - Must be set and give rights to push to the branch on"
-  echo "                       which the release is made."
-  echo "  - RELEASE_TYPE     - Optional. Set to patch, minor or major. Defaults to patch."
+  echo "  - RELEASE_TYPE - Optional. Set to patch, minor or major. Defaults to patch."
   echo
   echo "If RELEASE_TYPE is major, or minor, the released version will be the bumped version"
   echo "and development continues on the next patch version."
   echo
-  echo "If RELEASE_TYPE is patch, the pre-release version of package.json is used. Then, the"
-  echo "patch number is bumped."
+  echo "If RELEASE_TYPE is patch, the pre-release version of package.json is used."
+  echo "After that the patch number is bumped."
 }
 
 if [[ $1 == "-?" || $1 == "-h" || $1 == "--help" ]]; then
@@ -31,11 +29,6 @@ fi
 function pre_flight_checks() {
   if [[ ! -z $(git status --porcelain) ]]; then
     echo "There are uncommitted changes. Please make sure branch is clean."
-    exit 1
-  fi
-
-  if [ "$GITHUB_API_TOKEN" == "" ]; then
-    echo "No GITHUB_API_TOKEN found - this must be set!"
     exit 1
   fi
 }
@@ -52,25 +45,9 @@ function check_release_type() {
   fi
 }
 
-function generate_change_log() {
-  echo "Generating changelog..."
-  github_changelog_generator --exclude-labels duplicate,question,invalid,wontfix,admin --max-issues 200
-  git add CHANGELOG.md
-  git commit -m "Change Log [ci skip]"
-  git push
-  echo "Pushing changelog to github release..."
-  chandler push v$RELEASE_VERSION
-}
-
-function set_github_tokens() {
-  export CHANGELOG_GITHUB_TOKEN=$GITHUB_API_TOKEN
-  export CHANDLER_GITHUB_API_TOKEN=$GITHUB_API_TOKEN
-}
-
 ## Now do the thing
 pre_flight_checks
 check_release_type
-set_github_tokens
 
 if [ -f package.json ]; then
   VERSION=$(node -e "console.log(require('./package.json').version)")
@@ -144,5 +121,4 @@ elif [ -n "$USING_VERSIONFILE" ]; then
   git push
 fi
 
-generate_change_log
 echo "Done."
