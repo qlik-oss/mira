@@ -1,8 +1,32 @@
 #!/bin/bash
 
 set -e
-
 REPO=qlik-ea/mira
+
+function print_usage {
+  echo "Usage:"
+  echo "  release.sh"
+  echo "  release.sh (-?, -h, --help)"
+  echo
+  echo "Options:"
+  echo "  -?, -h, --help  - Prints this usage information."
+  echo
+  echo "Environment variables:"
+  echo "  - GITHUB_API_TOKEN - Must be set and give rights to push to the branch on"
+  echo "                       which the release is made."
+  echo "  - RELEASE_TYPE     - Optional. Set to patch, minor or major. Defaults to patch."
+  echo
+  echo "If RELEASE_TYPE is major, or minor, the released version will be the bumped version"
+  echo "and development continues on the next patch version."
+  echo
+  echo "If RELEASE_TYPE is patch, the pre-release version of package.json is used. Then, the"
+  echo "patch number is bumped."
+}
+
+if [[ $1 == "-?" || $1 == "-h" || $1 == "--help" ]]; then
+  print_usage
+  exit 0
+fi
 
 function pre_flight_checks() {
   if [[ ! -z $(git status --porcelain) ]]; then
@@ -94,14 +118,14 @@ if (echo $VERSION | egrep -- '-[0-9A-Za-z.-]+$' 1> /dev/null ); then
     npm version $RELEASE_TYPE -m "Releasing v%s"
   else
     git commit --allow-empty -m "Releasing v${RELEASE_VERSION}"
-    git tag -a v${RELEASE_VERSION} -m "Releasing v${RELEASE_VERSION}" || enable_status_checks
+    git tag -a v${RELEASE_VERSION} -m "Releasing v${RELEASE_VERSION}"
   fi
   git push
   git push --tags
 else
-  git tag -a v$VERSION -m "Releasing v$VERSION" || enable_status_checks
+  git tag -a v$VERSION -m "Releasing v$VERSION"
   git push
-  git push --tags || enable_status_checks
+  git push --tags
 fi
 
 if [ -n "$USING_NPM" ]; then
