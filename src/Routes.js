@@ -26,6 +26,8 @@ const enginesEndpoint = 'engines';
 * /health:
 *   get:
 *     description: Returns health status of the Mira service
+*     produces:
+*       - application/json; charset=utf-8
 *     responses:
 *       200:
 *         description: successful operation
@@ -39,6 +41,9 @@ router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = {}; });
 * /metrics:
 *   get:
 *     description: Returns metrics of the Mira service
+*     produces:
+*       - application/json; charset=utf-8
+*       - text/plain; charset=utf-8
 *     responses:
 *       200:
 *         description: successful operation
@@ -59,6 +64,8 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
   * /engines:
   *   get:
   *     description:  Lists available QIX Engines.
+  *     produces:
+  *       - application/json; charset=utf-8
   *     responses:
   *       200:
   *         description: successful operation
