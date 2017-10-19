@@ -1,6 +1,5 @@
 const Dredd = require('dredd'); // eslint-disable-line
 
-
 const testHost = process.env.TEST_HOST || 'localhost';
 
 const dreddConfiguration = {

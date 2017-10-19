@@ -52,7 +52,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => { ctx.body = {}; });
 *           description: Default prometheus client metrics
 */
 router.get(`/${metricsEndpoint}`, async (ctx) => {
-  if (ctx.accepts('text/plain; charset=utf-8')) {
+  if (ctx.accepts('text')) {
     ctx.body = prom.register.metrics();
   } else {
     ctx.body = prom.register.getMetricsAsJSON();
