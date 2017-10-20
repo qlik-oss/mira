@@ -114,6 +114,9 @@ router.get(`/${enginesEndpoint}`, async (ctx) => { ctx.body = await engineDiscov
 *       kubernetes:
 *         type: object
 *         description: Pod information in verbatim format as returned by the Kubernetes API.
+*       dns:
+*         type: object
+*         description: DNS query response for a specific hostname.
 *   containerStatus:
 *     type: string
 *     description: Status of the QIX Engine.

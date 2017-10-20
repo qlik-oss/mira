@@ -1,4 +1,3 @@
-const Config = require('./Config');
 const EngineMap = require('./EngineMap');
 const EngineEntry = require('./EngineEntry');
 const logger = require('./logger/Logger').get();
@@ -19,7 +18,7 @@ const logger = require('./logger/Logger').get();
   * Discovers engines and sets the timeout for periodical refreshing.
   */
 async function discover() {
-  const engines = await this.DockerClient.listEngines(Config.discoveryLabel);
+  const engines = await this.OrchestrationClient.listEngines();
   const keys = engines.map(engine => engine.key);
   const keysToDelete = this.engineMap.difference(keys);
   keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
@@ -42,14 +41,14 @@ async function discover() {
 class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
-   * @param {DockerClient} DockerClient - The Docker client implementation used to list engines.
+   * @param {OrchestrationClient} OrchestrationClient - The Docker client implementation used to list engines.
    * @param {number} discoveryRefreshRate - The engine discovery refresh rate in milliseconds.
    * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
-  constructor(DockerClient, discoveryRefreshRate, healthRefreshRate) {
+  constructor(OrchestrationClient, discoveryRefreshRate, healthRefreshRate) {
     this.discoveryRefreshRate = discoveryRefreshRate;
     this.healthRefreshRate = healthRefreshRate;
-    this.DockerClient = DockerClient;
+    this.OrchestrationClient = OrchestrationClient;
     this.engineMap = new EngineMap();
 
     // Start discovery!
@@ -68,6 +67,7 @@ class EngineDiscovery {
       local: item.properties.local,
       swarm: item.properties.swarm,
       kubernetes: item.properties.kubernetes,
+      dns: item.properties.dns,
     }));
   }
 }

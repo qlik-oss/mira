@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
 const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
+const Config = require('../Config');
 
 const localhostIp = '127.0.0.1';
 
@@ -38,9 +39,9 @@ class LocalDockerClient {
    * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(discoveryLabel) {
+  static async listEngines() {
     return new Promise((resolve, reject) => {
-      LocalDockerClient.docker.listContainers({ filters: { label: [discoveryLabel] } }, (err, containers) => {
+      LocalDockerClient.docker.listContainers({ filters: { label: [Config.discoveryLabel] } }, (err, containers) => {
         if (!err) {
           const engineInfoEntries = containers.map((local) => {
             const labels = local.Labels;

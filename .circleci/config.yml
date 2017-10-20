@@ -171,6 +171,54 @@ jobs:
           name: Kubernetes delete mira
           command: sudo kubectl delete -f ./examples/kubernetes/
 
+  # Job for testing Mira in dns mode
+  dns:
+    machine: true
+    environment:
+      DOCKER_REPO: qlikea/mira
+    working_directory: ~/mira
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Import previously built docker image
+          command: docker load < /tmp/workspace/mira_image.tar
+      - checkout
+      - run:
+          name: Login to Docker
+          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Spin up core in a local docker swarm
+          command: |
+            docker swarm init
+            # Spin up a local setup with the previously built docker image.
+            VER=$(cat /tmp/workspace/version.txt)
+            TAG=:${VER} docker stack deploy -c ./examples/dns/docker-compose-dns.yml --with-registry-auth mira-dns
+      - run:
+          name: Check health of the Mira service
+          command: |
+            echo "Waiting for Swarm to wake up..."
+            SWARM_IS_DOWN="true"
+
+            while [ "$SWARM_IS_DOWN" == "true" ]; do
+              SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
+              sleep 1
+            done
+
+            echo "Mira is up and running!"
+      - run:
+          name: Verify number of engines found
+          command: |
+
+            # Check that Mira returns correct number of qix engines
+            NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"qix-engine\" | wc -w)
+            echo "Mira returned $NBR_ENGINES qix engines"
+
+            if [ "$NBR_ENGINES" != "2" ]; then
+              echo "Incorrect number of qix engines found"
+              exit 1
+            fi
+
   # Job for publishing Docker image to Docker hub
   publish:
     docker:
@@ -212,8 +260,12 @@ workflows:
       - kubernetes:
           requires:
             - build
+      - dns:
+          requires:
+            - build
       - publish:
           requires:
             - build
             - swarm
             - kubernetes
+            - dns

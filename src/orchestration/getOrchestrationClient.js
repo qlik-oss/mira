@@ -1,6 +1,7 @@
 const LocalDockerClient = require('./LocalDockerClient');
 const SwarmDockerClient = require('./SwarmDockerClient');
 const KubernetesClient = require('./KubernetesClient');
+const DnsClient = require('./DnsClient');
 
 /**
  * Gets an orchestration client implementation for the provided operation mode.
@@ -15,6 +16,8 @@ function getOrchestrationClient(mode) {
       return SwarmDockerClient;
     case 'kubernetes':
       return KubernetesClient;
+    case 'dns':
+      return DnsClient;
     default:
       return undefined;
   }
