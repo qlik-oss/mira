@@ -241,7 +241,7 @@ $ npm start
 
 ## Development
 
-If you encounter _node-gyp_ errors when running ```npm install``` on Windows it is due to the C++ compilation step for ```Dredd```, more information [here](https://dredd.readthedocs.io/en/latest/installation.html#why-i-m-seeing-node-gyp-errors). This can be avoided by instead using precompiled binaries by running ```npm install --no-optional```.
+If you encounter _node-gyp_ errors when running `npm install` on Windows it is due to the C++ compilation step for `Dredd`, more information [here](https://dredd.readthedocs.io/en/latest/installation.html#why-i-m-seeing-node-gyp-errors). This can be avoided by instead using precompiled binaries by running `npm install --no-optional`.
 
 ### Contributing
 
