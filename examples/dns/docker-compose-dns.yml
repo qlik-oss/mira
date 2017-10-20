@@ -7,7 +7,7 @@ services:
       - "9100:9100"
     environment:
      - MIRA_MODE=dns
-     - MIRA_DISCOVERY_HOSTNAME=qix-engine
+     - MIRA_DISCOVERY_HOSTNAME=tasks.qix-engine
     deploy:
       mode: global
       placement:
