@@ -11,7 +11,7 @@
     "test:component:local": "cross-env NODE_ENV=test MIRA_MODE=local aw-test-runner ./test/component/local --timeout 5000",
     "test:component:swarm": "cross-env NODE_ENV=test MIRA_MODE=swarm aw-test-runner ./test/component/swarm",
     "test:component:kubernetes": "cross-env NODE_ENV=test MIRA_MODE=kubernetes aw-test-runner ./test/component/kubernetes",
-    "test:component:dns": "cross-env NODE_ENV=test MIRA_MODE=dns MIRA_DISOVERY_HOSTNAME=qix-engine aw-test-runner ./test/component/dns",
+    "test:component:dns": "cross-env NODE_ENV=test MIRA_MODE=dns MIRA_DISCOVERY_HOSTNAME=qix-engine aw-test-runner ./test/component/dns",
     "test:integration": "npm run test:integration:local && npm run test:integration:dredd",
     "test:integration:local": "aw-test-runner ./test/integration/integration-local.spec.js",
     "test:integration:dredd": "aw-test-runner ./test/integration/integration-dredd.spec.js",
