@@ -1,4 +1,4 @@
-const Dredd = require('dredd'); // eslint-disable-line
+const Dredd = require('dredd');
 
 const testHost = process.env.TEST_HOST || 'localhost';
 
