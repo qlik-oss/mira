@@ -111,7 +111,7 @@ class Config {
     Config.mode = process.env.MIRA_MODE || 'swarm'; // swarm is the default value
     const SUPPORTED_MODES = ['local', 'swarm', 'kubernetes', 'dns'];
     if (SUPPORTED_MODES.indexOf(Config.mode) === -1) {
-      throw new Error(`Incorrect operation mode. Supported modes are: ${SUPPORTED_MODES}.join(', ')`);
+      throw new Error(`Incorrect operation mode. Supported modes are: ${SUPPORTED_MODES.join(', ')}`);
     }
     logger.info(`Mira is running in ${Config.mode} mode`);
 
