@@ -209,9 +209,15 @@ jobs:
       - run:
           name: Verify number of engines found
           command: |
-
+            set +e
             # Check that Mira returns correct number of qix engines
-            NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"qix-engine\" | wc -w)
+            TIMEOUT=0
+            while (( $NBR_ENGINES != "2" || $TIMEOUT == 10 )); do
+              NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
+              echo "Mira returned $NBR_ENGINES qix engines"
+              sleep $(( TIMEOUT++ ))
+            done
+
             echo "Mira returned $NBR_ENGINES qix engines"
 
             if [ "$NBR_ENGINES" != "2" ]; then

@@ -110,8 +110,8 @@ class Config {
      */
     Config.mode = process.env.MIRA_MODE || 'swarm'; // swarm is the default value
     if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes' && Config.mode !== 'dns') {
-      logger.error('Incorrect operation mode. Supported modes are "local", "swarm" and "kubernetes"');
-      throw new Error('Incorrect operation mode. Supported modes are "local", "swarm" and "kubernetes"');
+      logger.error('Incorrect operation mode. Supported modes are "local", "swarm", "dns" and "kubernetes"');
+      throw new Error('Incorrect operation mode. Supported modes are "local", "swarm", "dns" and "kubernetes"');
     }
     logger.info(`Mira is running in ${Config.mode} mode`);
 

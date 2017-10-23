@@ -44,7 +44,7 @@ If an engine instance does not have these labels set, Mira defaults to setting t
 ## Operation Modes
 
 Mira supports different operation modes. The operation mode determines what operations Mira uses to discover QIX Engine instances. This depends on
-1. The orchestration environment in which QIX Engine instances are running. This environment must be explicitly provided when starting Mira. Currently _local_, _swarm_, and _kubernetes_ environments are supported.
+1. The orchestration environment in which QIX Engine instances are running. This environment must be explicitly provided when starting Mira. Currently _local_, _swarm_ and _kubernetes_ environments are supported.
 1. Whether Mira itself runs containerized (the standard/most common case), or if Mira is started as a Node.js process, "non-Dockerized". Mira detects this operation mode automatically.
 
 ### Environment Variables
@@ -55,6 +55,7 @@ The following environment variable can optionally be set for Mira
 |---------------------------------------|-------------------------|-------------|
 | MIRA_MODE                             | swarm                   | The operation mode of Mira which can be `local`, `swarm` or `kubernetes`. |
 | MIRA_DISCOVERY_LABEL                  | qix-engine              | Label key that Mira uses to identify engine instances. |
+| MIRA_DISCOVERY_HOSTNAME               | n/a                     | Hostname that Mira uses to query dns for engine instances. |
 | MIRA_ENGINE_API_PORT_LABEL            | qix-engine-api-port     | Label that Mira will use to determine the QIX API (websocket) port. |
 | MIRA_ENGINE_METRICS_PORT_LABEL        | qix-engine-metrics-port | Label that Mira will use to determine the `/metrics` port. |
 | MIRA_ENGINE_DISCOVERY_REFRESH_RATE    | 1000                    | Refresh rate in milliseconds for discovering engines. |
@@ -230,6 +231,12 @@ spec:
 ```
 
 **NOTE** - Mira does not support hosting multiple engine containers inside the same pod, since they would get the same IP address and port.
+
+### DNS mode
+
+In dns mode Mira assumes that any dns queries for the string defined as MIRA_DISCOVERY_HOSTNAME returns all the qix engine instances in the orchestration. In this mode there is no need to set labels on your container/pod as in previous modes, instead the hostname to query for will differ dependending on orchestration.
+
+An example for how this is configured for docker swarm is found [here](./examples/dns/docker-compose-dns.yml).
 
 ### Non-Dockerized Node.js process
 
