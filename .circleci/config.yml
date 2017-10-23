@@ -212,7 +212,7 @@ jobs:
             set +e
             # Check that Mira returns correct number of qix engines
             TIMEOUT=0
-            while (( $NBR_ENGINES != "2" || $TIMEOUT == 10 )); do
+            while (( NBR_ENGINES != "2" || TIMEOUT == 10 )); do
               NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
               echo "Mira returned $NBR_ENGINES qix engines"
               sleep $(( TIMEOUT++ ))
