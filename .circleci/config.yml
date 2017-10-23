@@ -199,11 +199,16 @@ jobs:
           command: |
             echo "Waiting for Swarm to wake up..."
             SWARM_IS_DOWN="true"
-
-            while [ "$SWARM_IS_DOWN" == "true" ]; do
+            TIMEOUT=0
+            while (( SWARM_IS_DOWN == "true" || TIMEOUT != 10 )); do
               SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
-              sleep 1
+              sleep $(( TIMEOUT++ ))
             done
+
+            if [ "$SWARM_IS_DOWN" == "true" ]; then
+              echo "Mira service did not start"
+              exit 1
+            fi
 
             echo "Mira is up and running!"
       - run:
@@ -212,13 +217,11 @@ jobs:
             set +e
             # Check that Mira returns correct number of qix engines
             TIMEOUT=0
-            while (( NBR_ENGINES != "2" || TIMEOUT == 10 )); do
+            while (( NBR_ENGINES != "2" || TIMEOUT != 10 )); do
               NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
               echo "Mira returned $NBR_ENGINES qix engines"
               sleep $(( TIMEOUT++ ))
             done
-
-            echo "Mira returned $NBR_ENGINES qix engines"
 
             if [ "$NBR_ENGINES" != "2" ]; then
               echo "Incorrect number of qix engines found"
