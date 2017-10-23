@@ -36,7 +36,6 @@ class LocalDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
