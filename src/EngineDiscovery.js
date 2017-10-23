@@ -46,9 +46,9 @@ class EngineDiscovery {
    * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
    */
   constructor(OrchestrationClient, discoveryRefreshRate, healthRefreshRate) {
+    this.OrchestrationClient = OrchestrationClient;
     this.discoveryRefreshRate = discoveryRefreshRate;
     this.healthRefreshRate = healthRefreshRate;
-    this.OrchestrationClient = OrchestrationClient;
     this.engineMap = new EngineMap();
 
     // Start discovery!
