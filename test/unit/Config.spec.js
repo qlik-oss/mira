@@ -92,6 +92,7 @@ describe('Config', () => {
   describe('#mode', () => {
     afterEach(() => {
       delete process.env.MIRA_MODE;
+      delete process.env.MIRA_QIX_ENGINE_HOSTNAME;
     });
 
     it('should return correct default value after initialization', () => {
@@ -106,6 +107,22 @@ describe('Config', () => {
       process.env.MIRA_MODE = miraMode;
       Config.init();
       expect(Config.mode).to.equal(miraMode);
+    });
+
+    it('should require qix engine hostname if dns mode is set', () => {
+      const miraMode = 'dns';
+      process.env.MIRA_MODE = miraMode;
+      expect(Config.init).to.throw('MIRA_DISCOVERY_HOSTNAME');
+    });
+
+    it('should set dns mode if qix engine hostname is set', () => {
+      const miraMode = 'dns';
+      const qixHostname = 'engine.domain.com';
+      process.env.MIRA_MODE = miraMode;
+      process.env.MIRA_DISCOVERY_HOSTNAME = qixHostname;
+      Config.init();
+      expect(Config.mode).to.equal(miraMode);
+      expect(Config.discoveryHostname).to.equal(qixHostname);
     });
   });
 });

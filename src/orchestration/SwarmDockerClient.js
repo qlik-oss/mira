@@ -1,5 +1,6 @@
 const Docker = require('dockerode');
 const logger = require('../logger/Logger').get();
+const Config = require('../Config');
 
 let dockerode = new Docker();
 
@@ -65,11 +66,10 @@ class SwarmDockerClient {
 
   /**
    * Lists engines.
-   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(discoveryLabel) {
-    const engineTasks = await getTasks(SwarmDockerClient.docker, discoveryLabel);
+  static async listEngines() {
+    const engineTasks = await getTasks(SwarmDockerClient.docker, Config.discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
       const labels = getLabels(task);
       const engine = {

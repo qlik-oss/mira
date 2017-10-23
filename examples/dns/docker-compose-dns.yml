@@ -1,0 +1,21 @@
+version: "3.1"
+
+services:
+  mira:
+    image: qlikea/mira${TAG} # If TAG is not set docker image with tag 'latest' will be used.
+    ports:
+      - "9100:9100"
+    environment:
+     - MIRA_MODE=dns
+     - MIRA_DISCOVERY_HOSTNAME=tasks.qix-engine
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+
+  qix-engine:
+    image: qlikea/engine:12.67.0
+    ports:
+      - 9076:9076
+    deploy:
+      replicas: 2

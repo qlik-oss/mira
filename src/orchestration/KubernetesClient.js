@@ -39,11 +39,10 @@ function kubeHttpGet(path) {
 class KubernetesClient {
   /**
    * Lists engines.
-   * @param {string} discoveryLabel - Engine discovery label to filter on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines(discoveryLabel) {
-    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${discoveryLabel}`);
+  static async listEngines() {
+    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
 
     const engineInfoEntries = pods.items.map((pod) => {
       const labels = pod.metadata.labels;

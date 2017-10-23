@@ -38,10 +38,10 @@ class Config {
     logger.info(`Discovery label set to: ${Config.discoveryLabel}`);
 
     /**
-      * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the QIX Engine,
-      *   if not defined with MIRA_ENGINE_API_PORT_LABEL.
-      * @static
-      */
+     * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the QIX Engine,
+     *   if not defined with MIRA_ENGINE_API_PORT_LABEL.
+     * @static
+     */
     Config.defaultEngineAPIPort = defaultEngineAPIPort;
 
     /**
@@ -55,10 +55,10 @@ class Config {
     logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
 
     /**
-      * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the QIX Engine metrics,
-      *   if not defined with MIRA_ENGINE_METRICS_PORT_LABEL.
-      * @static
-      */
+     * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the QIX Engine metrics,
+     *   if not defined with MIRA_ENGINE_METRICS_PORT_LABEL.
+     * @static
+     */
     Config.defaultEngineMetricsPort = defaultEngineMetricsPort;
 
     /**
@@ -109,11 +109,21 @@ class Config {
      * @static
      */
     Config.mode = process.env.MIRA_MODE || 'swarm'; // swarm is the default value
-    if (Config.mode !== 'local' && Config.mode !== 'swarm' && Config.mode !== 'kubernetes') {
-      logger.error('Incorrect operation mode. Supported modes are "local", "swarm" and "kubernetes"');
-      process.exit(1);
+    const SUPPORTED_MODES = ['local', 'swarm', 'kubernetes', 'dns'];
+    if (SUPPORTED_MODES.indexOf(Config.mode) === -1) {
+      throw new Error(`Incorrect operation mode. Supported modes are: ${SUPPORTED_MODES.join(', ')}`);
     }
     logger.info(`Mira is running in ${Config.mode} mode`);
+
+    /**
+     * @prop {string} discoveryHostname - The hostname mira will use for querying engines in dns mode
+     * @static
+     */
+    Config.discoveryHostname = process.env.MIRA_DISCOVERY_HOSTNAME;
+    if (Config.mode === 'dns' && !Config.discoveryHostname) {
+      throw new Error('Running Mira in dns mode requires the mira discovery hostname (MIRA_DISCOVERY_HOSTNAME) to be set');
+    }
+    logger.info(`Mira discovery hostname is set to ${Config.discoveryHostname}`);
 
     /**
      * @prop {boolean} devMode - If true the process is expected to run outside of docker
