@@ -8,7 +8,6 @@ const Config = require('../Config');
 class DnsClient {
   /**
    * Lists engines.
-   * @param {string} hostname - Host name to perform DNS lookup on.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
