@@ -67,7 +67,6 @@ class EngineDiscovery {
       local: item.properties.local,
       swarm: item.properties.swarm,
       kubernetes: item.properties.kubernetes,
-      dns: item.properties.dns,
     }));
   }
 }

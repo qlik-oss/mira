@@ -26,8 +26,6 @@ class DnsClient {
             return {
               key,
               engine,
-              dns: record,
-              labels: [],
             };
           });
           resolve(engineInfoEntries);
