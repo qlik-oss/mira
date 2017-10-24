@@ -269,7 +269,7 @@ Circle CI is configured to build a new Docker image from all pushed commits on a
 If the repo is cloned locally to a dev machine, build the image using the provided [Dockerfile](./Dockerfile), e.g.
 
 ```sh
-$ docker build -t qlikea/mira:mytag .
+$ docker build -t qlikea/mira:0.0.6 .
 ```
 
 ### Testing
