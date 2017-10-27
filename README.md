@@ -10,19 +10,15 @@ Mira provides QIX Engine discovery in a Docker containerized environment. Mira i
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
+For Mira's end-user documentation, check out the the [Frontira](https://github.com/qlik-ea/info/tree/master/docs/services/mira) site.
+
 ## Contributing
 
 Contributions are welcome and encouraged! See more info at [Open Source at Qlik R&D](https://github.com/qlik-oss/open-source).
 
 ## Docker Image
 
-Mira is distributed to end users as a the [qlikea/mira](https://hub.docker.com/r/qlikea/mira) Docker image. Also see the [Dockerfile](./Dockerfile).
-
-To build the image locally, in the repo root run:
-
-```sh
-$ docker build -t qlikea/mira:latest .
-```
+Mira is distributed to end users as a the [qlikea/mira](https://hub.docker.com/r/qlikea/mira) Docker image. Also see the [Dockerfile](./Dockerfile).l
 
 ## Running Mira as a Plain Node.js Process
 
@@ -34,7 +30,7 @@ $ MIRA_MODE=local npm start
 
 ## Development
 
-### Editor/IDE configuration
+### Editor/IDE Configuration
 
 No particular editor or IDE is assumed. The repo root contains an [.editorconfig](./.editorconfig) file for editors that support it. If not, make sure that the used editor is configured accordingly.
 
@@ -42,11 +38,7 @@ No particular editor or IDE is assumed. The repo root contains an [.editorconfig
 
 JavaScript code shall be developed according the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 
-The repo root contains the [eslintrc.json](./eslintrc.json) file which incorporates these rules with minor modifications. To lint the code, run:
-
-```sh
-$ npm run lint
-```
+The [eslintrc.json](./eslintrc.json) file incorporates these rules with minor modifications.
 
 ### Install Packages
 
@@ -76,67 +68,30 @@ Circle CI is configured to build a new Docker image from all pushed commits on a
 
 ### Testing
 
-#### Unit Tests
-
-Unit tests run as part of the Circle CI build. To run unit tests locally
+Unit and component tests can be run with:
 
 ```sh
 $ npm run test:unit
-```
-
-Test coverage lcov and html report will be stored at `./coverage`. In Circle CI the coverage reports will be saved as build artifacts for each build.
-
-#### Component Tests
-
-The component tests executes Mira as a Node.js process and are divided into test suites for each operation mode. Each suite is also part of the job pipeline in Circle CI.
-
-To run component tests for all operation modes
-
-```sh
 $ npm run test:component
 ```
 
-There is also separate npm tasks for running each mode. To run only component tests for local docker mode:
+These tests run Mira in isolation and does not depend on any external components.
+
+Integration tests depend on external components. Before they can run, they must be started using the [docker-compose.yml](./docker-compose.yml) file:
 
 ```sh
-$ npm run test:component:local
-```
-
-and for Docker Swarm:
-
-```sh
-$ npm run test:component:swarm
-```
-
-For Kubernetes:
-
-```sh
-$ npm run test:component:kubernetes
-```
-
-#### Integration Tests
-
-Integration tests on a local setup of Mira is part of the Circle CI build pipeline. To run the test cases locally:
-
-```bash
 $ docker-compose up -d
 $ npm run test:integration
 ```
 
-To run the tests using a locally build Mira Docker Image, specify the Mira image tag:
+To run integration tests towards locally build Mira Docker Image, specify the Mira image tag to use:
 
 ```bash
 $ TAG=:<VERSION> docker-compose up -d
 $ npm run test:integration
 ```
 
-As part of the integration tests the OpenAPI specification is also validated against the actual API implementation using [Dredd](https://github.com/apiaryio/dredd).
-
-To only execute the Dredd test:
-
-```sh
-$ npm run test:integration:dredd
-```
+See [package.json](./package.json) for more test script variants.
 
 ### Releasing
 
