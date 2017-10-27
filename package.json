@@ -33,7 +33,6 @@
     "containerized": "1.0.2",
     "dockerode": "2.4.3",
     "koa": "2.2.0",
-    "koa-logger-winston": "0.0.2",
     "koa-router": "7.1.1",
     "prom-client": "10.1.0",
     "swagger2": "0.0.24",

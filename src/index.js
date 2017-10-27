@@ -1,5 +1,4 @@
 const Koa = require('koa');
-const koaLoggerWinston = require('koa-logger-winston');
 const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
 const path = require('path');
@@ -36,7 +35,6 @@ process.on('unhandledRejection', onUnhandledError);
 
 app
   .use(swagger2koa.ui(document, '/openapi'))
-  .use(koaLoggerWinston(logger))
   .use(router.routes())
   .use(router.allowedMethods());
 
