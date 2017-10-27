@@ -84,10 +84,10 @@ $ docker-compose up -d
 $ npm run test:integration
 ```
 
-To run integration tests towards locally build Mira Docker Image, specify the Mira image tag to use:
+To run integration tests towards a specific image tag, provide the `TAG` environment variable to `docker-compose`:
 
 ```bash
-$ TAG=:<VERSION> docker-compose up -d
+$ TAG=:<YOUR TAG HERE> docker-compose up -d
 $ npm run test:integration
 ```
 
