@@ -124,14 +124,6 @@ class Config {
       throw new Error('Running Mira in dns mode requires the mira discovery hostname (MIRA_DISCOVERY_HOSTNAME) to be set');
     }
     logger.info(`Mira discovery hostname is set to ${Config.discoveryHostname}`);
-
-    /**
-     * @prop {boolean} devMode - If true the process is expected to run outside of docker
-     *   communicating with engines public ports.
-     * @static
-     */
-    Config.devMode = process.env.DEV_MODE ? process.env.DEV_MODE.toLowerCase() === 'true' : false;
-    logger.info(`Mira is running in ${Config.devMode ? 'dev' : 'production'} mode`);
   }
 }
 
