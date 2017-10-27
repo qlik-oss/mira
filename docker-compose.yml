@@ -11,14 +11,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine:12.85.0
+    image: qlikea/engine:12.86.0
     ports:
       - "9176:9076"
     labels:
       qix-engine:
 
   engine2:
-    image: qlikea/engine:12.85.0
+    image: qlikea/engine:12.86.0
     ports:
       - "9276:9076"
     labels:
