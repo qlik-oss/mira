@@ -16,7 +16,7 @@ class Logger {
             timestamp: true,
             json: true,
             stringify: true,
-            level: process.env.MIRA_LOG_LEVEL || 'silly',
+            level: process.env.MIRA_LOG_LEVEL || 'debug',
             humanReadableUnhandledException: true,
           }),
         ],
