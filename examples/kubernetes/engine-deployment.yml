@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: engine
-        image: "qlikea/engine:12.89.0"
+        image: "qlikea/engine:12.90.0"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9076
