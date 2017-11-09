@@ -4,7 +4,7 @@ jobs:
   # Job for build src, run unit & component test and build docker image
   build:
     docker:
-      - image: node:8
+      - image: circleci/node:8
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikea/mira
@@ -35,17 +35,8 @@ jobs:
             - node_modules
       - setup_remote_docker
       - run:
-          name: Install Docker client
-          command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
-      - run:
           name: Login to Docker
           command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-      - run:
-          name: Install Docker Compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
       - run:
           name: Update version
           command: |
@@ -233,7 +224,7 @@ jobs:
   # Job for publishing Docker image to Docker hub
   publish:
     docker:
-    - image: node:8
+    - image: circleci/node:8
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikea/mira
@@ -242,9 +233,6 @@ jobs:
           at: /tmp/workspace
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install Docker client
-          command: ./scripts/cci2-install-docker-client.sh 17.04.0-ce
       - run:
           name: Import previously built docker image
           command: docker load < /tmp/workspace/mira_image.tar
