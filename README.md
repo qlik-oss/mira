@@ -10,7 +10,7 @@ Mira provides QIX Engine discovery in a Docker containerized environment. Mira i
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
-For Mira's end-user documentation, check out the the [Frontira](https://github.com/qlik-ea/info/tree/master/docs/documentation/services/mira) site.
+For Mira's end-user documentation, check out the the [Frontira](https://github.com/qlik-ea/info/tree/master/docs/documentation/services/mira.md) site.
 
 ## Contributing
 
