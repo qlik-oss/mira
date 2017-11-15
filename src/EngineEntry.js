@@ -31,7 +31,7 @@ async function checkStatus() {
       this.properties.engine.status = 'NO_METRICS';
     }
   }
-  this.fetcherTimeOutId = setTimeout(() => checkStatus.call(this), this.refreshRate);
+  setTimeout(() => checkStatus.call(this), this.refreshRate);
 }
 
 /**
