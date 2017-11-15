@@ -12,19 +12,14 @@ class Logger {
     if (!Logger.logger) {
       Logger.logger = new (winston.Logger)({
         transports: [
-          new(winston.transports.Console)({
-            timestamp: true,
-            json: false,
-            stringify: true,
+          new (winston.transports.Console)({
             level: process.env.MIRA_LOG_LEVEL || 'info',
             humanReadableUnhandledException: true,
-            formatter: (options) => {
-              return {
-                logseverity: options.level,
-                message: options.message,
-                timestamp: options.timestamp,
-              };
-            },
+            formatter: options => JSON.stringify({
+              logseverity: options.level.toUpperCase(),
+              message: options.message,
+              timestamp: new Date(Date.now()).toISOString(),
+            }),
           }),
         ],
       });
