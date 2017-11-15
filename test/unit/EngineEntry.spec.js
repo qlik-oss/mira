@@ -125,6 +125,7 @@ describe('EngineEntry', () => {
       fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(async () => Promise.resolve(metrics));
       entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
     });
+
     it('should stop fetching health', async () => {
       entry.startStatusChecks();
       await sleep(50);
@@ -140,6 +141,17 @@ describe('EngineEntry', () => {
       await sleep(50);
       entry.stopStatusChecks();
       entry.stopStatusChecks();
+    });
+
+    it('should cancel updates', async () => {
+      fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck')
+        .returns(async () => { await sleep(50); return Promise.resolve(healthOk); });
+      fetchStub.withArgs('10.10.10.10', 9999, '/metrics')
+        .returns(async () => { await sleep(50); return Promise.resolve(metrics); });
+      entry.startStatusChecks();
+      entry.stopStatusChecks();
+      await sleep(150);
+      expect(fetchStub.callCount).to.equal(2);
     });
   });
 

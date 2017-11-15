@@ -6,7 +6,7 @@ const logger = require('./logger/Logger').get();
 class EngineMap {
 
   /**
-   * Creates new {@link EngineList}.
+   * Creates new {@link EngineMap}.
    */
   constructor() {
     this.entries = {};
@@ -58,16 +58,6 @@ class EngineMap {
    */
   difference(keys) {
     return Object.keys(this.entries).filter(key => !keys.includes(key));
-  }
-
-  /**
-   * Filters the lists based on a given set of constraints. Engines that satisfies
-   * the constraints will be included in the result.
-   * @param {object} constraints - Property constraints to use for filtering.
-   * @returns {EngineEntry[]} An array of engines satisfying the constraints.
-   */
-  filter(constraints) {
-    return this.all().filter(engine => engine.satisfies(constraints));
   }
 
   /**

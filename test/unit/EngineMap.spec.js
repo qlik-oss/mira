@@ -56,22 +56,6 @@ describe('EngineMap', () => {
     expect(engineMap.difference(['a', 'b', 'c'])).to.deep.equal([]);
   });
 
-  it('should filter', () => {
-    const entry1 = getEntry();
-    const entry2 = getEntry();
-    const entry3 = getEntry();
-    entry1.satisfies = sinon.stub().returns(false);
-    entry2.satisfies = sinon.stub().returns(false);
-    entry3.satisfies = sinon.stub().returns(true);
-
-    engineMap.add('a', entry1);
-    engineMap.add('b', entry2);
-    expect(engineMap.filter('dummy')).to.deep.equal([]);
-
-    engineMap.add('c', entry3);
-    expect(engineMap.filter('dummy')).to.deep.equal([entry3]);
-  });
-
   it('should exist', () => {
     engineMap.add('foo', getEntry());
     expect(engineMap.has('foo')).to.equal(true);

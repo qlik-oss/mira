@@ -4,11 +4,16 @@ const Config = require('./Config');
 
 /**
  * Helper for periodical health checking.
- * An {@link EngineEntry} object must be bound as this before calling.
+ * An {@link EngineEntry} object must be set as this before calling.
  */
 async function checkStatus() {
   let health;
   let metrics;
+
+  if (!this.running) {
+    return;
+  }
+
   try {
     health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
     this.properties.engine.health = health;
@@ -26,7 +31,7 @@ async function checkStatus() {
       this.properties.engine.status = 'NO_METRICS';
     }
   }
-  this.fetcherTimeOutId = setTimeout(checkStatus.bind(this), this.refreshRate);
+  setTimeout(() => checkStatus.call(this), this.refreshRate);
 }
 
 /**
@@ -47,6 +52,7 @@ class EngineEntry {
    *   implementation will be used.
    */
   constructor(properties, refreshRate, statusFetcher) {
+    this.running = false;
     this.properties = properties;
     this.refreshRate = refreshRate;
     this.statusFetcher = statusFetcher || new EngineStatusFetcher();
@@ -73,15 +79,17 @@ class EngineEntry {
    * Starts periodical status checking.
    */
   startStatusChecks() {
-    this.stopStatusChecks();
-    checkStatus.call(this);
+    if (!this.running) {
+      this.running = true;
+      checkStatus.call(this);
+    }
   }
 
   /**
    * Stops periodical status checking.
    */
   stopStatusChecks() {
-    clearTimeout(this.fetcherTimeOutId);
+    this.running = false;
   }
 }
 
