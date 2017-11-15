@@ -3,6 +3,38 @@ const EngineStatusFetcher = require('./EngineStatusFetcher');
 const Config = require('./Config');
 
 /**
+ * Helper for periodical health checking.
+ * An {@link EngineEntry} object must be set as this before calling.
+ */
+async function checkStatus() {
+  let health;
+  let metrics;
+
+  if (!this.running) {
+    return;
+  }
+
+  try {
+    health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
+    this.properties.engine.health = health;
+    metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
+    this.properties.engine.metrics = metrics;
+    this.properties.engine.status = 'OK';
+  } catch (err) {
+    if (!health) {
+      logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+      this.properties.engine.health = undefined;
+      this.properties.engine.status = 'UNHEALTHY';
+    } else if (!metrics) {
+      logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
+      this.properties.engine.metrics = undefined;
+      this.properties.engine.status = 'NO_METRICS';
+    }
+  }
+  this.fetcherTimeOutId = setTimeout(() => checkStatus.call(this), this.refreshRate);
+}
+
+/**
  * Engine entry class definition.
  * @prop {object} properties - Properties of the engine instance.
  * @prop {number} refreshRate - The status check refresh rate in milliseconds.
@@ -44,42 +76,13 @@ class EngineEntry {
   }
 
   /**
-   * Periodical health and metrics checking.
-   */
-  async checkStatus() {
-    let health;
-    let metrics;
-
-    if (!this.running) {
-      return;
-    }
-
-    try {
-      health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
-      this.properties.engine.health = health;
-      metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
-      this.properties.engine.metrics = metrics;
-      this.properties.engine.status = 'OK';
-    } catch (err) {
-      if (!health) {
-        logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
-        this.properties.engine.health = undefined;
-        this.properties.engine.status = 'UNHEALTHY';
-      } else if (!metrics) {
-        logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
-        this.properties.engine.metrics = undefined;
-        this.properties.engine.status = 'NO_METRICS';
-      }
-    }
-    setTimeout(() => this.checkStatus(), this.refreshRate);
-  }
-
-  /**
    * Starts periodical status checking.
    */
   startStatusChecks() {
-    this.running = true;
-    this.checkStatus();
+    if (!this.running) {
+      this.running = true;
+      checkStatus.call(this);
+    }
   }
 
   /**
