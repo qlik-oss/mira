@@ -3,33 +3,6 @@ const EngineStatusFetcher = require('./EngineStatusFetcher');
 const Config = require('./Config');
 
 /**
- * Helper for periodical health checking.
- * An {@link EngineEntry} object must be bound as this before calling.
- */
-async function checkStatus() {
-  let health;
-  let metrics;
-  try {
-    health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
-    this.properties.engine.health = health;
-    metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
-    this.properties.engine.metrics = metrics;
-    this.properties.engine.status = 'OK';
-  } catch (err) {
-    if (!health) {
-      logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
-      this.properties.engine.health = undefined;
-      this.properties.engine.status = 'UNHEALTHY';
-    } else if (!metrics) {
-      logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
-      this.properties.engine.metrics = undefined;
-      this.properties.engine.status = 'NO_METRICS';
-    }
-  }
-  this.fetcherTimeOutId = setTimeout(checkStatus.bind(this), this.refreshRate);
-}
-
-/**
  * Engine entry class definition.
  * @prop {object} properties - Properties of the engine instance.
  * @prop {number} refreshRate - The status check refresh rate in milliseconds.
@@ -47,6 +20,7 @@ class EngineEntry {
    *   implementation will be used.
    */
   constructor(properties, refreshRate, statusFetcher) {
+    this.running = false;
     this.properties = properties;
     this.refreshRate = refreshRate;
     this.statusFetcher = statusFetcher || new EngineStatusFetcher();
@@ -70,18 +44,49 @@ class EngineEntry {
   }
 
   /**
+   * Periodical health and metrics checking.
+   */
+  async checkStatus() {
+    let health;
+    let metrics;
+
+    if (!this.running) {
+      return;
+    }
+
+    try {
+      health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
+      this.properties.engine.health = health;
+      metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
+      this.properties.engine.metrics = metrics;
+      this.properties.engine.status = 'OK';
+    } catch (err) {
+      if (!health) {
+        logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+        this.properties.engine.health = undefined;
+        this.properties.engine.status = 'UNHEALTHY';
+      } else if (!metrics) {
+        logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
+        this.properties.engine.metrics = undefined;
+        this.properties.engine.status = 'NO_METRICS';
+      }
+    }
+    setTimeout(() => this.checkStatus(), this.refreshRate);
+  }
+
+  /**
    * Starts periodical status checking.
    */
   startStatusChecks() {
-    this.stopStatusChecks();
-    checkStatus.call(this);
+    this.running = true;
+    this.checkStatus();
   }
 
   /**
    * Stops periodical status checking.
    */
   stopStatusChecks() {
-    clearTimeout(this.fetcherTimeOutId);
+    this.running = false;
   }
 }
 
