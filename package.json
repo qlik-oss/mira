@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/qlik-ea/mira#readme",
   "dependencies": {
-    "containerized": "1.0.2",
     "dockerode": "2.4.3",
     "koa": "2.2.0",
     "koa-router": "7.1.1",

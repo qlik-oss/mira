@@ -116,6 +116,17 @@ class Config {
     logger.info(`Mira is running in ${Config.mode} mode`);
 
     /**
+     * @prop {boolean} containerized - If mira is running inside a docker container or not.
+     * @static
+     */
+    Config.containerized = false;
+    if (process.env.CONTAINERIZED && process.env.CONTAINERIZED === 'true') {
+      Config.containerized = true;
+    }
+    logger.info(`Mira is ${Config.containerized ? '' : 'not '}running inside a docker container`);
+
+
+    /**
      * @prop {string} discoveryHostname - The hostname mira will use for querying engines in dns mode
      * @static
      */
