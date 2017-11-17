@@ -1,5 +1,4 @@
 const Docker = require('dockerode');
-const containerized = require('containerized');
 const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
@@ -8,7 +7,7 @@ const localhostIp = '127.0.0.1';
 let dockerode = new Docker();
 
 function getIpAddress(container) {
-  if (containerized()) {
+  if (Config.containerized) {
     const firstKey = Object.keys(container.NetworkSettings.Networks)[0];
     return container.NetworkSettings.Networks[firstKey].IPAddress;
   }
