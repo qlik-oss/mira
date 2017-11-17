@@ -31,7 +31,7 @@ async function discover() {
       this.engineMap.add(item.key, engineEntry);
     }
   });
-  setTimeout(discover.bind(this), this.discoveryRefreshRate);
+  setTimeout(() => discover.call(this), this.discoveryRefreshRate);
 }
 
 /**
