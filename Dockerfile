@@ -7,7 +7,7 @@ ARG MIRA_API_PORT=9100
 ENV MIRA_API_PORT $MIRA_API_PORT
 EXPOSE $MIRA_API_PORT
 
-ENV CONTAINERIZED true
+ENV MIRA_CONTAINERIZED true
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK CMD curl -fs http://localhost:$MIRA_API_PORT/v1/health || exit 1
