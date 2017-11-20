@@ -59,7 +59,7 @@ jobs:
           command: |
             # Spin up a local setup with the previously built docker image.
             VER=$(cat workspace/version.txt)
-            TAG=:${VER} docker-compose up -d
+            TAG=:${VER} MIRA_ENGINE_DISCOVERY_REFRESH_RATE=1000 MIRA_ENGINE_HEALTH_REFRESH_RATE=5000 docker-compose up -d
             # Find IP address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
             TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
