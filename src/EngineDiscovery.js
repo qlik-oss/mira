@@ -15,13 +15,15 @@ const logger = require('./logger/Logger').get();
  */
 
 /**
-  * Discovers engines and sets the timeout for periodical refreshing.
-  */
+ * Discovers engines and sets the timeout for periodical refreshing.
+ */
 async function discover() {
   const engines = await this.OrchestrationClient.listEngines();
   const keys = engines.map(engine => engine.key);
   const keysToDelete = this.engineMap.difference(keys);
-  keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
+  keysToDelete.forEach((key) => {
+    logger.info(`Engine removed: ${key}`);
+  });
   this.engineMap.delete(this.engineMap.difference(keys));
   engines.forEach((item) => {
     if (!this.engineMap.has(item.key)) {
@@ -57,16 +59,28 @@ class EngineDiscovery {
 
   /**
    * Lists available engine instances.
+   * @param {boolean} full - If true return a verbose list of engines and orchestration info.
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
-  async list() {
+  async list(full) {
     const engines = this.engineMap.all();
 
+    if (full) {
+      return engines.map(item => ({
+        engine: item.properties.engine,
+        local: item.properties.local,
+        swarm: item.properties.swarm,
+        kubernetes: item.properties.kubernetes,
+      }));
+    }
+
     return engines.map(item => ({
-      engine: item.properties.engine,
-      local: item.properties.local,
-      swarm: item.properties.swarm,
-      kubernetes: item.properties.kubernetes,
+      engine: {
+        ip: item.properties.engine.ip,
+        port: item.properties.engine.port,
+        metricsPort: item.properties.engine.metricsPort,
+        status: item.properties.engine.status,
+      },
     }));
   }
 }

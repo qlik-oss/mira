@@ -70,7 +70,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  * @swagger
  * /engines:
  *   get:
- *     description:  Lists available QIX Engines.
+ *     description:  Lists available QIX Engines in a condensed format.
  *     produces:
  *       - application/json; charset=utf-8
  *     responses:
@@ -88,6 +88,26 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
 
 /**
  * @swagger
+ * /engines/full:
+ *   get:
+ *     description:  Lists available QIX Engines in a verbose format.
+ *     produces:
+ *       - application/json; charset=utf-8
+ *     responses:
+ *       200:
+ *         description: successful operation
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/containerInfo'
+ */
+router.get(`/${enginesEndpoint}/full`, async (ctx) => {
+  logger.info(`GET /${apiVersion}/${enginesEndpoint}/full`);
+  ctx.body = await engineDiscovery.list(true);
+});
+
+/**
+ * @swagger
  * definitions:
  *   engineInfo:
  *     type: object
@@ -95,14 +115,18 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *       ip:
  *         description: IP address to use when connecting to the QIX Engine.
  *         type: string
+ *         required: true
  *       port:
  *         description: Port to use when communicating with the QIX Engine API.
  *         type: number
+ *         required: true
  *       metricsPort:
  *         description: Port to use when retrieving the QIX Engine metrics.
  *         type: number
+ *         required: true
  *       status:
  *         $ref: '#/definitions/containerStatus'
+ *         required: true
  *       health:
  *          description: Last health endpoint response of the QIX Engine.
  *          type: object
