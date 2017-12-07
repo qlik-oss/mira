@@ -111,22 +111,23 @@ router.get(`/${enginesEndpoint}/full`, async (ctx) => {
  * definitions:
  *   engineInfo:
  *     type: object
+ *     required:
+ *       - ip
+ *       - port
+ *       - metricsPort
+ *       - status
  *     properties:
  *       ip:
  *         description: IP address to use when connecting to the QIX Engine.
  *         type: string
- *         required: true
  *       port:
  *         description: Port to use when communicating with the QIX Engine API.
  *         type: number
- *         required: true
  *       metricsPort:
  *         description: Port to use when retrieving the QIX Engine metrics.
  *         type: number
- *         required: true
  *       status:
  *         $ref: '#/definitions/containerStatus'
- *         required: true
  *       health:
  *          description: Last health endpoint response of the QIX Engine.
  *          type: object
@@ -135,7 +136,7 @@ router.get(`/${enginesEndpoint}/full`, async (ctx) => {
  *   containerInfo:
  *     type: object
  *     required:
- *      - engine
+ *       - engine
  *     properties:
  *       engine:
  *         $ref: '#/definitions/engineInfo'
