@@ -55,11 +55,49 @@ jobs:
             docker build -t $DOCKER_REPO:$VER .
             docker save $DOCKER_REPO:$VER -o workspace/mira_image.tar
       - run:
-          name: Run integration tests on a local setup
+          name: Spin up a local setup
           command: |
             # Spin up a local setup with the previously built docker image.
             VER=$(cat workspace/version.txt)
             TAG=:${VER} MIRA_ENGINE_DISCOVERY_REFRESH_RATE=1000 MIRA_ENGINE_HEALTH_REFRESH_RATE=1000 docker-compose up -d
+      - run:
+          name: Check that services are up and running
+          command: |
+            set +e
+
+            # Check that Mira is healthy
+            MIRA_ID=$(docker ps -aqf "name=mira_mira")
+            echo "Mira container id is $MIRA_ID"
+
+            RETRIES=0
+
+            while [[ "$MIRA_STATUS" != "healthy" && $RETRIES -le 30 ]]; do
+              MIRA_STATUS=$(docker inspect -f '{{.State.Health.Status}}' "$MIRA_ID")
+              echo "Mira status is $MIRA_STATUS"
+              sleep 2
+              RETRIES=$[$RETRIES+1]
+            done
+
+            # Check that Engine is running
+            ENGINE_ID=$(docker ps -aqf "name=mira_engine2")
+            echo "Engine container id is $ENGINE_ID"
+
+            RETRIES=0
+
+            while [[ "$ENGINE_STATUS" != "running" && $RETRIES -le 30 ]]; do
+              ENGINE_STATUS=$(docker inspect -f '{{.State.Status}}' "$ENGINE_ID")
+              echo "Engine status is $ENGINE_STATUS"
+              sleep 2
+              RETRIES=$[$RETRIES+1]
+            done
+
+            if [[ "$MIRA_STATUS" != "healthy" || "$ENGINE_STATUS" != "running"  ]]; then
+              echo "Services did not start up properly"
+              exit 1
+            fi
+      - run:
+          name: Build and execute integration tests
+          command: |
             # Find IP address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
             TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
