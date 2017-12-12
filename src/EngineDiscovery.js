@@ -59,28 +59,28 @@ class EngineDiscovery {
 
   /**
    * Lists available engine instances.
-   * @param {boolean} full - If true return a verbose list of engines and orchestration info.
+   * @param {Object} query - Query parameters passed in url
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
-  async list(full) {
+  async list(query) {
     const engines = this.engineMap.all();
 
-    if (full) {
+    if (query.format === 'condensed') {
       return engines.map(item => ({
-        engine: item.properties.engine,
-        local: item.properties.local,
-        swarm: item.properties.swarm,
-        kubernetes: item.properties.kubernetes,
+        engine: {
+          ip: item.properties.engine.ip,
+          port: item.properties.engine.port,
+          metricsPort: item.properties.engine.metricsPort,
+          status: item.properties.engine.status,
+        },
       }));
     }
 
     return engines.map(item => ({
-      engine: {
-        ip: item.properties.engine.ip,
-        port: item.properties.engine.port,
-        metricsPort: item.properties.engine.metricsPort,
-        status: item.properties.engine.status,
-      },
+      engine: item.properties.engine,
+      local: item.properties.local,
+      swarm: item.properties.swarm,
+      kubernetes: item.properties.kubernetes,
     }));
   }
 }

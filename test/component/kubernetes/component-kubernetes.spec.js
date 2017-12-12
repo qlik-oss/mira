@@ -22,25 +22,25 @@ describe('Mira in kubernetes mode', () => {
 
   describe('GET /engines/full', () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {
-      const res = await request(app.listen()).get('/v1/engines/full');
+      const res = await request(app.listen()).get('/v1/engines');
       expect(res.body.length).to.equal(2);
     });
 
     it('should set the kubernetes property to holding the container info', async () => {
-      const res = await request(app.listen()).get('/v1/engines/full');
+      const res = await request(app.listen()).get('/v1/engines');
       expect(res.body[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
       expect(res.body[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
     });
 
     it('should set the health and metrics properties', async () => {
-      const res = await request(app.listen()).get('/v1/engines/full');
+      const res = await request(app.listen()).get('/v1/engines');
       expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
       expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
       expect(res.body[0].engine.status).to.equal('OK');
     });
 
     it('should return the local and swarm properties as undefined', async () => {
-      const res = await request(app.listen()).get('/v1/engines/full');
+      const res = await request(app.listen()).get('/v1/engines');
       expect(res.body[0].local).to.be.undefined;
       expect(res.body[0].swarm).to.be.undefined;
       expect(res.body[1].local).to.be.undefined;

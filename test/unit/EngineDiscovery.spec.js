@@ -19,7 +19,7 @@ describe('EngineDiscovery', () => {
     });
   });
 
-  describe('#list()', () => {
+  describe('#list({ format: "condensed" })', () => {
     const engine1 = { key: 'e1', engine: { ip: '10.0.0.1', port: 9077, metricsPort: 9999, status: 'OK' } };
     const engine2 = { key: 'e2', engine: { ip: '10.0.0.2', port: 9077, metricsPort: 9999, status: 'OK' } };
     const engine3 = { key: 'e3', engine: { ip: '10.0.0.3', port: 9077, metricsPort: 9999, status: 'OK' } };
@@ -30,7 +30,7 @@ describe('EngineDiscovery', () => {
       let listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
       const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
       await sleep(50);
-      let listedEngines = await engineDiscovery.list();
+      let listedEngines = await engineDiscovery.list({ format: 'condensed' });
 
       expect(listedEngines.length).to.equal(2);
       let listedEngine1 = listedEngines[0];
@@ -41,7 +41,7 @@ describe('EngineDiscovery', () => {
       listEnginesStub.restore();
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
       await sleep(50);
-      listedEngines = await engineDiscovery.list();
+      listedEngines = await engineDiscovery.list({ format: 'condensed' });
 
       expect(listedEngines.length).to.equal(2);
       listedEngine1 = listedEngines[0];
@@ -51,7 +51,7 @@ describe('EngineDiscovery', () => {
     });
   });
 
-  describe('#list(full)', () => {
+  describe('#list()', () => {
     const engine1 = { key: 'e1', engine: { ip: '10.0.0.1', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
     const engine2 = { key: 'e2', engine: { ip: '10.0.0.2', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
     const engine3 = { key: 'e3', engine: { ip: '10.0.0.3', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
@@ -62,7 +62,7 @@ describe('EngineDiscovery', () => {
       let listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
       const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
       await sleep(50);
-      let listedEngines = await engineDiscovery.list(true);
+      let listedEngines = await engineDiscovery.list({ format: 'full' });
 
       expect(listedEngines.length).to.equal(2);
       let listedEngine1 = listedEngines[0];
@@ -73,7 +73,7 @@ describe('EngineDiscovery', () => {
       listEnginesStub.restore();
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
       await sleep(50);
-      listedEngines = await engineDiscovery.list(true);
+      listedEngines = await engineDiscovery.list({ format: 'full' });
 
       expect(listedEngines.length).to.equal(2);
       listedEngine1 = listedEngines[0];

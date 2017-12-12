@@ -73,6 +73,13 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *     description:  Lists available QIX Engines in a condensed format.
  *     produces:
  *       - application/json; charset=utf-8
+ *     parameters:
+ *       - name: format
+ *         in: query
+ *         description: If result should be in full or condensed format.
+ *         required: false
+ *         type: string
+ *         default: full
  *     responses:
  *       200:
  *         description: successful operation
@@ -82,28 +89,8 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *             $ref: '#/definitions/containerInfo'
  */
 router.get(`/${enginesEndpoint}`, async (ctx) => {
-  logger.info(`GET /${apiVersion}/${enginesEndpoint}`);
-  ctx.body = await engineDiscovery.list();
-});
-
-/**
- * @swagger
- * /engines/full:
- *   get:
- *     description:  Lists available QIX Engines in a verbose format.
- *     produces:
- *       - application/json; charset=utf-8
- *     responses:
- *       200:
- *         description: successful operation
- *         schema:
- *           type: array
- *           items:
- *             $ref: '#/definitions/containerInfo'
- */
-router.get(`/${enginesEndpoint}/full`, async (ctx) => {
-  logger.info(`GET /${apiVersion}/${enginesEndpoint}/full`);
-  ctx.body = await engineDiscovery.list(true);
+  logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
+  ctx.body = await engineDiscovery.list(ctx.query);
 });
 
 /**
