@@ -70,7 +70,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  * @swagger
  * /engines:
  *   get:
- *     description:  Lists available QIX Engines in a condensed format.
+ *     description:  Lists available QIX Engines.
  *     produces:
  *       - application/json; charset=utf-8
  *     parameters:

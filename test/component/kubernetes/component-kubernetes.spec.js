@@ -20,7 +20,7 @@ describe('Mira in kubernetes mode', () => {
     await sleep(1000); // Sleep to make room for status checks to succeed
   });
 
-  describe('GET /engines/full', () => {
+  describe('GET /engines', () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {
       const res = await request(app.listen()).get('/v1/engines');
       expect(res.body.length).to.equal(2);

@@ -62,7 +62,7 @@ describe('EngineDiscovery', () => {
       let listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
       const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
       await sleep(50);
-      let listedEngines = await engineDiscovery.list({ format: 'full' });
+      let listedEngines = await engineDiscovery.list({});
 
       expect(listedEngines.length).to.equal(2);
       let listedEngine1 = listedEngines[0];
@@ -73,7 +73,7 @@ describe('EngineDiscovery', () => {
       listEnginesStub.restore();
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
       await sleep(50);
-      listedEngines = await engineDiscovery.list({ format: 'full' });
+      listedEngines = await engineDiscovery.list({});
 
       expect(listedEngines.length).to.equal(2);
       listedEngine1 = listedEngines[0];
