@@ -15,13 +15,15 @@ const logger = require('./logger/Logger').get();
  */
 
 /**
-  * Discovers engines and sets the timeout for periodical refreshing.
-  */
+ * Discovers engines and sets the timeout for periodical refreshing.
+ */
 async function discover() {
   const engines = await this.OrchestrationClient.listEngines();
   const keys = engines.map(engine => engine.key);
   const keysToDelete = this.engineMap.difference(keys);
-  keysToDelete.forEach((key) => { logger.info(`Engine removed: ${key}`); });
+  keysToDelete.forEach((key) => {
+    logger.info(`Engine removed: ${key}`);
+  });
   this.engineMap.delete(this.engineMap.difference(keys));
   engines.forEach((item) => {
     if (!this.engineMap.has(item.key)) {
@@ -57,10 +59,22 @@ class EngineDiscovery {
 
   /**
    * Lists available engine instances.
+   * @param {Object} query - Query parameters passed in url
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
-  async list() {
+  async list(query) {
     const engines = this.engineMap.all();
+
+    if (query.format === 'condensed') {
+      return engines.map(item => ({
+        engine: {
+          ip: item.properties.engine.ip,
+          port: item.properties.engine.port,
+          metricsPort: item.properties.engine.metricsPort,
+          status: item.properties.engine.status,
+        },
+      }));
+    }
 
     return engines.map(item => ({
       engine: item.properties.engine,

@@ -10,20 +10,35 @@ process.env.MIRA_ENGINE_HEALTH_REFRESH_RATE = 1000;
 describe('Mira in local docker mode with two engines', () => {
   let app;
 
-  describe('GET /engines', () => {
-    before(async () => {
-      // Mock docker.sock
-      nock('http://localhost:8001').filteringPath(/\/containers\/json?.*/g, '/containers/json').get('/containers/json').times(10)
-        .reply(200, specData.endpointsResponse);
-      // Engine healthcheck mocks
-      nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
-      nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
-      nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
-      nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
-      app = require('../../../src/index'); // eslint-disable-line global-require
-      await sleep(1000); // allow atleast 1 discovery
+  before(async () => {
+    // Mock docker.sock
+    nock('http://localhost:8001').filteringPath(/\/containers\/json?.*/g, '/containers/json').get('/containers/json').times(10)
+      .reply(200, specData.endpointsResponse);
+    // Engine healthcheck mocks
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
+    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
+    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
+    app = require('../../../src/index'); // eslint-disable-line global-require
+    await sleep(1000); // allow atleast 1 discovery
+  });
+
+  describe('GET /engines?format=condensed', () => {
+    it('should return a list with two engines', async () => {
+      const res = await request(app.listen()).get('/v1/engines').query({ format: 'condensed' });
+      expect(res.body.length).to.equal(2);
     });
 
+    it('should return engine status but not metrics nor orchestration info', async () => {
+      const res = await request(app.listen()).get('/v1/engines').query({ format: 'condensed' });
+      expect(res.body[0].engine.health).to.be.undefined;
+      expect(res.body[0].engine.metrics).to.be.undefined;
+      expect(res.body[0].local).to.be.undefined;
+      expect(res.body[0].engine.status).to.equal('OK');
+    });
+  });
+
+  describe('GET /engines', () => {
     it('should return a list with two engines', async () => {
       const res = await request(app.listen()).get('/v1/engines');
       expect(res.body.length).to.equal(2);
@@ -49,7 +64,7 @@ describe('Mira in local docker mode with two engines', () => {
       expect(res.body[1].swarm).to.be.undefined;
       expect(res.body[1].kubernetes).to.be.undefined;
     });
-
-    after(() => nock.cleanAll());
   });
+
+  after(() => nock.cleanAll());
 });

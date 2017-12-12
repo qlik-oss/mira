@@ -73,6 +73,13 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *     description:  Lists available QIX Engines.
  *     produces:
  *       - application/json; charset=utf-8
+ *     parameters:
+ *       - name: format
+ *         in: query
+ *         description: If result should be in full or condensed format.
+ *         required: false
+ *         type: string
+ *         default: full
  *     responses:
  *       200:
  *         description: successful operation
@@ -82,8 +89,8 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *             $ref: '#/definitions/containerInfo'
  */
 router.get(`/${enginesEndpoint}`, async (ctx) => {
-  logger.info(`GET /${apiVersion}/${enginesEndpoint}`);
-  ctx.body = await engineDiscovery.list();
+  logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
+  ctx.body = await engineDiscovery.list(ctx.query);
 });
 
 /**
@@ -91,6 +98,11 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  * definitions:
  *   engineInfo:
  *     type: object
+ *     required:
+ *       - ip
+ *       - port
+ *       - metricsPort
+ *       - status
  *     properties:
  *       ip:
  *         description: IP address to use when connecting to the QIX Engine.
@@ -111,7 +123,7 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *   containerInfo:
  *     type: object
  *     required:
- *      - engine
+ *       - engine
  *     properties:
  *       engine:
  *         $ref: '#/definitions/engineInfo'
