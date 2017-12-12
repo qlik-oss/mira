@@ -147,11 +147,6 @@ jobs:
             done
 
             echo "Mira is up and running!"
-      - run:
-          name: Remove deployment and leave swarm
-          command: |
-            docker stack rm mira-swarm
-            docker swarm leave --force
 
   # Job for testing Mira in kubernetes
   kubernetes:
@@ -196,9 +191,6 @@ jobs:
             # Check mira health
             MIRA_URL=$(sudo minikube service mira --url)
             curl -fs "$MIRA_URL/v1/health"
-      - run:
-          name: Kubernetes delete mira
-          command: sudo kubectl delete -f ./examples/kubernetes/
 
   # Job for testing Mira in dns mode
   dns:
