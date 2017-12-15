@@ -2,6 +2,9 @@
   "name": "mira",
   "version": "0.0.9-0",
   "description": "QIX Engine Discovery Service",
+  "author": "QlikTech International AB",
+  "private": true,
+  "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
@@ -22,9 +25,6 @@
     "type": "git",
     "url": "https://github.com/qlik-ea/mira.git"
   },
-  "author": "QlikTech International AB",
-  "private": true,
-  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/qlik-ea/mira/issues"
   },
