@@ -52,6 +52,6 @@
     "swagger-jsdoc": "1.9.7"
   },
   "engines": {
-    "node": ">=8.0.x"
+    "node": ">=8.9.3"
   }
 }
