@@ -1,5 +1,5 @@
 # Do the npm install on the full image
-FROM node:8.9.3
+FROM node:8.9.3 AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -12,7 +12,7 @@ COPY src src/
 FROM node:8.9.3-alpine
 
 WORKDIR /app
-COPY --from=0 /app .
+COPY --from=builder /app .
 
 RUN apk --update add curl
 
