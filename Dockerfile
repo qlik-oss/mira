@@ -1,5 +1,5 @@
 # Do the npm install on the full image
-FROM node:8
+FROM node:8.9.3
 
 WORKDIR /app
 COPY package*.json ./
@@ -9,7 +9,7 @@ COPY doc/api-doc.yml doc/
 COPY src src/
 
 # Only copy needed pieces from the build step
-FROM node:8-alpine
+FROM node:8.9.3-alpine
 
 WORKDIR /app
 COPY --from=0 /app .
