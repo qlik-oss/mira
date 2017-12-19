@@ -147,6 +147,24 @@ jobs:
             done
 
             echo "Mira is up and running!"
+      - run:
+          name: Verify number of engines found
+          command: |
+            set +e
+
+            # Check that Mira returns correct number of qix engines
+            RETRIES=0
+            while (( NBR_ENGINES != "2" && RETRIES != 10 )); do
+              NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
+              echo "Mira returned $NBR_ENGINES qix engines"
+              sleep 2
+              RETRIES=$((RETRIES + 1 ))
+            done
+
+            if [ "$NBR_ENGINES" != "2" ]; then
+              echo "Incorrect number of qix engines found"
+              exit 1
+            fi
 
   # Job for testing Mira in kubernetes
   kubernetes:
@@ -191,6 +209,25 @@ jobs:
             # Check mira health
             MIRA_URL=$(sudo minikube service mira --url)
             curl -fs "$MIRA_URL/v1/health"
+      - run:
+          name: Verify number of engines found
+          command: |
+            set +e
+
+            MIRA_URL=$(sudo minikube service mira --url)
+            # Check that Mira returns correct number of qix engines
+            RETRIES=0
+            while (( NBR_ENGINES != "2" && RETRIES != 10 )); do
+              NBR_ENGINES=$(curl "$MIRA_URL/v1/engines" | grep -o \"metricsPort\" | wc -w)
+              echo "Mira returned $NBR_ENGINES qix engines"
+              sleep 2
+              RETRIES=$((RETRIES + 1 ))
+            done
+
+            if [ "$NBR_ENGINES" != "2" ]; then
+              echo "Incorrect number of qix engines found"
+              exit 1
+            fi
 
   # Job for testing Mira in dns mode
   dns:
