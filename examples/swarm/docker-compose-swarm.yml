@@ -16,5 +16,7 @@ services:
     image: qlikea/engine:12.113.0
     ports:
       - 9076:9076
+    deploy:
+      replicas: 2
     labels:
       qix-engine: ""
