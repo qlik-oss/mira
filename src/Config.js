@@ -3,8 +3,8 @@ const logger = require('./logger/Logger').get();
 const defaultMiraApiPort = 9100;
 const defaultEngineAPIPort = 9076;
 const defaultEngineMetricsPort = 9090;
-const defaultEngineDiscoveryRefreshRate = 10000;
-const defaultEngineHealthRefreshRate = 30000;
+const defaultEngineDiscoveryInterval = 1000;
+const defaultEngineUpdateInterval = 1000;
 const defaultKubernetesProxyPort = 8001;
 const defaultDiscoveryLabel = 'qix-engine';
 const defaultEngineAPIPortLabel = 'qix-engine-api-port';
@@ -72,26 +72,26 @@ class Config {
     logger.info(`QIX Engine Metrics port label set to: ${Config.engineMetricsPortLabel}`);
 
     /**
-     * @prop {number} engineDiscoveryRefreshRate - The engine discovery refresh rate in
+     * @prop {number} engineDiscoveryInterval - The engine discovery interval in
      *   milliseconds. This is how often Mira triggers engine discovery scans towards the system to
      *   detect new or removed engine instaces.
      * @static
      */
-    Config.engineDiscoveryRefreshRate = parseInt(process.env.MIRA_ENGINE_DISCOVERY_REFRESH_RATE, 10);
-    if (!Config.engineDiscoveryRefreshRate || isNaN(Config.engineDiscoveryRefreshRate)) {
-      Config.engineDiscoveryRefreshRate = defaultEngineDiscoveryRefreshRate;
+    Config.engineDiscoveryInterval = parseInt(process.env.MIRA_ENGINE_DISCOVERY_INTERVAL, 10);
+    if (!Config.engineDiscoveryInterval || isNaN(Config.engineDiscoveryInterval)) {
+      Config.engineDiscoveryInterval = defaultEngineDiscoveryInterval;
     }
-    logger.info(`Discovery refresh rate set to: ${Config.engineDiscoveryRefreshRate}`);
+    logger.info(`QIX Engine discovery interval set to: ${Config.engineDiscoveryInterval}`);
 
     /**
-     * @prop {number} engineHealthRefreshRate - The health check refresh rate in milliseconds.
+     * @prop {number} engineUpdateInterval - The engine health and metrics update interval in milliseconds.
      * @static
      */
-    Config.engineHealthRefreshRate = parseInt(process.env.MIRA_ENGINE_HEALTH_REFRESH_RATE, 10);
-    if (!Config.engineHealthRefreshRate || isNaN(Config.engineHealthRefreshRate)) {
-      Config.engineHealthRefreshRate = defaultEngineHealthRefreshRate;
+    Config.engineUpdateInterval = parseInt(process.env.MIRA_ENGINE_UPDATE_INTERVAL, 10);
+    if (!Config.engineUpdateInterval || isNaN(Config.engineUpdateInterval)) {
+      Config.engineUpdateInterval = defaultEngineUpdateInterval;
     }
-    logger.info(`Health check refresh rate set to: ${Config.engineHealthRefreshRate}`);
+    logger.info(`QIX Engine update interval set to: ${Config.engineUpdateInterval}`);
 
     /**
      * @prop {number} kubernetesProxyPort - The proxy port to the Kubernetes API server used in

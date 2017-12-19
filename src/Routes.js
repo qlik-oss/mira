@@ -13,8 +13,8 @@ const router = new Router({
 const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
   OrchestrationClient,
-  Config.engineDiscoveryRefreshRate,
-  Config.engineHealthRefreshRate);
+  Config.engineDiscoveryInterval,
+  Config.engineHealthInterval);
 
 // Collect default prometheus metrics every 10 seconds
 const collectDefaultMetrics = prom.collectDefaultMetrics;
