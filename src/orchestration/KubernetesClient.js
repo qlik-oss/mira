@@ -44,6 +44,8 @@ class KubernetesClient {
   static async listEngines() {
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
 
+    logger.debug('KubernetesClient.listEngines() - Pod info received:', pods);
+
     const engineInfoEntries = pods.items.map((pod) => {
       const labels = pod.metadata.labels;
       const engine = {
