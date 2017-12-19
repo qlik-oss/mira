@@ -41,7 +41,15 @@ class LocalDockerClient {
     return new Promise((resolve, reject) => {
       LocalDockerClient.docker.listContainers({ filters: { label: [Config.discoveryLabel] } }, (err, containers) => {
         if (!err) {
-          const engineInfoEntries = containers.map((local) => {
+          const runningContainers = containers.filter((container) => {
+            if (container.State.toLowerCase() === 'running') {
+              logger.debug(`Valid engine container info received: ${JSON.stringify(container)}`);
+              return true;
+            }
+            logger.info(`Discarding non-running engine container: ${JSON.stringify(container)}`);
+            return false;
+          });
+          const engineInfoEntries = runningContainers.map((local) => {
             const labels = local.Labels;
             const engine = {
               ip: getIpAddress(local),

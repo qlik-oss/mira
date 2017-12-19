@@ -43,12 +43,18 @@ class KubernetesClient {
    */
   static async listEngines() {
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
-
-    const engineInfoEntries = pods.items.map((pod) => {
+    const runningPods = pods.items.filter(
+      (pod) => {
+        if (pod.status.phase.toLowerCase() === 'running') {
+          logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
+          return true;
+        }
+        logger.info(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
+        return false;
+      });
+    const engineInfoEntries = runningPods.map((pod) => {
       const labels = pod.metadata.labels;
-      const engine = {
-        ip: pod.status.podIP,
-      };
+      const engine = { ip: pod.status.podIP };
       const key = pod.metadata.uid;
       return { key, engine, kubernetes: pod, labels };
     });

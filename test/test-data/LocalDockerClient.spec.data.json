@@ -99,6 +99,56 @@
         }
       },
       "Mounts": []
+    },
+    {
+      "Id": "c506c9b17ee150673dd5818c4ae21f09618f3581c0f19e1c1a24450c6c2eb421",
+      "Names": [
+        "/mira_engine3_1"
+      ],
+      "Image": "qlikea/engine:12.38.0",
+      "ImageID": "sha256:8f00a39a3f0151ae7d80744eafd6ee71474df010349d44c9cf455a76baf59b1f",
+      "Command": "./entrypoint.sh",
+      "Created": 1502866132,
+      "Ports": [
+        {
+          "IP": "0.0.0.0",
+          "PrivatePort": 9076,
+          "PublicPort": 9376,
+          "Type": "tcp"
+        }
+      ],
+      "Labels": {
+        "foo": "foo2",
+        "bar": "bar2",
+        "qix-engine": "prod",
+        "qix-engine-api-port": "9276",
+        "qix-engine-metrics-port": "9090"
+      },
+      "State": "paused",
+      "Status": "Paused About a minute",
+      "HostConfig": {
+        "NetworkMode": "mira_default"
+      },
+      "NetworkSettings": {
+        "Networks": {
+          "mira_default": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "NetworkID": "0ff1add8bc3c672e38b3cfbd6d3d10e824297550f67428508151bde8b19d7916",
+            "EndpointID": "c64e002b80cd25fb8e402a082157991f569624029f02da957550f14b68560479",
+            "Gateway": "172.19.0.1",
+            "IPAddress": "172.19.0.3",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "MacAddress": "02:42:ac:13:00:02",
+            "DriverOpts": null
+          }
+        }
+      },
+      "Mounts": []
     }
   ],
   "miraOutput": [

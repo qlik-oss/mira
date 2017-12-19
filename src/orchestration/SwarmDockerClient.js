@@ -30,13 +30,20 @@ function getIpAddress(task) {
 
 function getTasks(docker, discoveryLabel) {
   return new Promise((resolve, reject) => {
-    docker.listTasks({ filters: '{ "desired-state": ["running"] }' }, (err, tasks) => {
+    docker.listTasks({}, (err, tasks) => {
       if (!err) {
         // We do filtering on the discovery label here, but this should be possible to do by
-        // specifying a filter on labels above.
-        const filteredTasks = tasks.filter(
-          task => discoveryLabel in task.Spec.ContainerSpec.Labels);
-        resolve(filteredTasks);
+        // specifying the filter in the listTasks() call above.
+        const labeledTasks = tasks.filter(task => discoveryLabel in task.Spec.ContainerSpec.Labels);
+        const runningTasks = labeledTasks.filter((task) => {
+          if (task.Status.State.toLowerCase() === 'running') {
+            logger.debug(`Valid engine container task received: ${JSON.stringify(task)}`);
+            return true;
+          }
+          logger.info(`Discarding non-running engine task: ${JSON.stringify(task)}`);
+          return false;
+        });
+        resolve(runningTasks);
       } else {
         logger.error('Error when listing Docker Swarm tasks', err);
         reject(err);

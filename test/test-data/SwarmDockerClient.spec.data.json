@@ -285,6 +285,149 @@
           ]
         }
       ]
+    },
+    {
+      "ID": "eqlp1haskhf876h2a9i91hd7im",
+      "Version": {
+        "Index": 780
+      },
+      "CreatedAt": "2017-08-24T09:13:38.429799819Z",
+      "UpdatedAt": "2017-08-24T09:13:52.511982557Z",
+      "Labels": {},
+      "Spec": {
+        "ContainerSpec": {
+          "Image": "qlikea/engine:12.42.0",
+          "Labels": {
+            "com.docker.stack.namespace": "mira-stack",
+            "qix-engine": "prod",
+            "foo": "foo2",
+            "bar": "bar2",
+            "qix-engine-api-port": "9076",
+            "qix-engine-metrics-port": "9090"
+          },
+          "Privileges": {
+            "CredentialSpec": null,
+            "SELinuxContext": null
+          }
+        },
+        "Resources": {},
+        "Placement": {
+          "Constraints": [
+            "node.role == manager"
+          ]
+        },
+        "Networks": [
+          {
+            "Target": "vtj9ni6c1mkv7v4ak4j3iqh9g",
+            "Aliases": [
+              "engine1"
+            ]
+          }
+        ],
+        "ForceUpdate": 0
+      },
+      "ServiceID": "t1s73kzykq9oenl414moh4htr",
+      "Slot": 1,
+      "NodeID": "4j4kqo4xx8ihfrkmuebvps11m",
+      "Status": {
+        "Timestamp": "2017-08-24T09:13:52.463896476Z",
+        "State": "paused",
+        "Message": "paused",
+        "ContainerStatus": {
+          "ContainerID": "8262d7dfcda867547affaeccac013d401b72448e4a621d9e300736d9e5b1643f",
+          "PID": 41650
+        },
+        "PortStatus": {}
+      },
+      "DesiredState": "running",
+      "NetworksAttachments": [
+        {
+          "Network": {
+            "ID": "e67gn9n85r0q4tvjwth7d3tay",
+            "Version": {
+              "Index": 6
+            },
+            "CreatedAt": "2017-08-23T13:48:18.402425147Z",
+            "UpdatedAt": "2017-08-23T13:48:18.418368808Z",
+            "Spec": {
+              "Name": "ingress",
+              "Labels": {},
+              "DriverConfiguration": {},
+              "Ingress": true,
+              "IPAMOptions": {
+                "Driver": {},
+                "Configs": [
+                  {
+                    "Subnet": "10.255.0.0/16",
+                    "Gateway": "10.255.0.1"
+                  }
+                ]
+              },
+              "Scope": "swarm"
+            },
+            "DriverState": {
+              "Name": "overlay",
+              "Options": {
+                "com.docker.network.driver.overlay.vxlanid_list": "4096"
+              }
+            },
+            "IPAMOptions": {
+              "Driver": {
+                "Name": "default"
+              },
+              "Configs": [
+                {
+                  "Subnet": "10.255.0.0/16",
+                  "Gateway": "10.255.0.1"
+                }
+              ]
+            }
+          },
+          "Addresses": [
+            "10.255.0.6/16"
+          ]
+        },
+        {
+          "Network": {
+            "ID": "vtj9ni6c1mkv7v4ak4j3iqh9g",
+            "Version": {
+              "Index": 569
+            },
+            "CreatedAt": "2017-08-23T14:06:39.512982339Z",
+            "UpdatedAt": "2017-08-23T14:06:39.519284155Z",
+            "Spec": {
+              "Name": "mira-stack_default",
+              "Labels": {
+                "com.docker.stack.namespace": "mira-stack"
+              },
+              "DriverConfiguration": {
+                "Name": "overlay"
+              },
+              "Scope": "swarm"
+            },
+            "DriverState": {
+              "Name": "overlay",
+              "Options": {
+                "com.docker.network.driver.overlay.vxlanid_list": "4098"
+              }
+            },
+            "IPAMOptions": {
+              "Driver": {
+                "Name": "default"
+              },
+              "Configs": [
+                {
+                  "Subnet": "10.0.1.0/24",
+                  "Gateway": "10.0.1.1"
+                }
+              ]
+            }
+          },
+          "Addresses": [
+            "10.0.1.16/24"
+          ]
+        }
+      ]
     }
   ],
   "miraOutput": [
