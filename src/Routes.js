@@ -14,7 +14,7 @@ const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
   OrchestrationClient,
   Config.engineDiscoveryInterval,
-  Config.engineHealthInterval);
+  Config.engineUpdateInterval);
 
 // Collect default prometheus metrics every 10 seconds
 const collectDefaultMetrics = prom.collectDefaultMetrics;

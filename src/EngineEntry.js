@@ -31,7 +31,7 @@ async function checkStatus() {
       this.properties.engine.status = 'NO_METRICS';
     }
   }
-  setTimeout(() => checkStatus.call(this), this.updateInerval);
+  setTimeout(() => checkStatus.call(this), this.updateInterval);
 }
 
 /**
