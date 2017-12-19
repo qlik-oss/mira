@@ -31,13 +31,13 @@ async function checkStatus() {
       this.properties.engine.status = 'NO_METRICS';
     }
   }
-  setTimeout(() => checkStatus.call(this), this.refreshRate);
+  setTimeout(() => checkStatus.call(this), this.updateInterval);
 }
 
 /**
  * Engine entry class definition.
  * @prop {object} properties - Properties of the engine instance.
- * @prop {number} refreshRate - The status check refresh rate in milliseconds.
+ * @prop {number} updateInterval - The status update interval in milliseconds.
  * @prop {EngineStatusFetcher} statusFetcher - The status fetcher to use.
  *   Optional and mainly used for testing; if not supplied, a default
  *   implementation will be used.
@@ -46,15 +46,15 @@ class EngineEntry {
   /**
    * Creates new {@link EngineEntry} object.
    * @param {object} properties - Properties of the engine instance.
-   * @param {number} refreshRate - The health check refresh rate in milliseconds.
+   * @param {number} updateInterval - The status update interval in milliseconds.
    * @param {EngineStatusFetcher} statusFetcher - The status fetcher to use.
    *   Optional and mainly used for testing; if not supplied, a default
    *   implementation will be used.
    */
-  constructor(properties, refreshRate, statusFetcher) {
+  constructor(properties, updateInterval, statusFetcher) {
     this.running = false;
     this.properties = properties;
-    this.refreshRate = refreshRate;
+    this.updateInterval = updateInterval;
     this.statusFetcher = statusFetcher || new EngineStatusFetcher();
 
     // Set api and metrics port of the engine

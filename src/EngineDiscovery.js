@@ -15,7 +15,7 @@ const logger = require('./logger/Logger').get();
  */
 
 /**
- * Discovers engines and sets the timeout for periodical refreshing.
+ * Discovers engines and sets the timeout for periodical updating metrics and health.
  */
 async function discover() {
   const engines = await this.OrchestrationClient.listEngines();
@@ -28,12 +28,12 @@ async function discover() {
   engines.forEach((item) => {
     if (!this.engineMap.has(item.key)) {
       const engineEntry = new EngineEntry(
-        item, this.healthRefreshRate);
+        item, this.updateInterval);
       logger.info(`Engine discovered at address: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port} with key: ${item.key}`);
       this.engineMap.add(item.key, engineEntry);
     }
   });
-  setTimeout(() => discover.call(this), this.discoveryRefreshRate);
+  setTimeout(() => discover.call(this), this.discoveryInterval);
 }
 
 /**
@@ -44,13 +44,13 @@ class EngineDiscovery {
   /**
    * Creates new {@link EngineDiscovery} object.
    * @param {OrchestrationClient} OrchestrationClient - The Docker client implementation used to list engines.
-   * @param {number} discoveryRefreshRate - The engine discovery refresh rate in milliseconds.
-   * @param {number} healthRefreshRate - The health check refresh rate in milliseconds.
+   * @param {number} discoveryInterval - The engine discovery interval in milliseconds.
+   * @param {number} updateInterval - The engine update interval in milliseconds.
    */
-  constructor(OrchestrationClient, discoveryRefreshRate, healthRefreshRate) {
+  constructor(OrchestrationClient, discoveryInterval, updateInterval) {
     this.OrchestrationClient = OrchestrationClient;
-    this.discoveryRefreshRate = discoveryRefreshRate;
-    this.healthRefreshRate = healthRefreshRate;
+    this.discoveryInterval = discoveryInterval;
+    this.updateInterval = updateInterval;
     this.engineMap = new EngineMap();
 
     // Start discovery!
