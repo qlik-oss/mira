@@ -49,7 +49,6 @@ class LocalDockerClient {
             logger.info(`Discarding non-running engine container: ${JSON.stringify(container)}`);
             return false;
           });
-
           const engineInfoEntries = runningContainers.map((local) => {
             const labels = local.Labels;
             const engine = {
