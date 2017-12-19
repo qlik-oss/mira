@@ -77,10 +77,6 @@ class SwarmDockerClient {
    */
   static async listEngines() {
     const engineTasks = await getTasks(SwarmDockerClient.docker, Config.discoveryLabel);
-
-
-
-
     const engineInfoEntries = engineTasks.map((task) => {
       const labels = getLabels(task);
       const engine = {
