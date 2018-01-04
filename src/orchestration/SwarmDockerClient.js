@@ -40,7 +40,7 @@ function getTasks(docker, discoveryLabel) {
             logger.debug(`Valid engine container task received: ${JSON.stringify(task)}`);
             return true;
           }
-          logger.info(`Discarding non-running engine task: ${JSON.stringify(task)}`);
+          logger.debug(`Discarding non-running engine task: ${JSON.stringify(task)}`);
           return false;
         });
         resolve(runningTasks);
