@@ -46,7 +46,7 @@ class LocalDockerClient {
               logger.debug(`Valid engine container info received: ${JSON.stringify(container)}`);
               return true;
             }
-            logger.info(`Discarding non-running engine container: ${JSON.stringify(container)}`);
+            logger.debug(`Discarding non-running engine container: ${JSON.stringify(container)}`);
             return false;
           });
           const engineInfoEntries = runningContainers.map((local) => {

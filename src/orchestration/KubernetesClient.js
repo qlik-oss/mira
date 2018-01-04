@@ -49,7 +49,7 @@ class KubernetesClient {
           logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
           return true;
         }
-        logger.info(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
+        logger.debug(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
         return false;
       });
     const engineInfoEntries = runningPods.map((pod) => {
