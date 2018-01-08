@@ -138,15 +138,20 @@ jobs:
       - run:
           name: Check health of the Mira service
           command: |
-            echo "Waiting for Swarm to wake up..."
-            SWARM_IS_DOWN="true"
+            set +e
 
-            while [ "$SWARM_IS_DOWN" == "true" ]; do
-              SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
-              sleep 1
+            # Verify Mira health
+            RETRIES=0
+            while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
+              sleep 2
+              RETRIES=$((RETRIES + 1 ))
             done
 
-            echo "Mira is up and running!"
+            if [ "$MIRA_STATUS" != "200" ]; then
+              echo "Mira did not return status code 200 on health endpoint"
+              exit 1
+            fi
       - run:
           name: Verify number of engines found
           command: |
@@ -257,21 +262,20 @@ jobs:
       - run:
           name: Check health of the Mira service
           command: |
-            echo "Waiting for Swarm to wake up..."
-            SWARM_IS_DOWN="true"
+            set +e
+
+            # Verify Mira health
             RETRIES=0
-            while (( SWARM_IS_DOWN == "true" && RETRIES != 30 )); do
-              SWARM_IS_DOWN=$(curl http://localhost:9100/v1/health -s -f -o /dev/null || echo "true")
+            while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
               sleep 2
               RETRIES=$((RETRIES + 1 ))
             done
 
-            if [ "$SWARM_IS_DOWN" == "true" ]; then
-              echo "Mira service did not start"
+            if [ "$MIRA_STATUS" != "200" ]; then
+              echo "Mira did not return status code 200 on health endpoint"
               exit 1
             fi
-
-            echo "Mira is up and running!"
       - run:
           name: Verify number of engines found
           command: |
