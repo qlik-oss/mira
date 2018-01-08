@@ -143,7 +143,7 @@ jobs:
             # Verify Mira health
             RETRIES=0
             while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
-              MIRA_STATUS=$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:9100/v1/health)
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
               sleep 2
               RETRIES=$((RETRIES + 1 ))
             done
@@ -267,7 +267,7 @@ jobs:
             # Verify Mira health
             RETRIES=0
             while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
-              MIRA_STATUS=$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:9100/v1/health)
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
               sleep 2
               RETRIES=$((RETRIES + 1 ))
             done
