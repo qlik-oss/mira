@@ -25,7 +25,7 @@ async function discover() {
     keysToDelete.forEach((key) => {
       logger.info(`Engine removed: ${key}`);
     });
-    this.engineMap.delete(this.engineMap.difference(keys));
+    this.engineMap.delete(keysToDelete);
     engines.forEach((item) => {
       if (!this.engineMap.has(item.key)) {
         const engineEntry = new EngineEntry(

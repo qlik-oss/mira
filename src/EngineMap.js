@@ -55,7 +55,7 @@ class EngineMap {
    */
   deleteAll() {
     logger.info('Removing all engine entries from map');
-    this.delete(this.difference(this.all()));
+    this.delete(Object.keys(this.entries));
   }
 
   /**
