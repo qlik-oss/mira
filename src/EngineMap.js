@@ -50,6 +50,15 @@ class EngineMap {
   }
 
   /**
+   * Deletes all engine entries. Helth checks for the deleted entries
+   * will be suspended.
+   */
+  deleteAll() {
+    logger.info('Removing all engine entries from map');
+    this.delete(this.difference(this.all()));
+  }
+
+  /**
    * Returns the difference (i.e. the relative complement) between the list and
    * the supplied set of keys.
    * @param {string[]} keys - The set of keys.

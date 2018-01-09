@@ -45,7 +45,7 @@ function getTasks(docker, discoveryLabel) {
         });
         resolve(runningTasks);
       } else {
-        logger.error('Error when listing Docker Swarm tasks', err);
+        logger.error(`Error when listing Docker Swarm tasks: ${err}`);
         reject(err);
       }
     });

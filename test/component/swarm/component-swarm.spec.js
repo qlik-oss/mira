@@ -12,10 +12,18 @@ describe('Mira in docker swarm mode', () => {
     // Mock docker.sock
     nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
       .reply(200, specData.endpointsResponse);
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
-    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, { metrics: 'some metrics' });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, {
+      health: 'health is ok',
+    });
+    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, {
+      health: 'health is ok',
+    });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
+      metrics: 'some metrics',
+    });
+    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
+      metrics: 'some metrics',
+    });
     app = require('../../../src/index'); // eslint-disable-line global-require
     await sleep(1000); // Sleep to make room for status checks to succeed
   });
@@ -34,8 +42,12 @@ describe('Mira in docker swarm mode', () => {
 
     it('should set the health and metrics properties', async () => {
       const res = await request(app.listen()).get('/v1/engines');
-      expect(res.body[0].engine.health).to.deep.equal({ health: 'health is ok' });
-      expect(res.body[0].engine.metrics).to.deep.equal({ metrics: 'some metrics' });
+      expect(res.body[0].engine.health).to.deep.equal({
+        health: 'health is ok',
+      });
+      expect(res.body[0].engine.metrics).to.deep.equal({
+        metrics: 'some metrics',
+      });
       expect(res.body[0].engine.status).to.equal('OK');
     });
 
@@ -52,6 +64,27 @@ describe('Mira in docker swarm mode', () => {
     it('should return OK', async () => {
       const res = await request(app.listen()).get('/v1/health');
       expect(res.statusCode).to.equal(200);
+    });
+  });
+
+  after(() => nock.cleanAll());
+});
+
+describe('Mira in docker swarm mode but no access to docker daemon', () => {
+  let app;
+
+  before(async () => {
+    // Mock docker.sock
+    nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
+      .reply(503, 'This node is not a swarm manager.');
+    app = require('../../../src/index'); // eslint-disable-line global-require
+    await sleep(1000); // Sleep to make room for status checks to succeed
+  });
+
+  describe('GET /engines', () => {
+    it('should return 503 Service Unavailable', async () => {
+      const res = await request(app.listen()).get('/v1/engines');
+      expect(res.status).to.equal(503);
     });
   });
 
