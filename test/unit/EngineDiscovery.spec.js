@@ -16,8 +16,8 @@ describe('EngineDiscovery', () => {
   describe('#constructor()', () => {
     it('should construct and start periodical discovery scans', async () => {
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns([]);
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 100, 5000);
-      await sleep(200);
+      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 5000);
+      await sleep(50);
       expect(engineDiscovery).to.not.be.null;
       expect(engineDiscovery).to.not.be.undefined;
       expect(listEnginesStub.callCount >= 2).to.be.true;
