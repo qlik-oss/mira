@@ -83,4 +83,9 @@ describe('EngineMap', () => {
     expect(engineMap.entries.a).to.equal(undefined);
     expect(engineMap.entries.b).to.equal(undefined);
   });
+
+  it('should handle delete all entries on an empty map', () => {
+    engineMap.deleteAll();
+    expect(engineMap.all()).to.deep.equal([]);
+  });
 });
