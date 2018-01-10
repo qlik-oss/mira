@@ -18,21 +18,35 @@ const logger = require('./logger/Logger').get();
  * Discovers engines and sets the timeout for periodical updating metrics and health.
  */
 async function discover() {
-  const engines = await this.OrchestrationClient.listEngines();
-  const keys = engines.map(engine => engine.key);
-  const keysToDelete = this.engineMap.difference(keys);
-  keysToDelete.forEach((key) => {
-    logger.info(`Engine removed: ${key}`);
-  });
-  this.engineMap.delete(this.engineMap.difference(keys));
-  engines.forEach((item) => {
-    if (!this.engineMap.has(item.key)) {
-      const engineEntry = new EngineEntry(
-        item, this.updateInterval);
-      logger.info(`Engine discovered at address: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port} with key: ${item.key}`);
-      this.engineMap.add(item.key, engineEntry);
+  try {
+    const engines = await this.OrchestrationClient.listEngines();
+    const keys = engines.map(engine => engine.key);
+    const keysToDelete = this.engineMap.difference(keys);
+    keysToDelete.forEach((key) => {
+      logger.info(`Engine removed: ${key}`);
+    });
+    this.engineMap.delete(keysToDelete);
+    engines.forEach((item) => {
+      if (!this.engineMap.has(item.key)) {
+        const engineEntry = new EngineEntry(
+          item, this.updateInterval);
+        logger.info(`Engine discovered at address: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port} with key: ${item.key}`);
+        this.engineMap.add(item.key, engineEntry);
+      }
+    });
+
+    if (!this.discoverySuccessful) {
+      logger.info('Engine discovery recovered and working again');
+      this.discoverySuccessful = true;
     }
-  });
+  } catch (err) {
+    // Log error and delete engine cache if this is the first failure
+    if (this.discoverySuccessful) {
+      logger.error(`Unable to discover engines with error: ${err}. Invalidating engine cache.`);
+      this.engineMap.deleteAll();
+      this.discoverySuccessful = false;
+    }
+  }
   setTimeout(() => discover.call(this), this.discoveryInterval);
 }
 
@@ -52,6 +66,7 @@ class EngineDiscovery {
     this.discoveryInterval = discoveryInterval;
     this.updateInterval = updateInterval;
     this.engineMap = new EngineMap();
+    this.discoverySuccessful = false;
 
     // Start discovery!
     discover.call(this);
@@ -63,6 +78,10 @@ class EngineDiscovery {
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
   async list(query) {
+    if (!this.discoverySuccessful) {
+      throw new Error('Last engine discovery failed');
+    }
+
     const engines = this.engineMap.all();
 
     if (query.format === 'condensed') {

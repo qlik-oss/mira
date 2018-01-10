@@ -71,4 +71,21 @@ describe('EngineMap', () => {
     engineMap.add('c', entry3);
     expect(engineMap.all()).to.deep.equal([entry1, entry2, entry3]);
   });
+
+  it('should delete all entries', () => {
+    const entry1 = getEntry();
+    const entry2 = getEntry();
+    engineMap.add('a', entry1);
+    engineMap.add('b', entry2);
+    engineMap.deleteAll();
+    expect(entry1.stopStatusChecks.calledOnce).to.equal(true);
+    expect(entry2.stopStatusChecks.calledOnce).to.equal(true);
+    expect(engineMap.entries.a).to.equal(undefined);
+    expect(engineMap.entries.b).to.equal(undefined);
+  });
+
+  it('should handle delete all entries on an empty map', () => {
+    engineMap.deleteAll();
+    expect(engineMap.all()).to.deep.equal([]);
+  });
 });

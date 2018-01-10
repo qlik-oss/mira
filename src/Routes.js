@@ -87,10 +87,16 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *           type: array
  *           items:
  *             $ref: '#/definitions/containerInfo'
+ *       503:
+ *         description: Service Unavailable
  */
 router.get(`/${enginesEndpoint}`, async (ctx) => {
   logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
-  ctx.body = await engineDiscovery.list(ctx.query);
+  try {
+    ctx.body = await engineDiscovery.list(ctx.query);
+  } catch (err) {
+    ctx.status = 503;
+  }
 });
 
 /**

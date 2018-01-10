@@ -53,6 +53,8 @@ paths:
             type: array
             items:
               $ref: '#/definitions/containerInfo'
+        '503':
+          description: Service Unavailable
 definitions:
   engineInfo:
     type: object
