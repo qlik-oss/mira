@@ -3,6 +3,8 @@ const request = require('supertest');
 const sleep = require('../../test-utils/sleep');
 
 process.env.DOCKER_HOST = 'http://localhost:8001';
+process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
+process.env.MIRA_ENGINE_UPDATE_INTERVAL = 1000;
 
 describe('Mira in local docker mode with no engines', () => {
   let app;
