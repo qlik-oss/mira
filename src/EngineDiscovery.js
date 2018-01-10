@@ -34,12 +34,18 @@ async function discover() {
         this.engineMap.add(item.key, engineEntry);
       }
     });
-    this.lastDiscoveryFailed = false;
+
+    if (this.lastDiscoveryFailed) {
+      logger.info('Previous discovery failed but the last discovery was successful');
+      this.lastDiscoveryFailed = false;
+    }
   } catch (err) {
-    logger.error(`Unable to discover engines with error: ${err}`);
-    logger.error('Invalidating engine cache');
-    this.engineMap.deleteAll();
-    this.lastDiscoveryFailed = true;
+    if (!this.lastDiscoveryFailed) {
+      logger.error(`Unable to discover engines with error: ${err}`);
+      logger.error('Invalidating engine cache');
+      this.engineMap.deleteAll();
+      this.lastDiscoveryFailed = true;
+    }
   }
   setTimeout(() => discover.call(this), this.discoveryInterval);
 }
