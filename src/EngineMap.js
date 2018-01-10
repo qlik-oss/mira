@@ -54,7 +54,7 @@ class EngineMap {
    * will be suspended.
    */
   deleteAll() {
-    logger.info('Removing all engine entries from map');
+    logger.debug('Removing all engine entries from map');
     this.delete(Object.keys(this.entries));
   }
 

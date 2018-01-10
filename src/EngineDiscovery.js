@@ -36,7 +36,7 @@ async function discover() {
     });
 
     if (!this.discoverySuccessful) {
-      logger.info('Previous discovery failed but the last discovery was successful');
+      logger.info('Engine discovery recovered and working again');
       this.discoverySuccessful = true;
     }
   } catch (err) {
@@ -80,7 +80,7 @@ class EngineDiscovery {
    */
   async list(query) {
     if (!this.discoverySuccessful) {
-      throw new Error('The last Engine Discovery has failed');
+      throw new Error('Last engine discovery failed');
     }
 
     const engines = this.engineMap.all();
