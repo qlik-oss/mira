@@ -66,7 +66,7 @@ class EngineDiscovery {
     this.discoveryInterval = discoveryInterval;
     this.updateInterval = updateInterval;
     this.engineMap = new EngineMap();
-    this.discoverySuccessful = false;
+    this.discoverySuccessful = true;
 
     // Start discovery!
     discover.call(this);
