@@ -16,8 +16,7 @@ function kubeHttpGet(path) {
       });
       response.on('error', (d) => {
         response.resume();
-        logger.error(`Kubernetes ${path} returned HTTP error (response.on): ${d}`);
-        reject(d);
+        reject(`Kubernetes ${path} returned HTTP error (response.on): ${d}`);
       });
       response.on('end', () => {
         try {
@@ -27,8 +26,7 @@ function kubeHttpGet(path) {
         }
       });
     }).on('error', (d) => {
-      logger.error(`Kubernetes ${path} returned HTTP error (get.on): ${d}`);
-      reject('No connection to kubernetes');
+      reject(`Kubernetes ${path} returned HTTP error (get.on): ${d}`);
     });
   });
 }
