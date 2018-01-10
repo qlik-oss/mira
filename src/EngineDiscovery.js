@@ -35,16 +35,17 @@ async function discover() {
       }
     });
 
-    if (this.lastDiscoveryFailed) {
+    if (!this.discoverySuccessful) {
       logger.info('Previous discovery failed but the last discovery was successful');
-      this.lastDiscoveryFailed = false;
+      this.discoverySuccessful = true;
     }
   } catch (err) {
-    if (!this.lastDiscoveryFailed) {
+    // Log error and delete engine cache if this is the first failure
+    if (this.discoverySuccessful) {
       logger.error(`Unable to discover engines with error: ${err}`);
       logger.error('Invalidating engine cache');
       this.engineMap.deleteAll();
-      this.lastDiscoveryFailed = true;
+      this.discoverySuccessful = false;
     }
   }
   setTimeout(() => discover.call(this), this.discoveryInterval);
@@ -66,7 +67,7 @@ class EngineDiscovery {
     this.discoveryInterval = discoveryInterval;
     this.updateInterval = updateInterval;
     this.engineMap = new EngineMap();
-    this.lastDiscoveryFailed = false;
+    this.discoverySuccessful = false;
 
     // Start discovery!
     discover.call(this);
@@ -78,7 +79,7 @@ class EngineDiscovery {
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
   async list(query) {
-    if (this.lastDiscoveryFailed) {
+    if (!this.discoverySuccessful) {
       throw new Error('The last Engine Discovery has failed');
     }
 
