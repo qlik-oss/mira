@@ -151,7 +151,7 @@ describe('EngineEntry', () => {
       entry.startStatusChecks();
       entry.stopStatusChecks();
       await sleep(150);
-      expect(fetchStub.callCount).to.equal(2);
+      expect(fetchStub.callCount).to.equal(0);
     });
   });
 
