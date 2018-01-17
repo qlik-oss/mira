@@ -16,6 +16,7 @@ services:
       - "9176:9076"
     labels:
       qix-engine:
+    command: -S LicenseServiceUrl=http://licensing:9200
 
   engine2:
     image: qlikea/engine:12.121.0
@@ -23,3 +24,7 @@ services:
       - "9276:9076"
     labels:
       qix-engine:
+    command: -S LicenseServiceUrl=http://licensing:9200
+
+  licensing:
+    image: qlikea/license-service:0.3.0
