@@ -14,7 +14,7 @@ services:
         constraints: [node.role == manager]
 
   qix-engine:
-    image: qlikea/engine:12.121.0
+    image: qlikea/engine:12.124.0
     ports:
       - 9076:9076
     deploy:
