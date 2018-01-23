@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
+const Rollbar = require('rollbar');
 const path = require('path');
 const logger = require('./logger/Logger').get();
 const Config = require('./Config');
@@ -10,25 +11,44 @@ Config.init();
 const router = require('./Routes');
 
 const app = new Koa();
-let server;
-
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
 
-function onUnhandledError(err) {
-  logger.error('Process encountered an unhandled error', err);
-  process.exit(1);
+let killOnNextLog = false;
+
+if (Config.rollbarToken) {
+  const rollbar = new Rollbar({
+    accessToken: Config.rollbarToken,
+  });
+
+  logger.on('logged', (level, message) => {
+    if (Config.rollbarLevels.indexOf(level) > -1) {
+      rollbar.error(message, () => {
+        if (killOnNextLog) {
+          process.exit(1);
+        }
+      });
+    }
+  });
+
+  app.use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      rollbar.error(err, ctx.request);
+    }
+  });
+} else {
+  logger.on('logged', () => {
+    if (killOnNextLog) {
+      process.exit(1);
+    }
+  });
 }
 
-/*
- * Service bootstrapping
- */
-
-process.on('SIGTERM', () => {
-  server.close(() => {
-    logger.info('Process exiting on SIGTERM');
-    process.exit(0);
-  });
-});
+function onUnhandledError(err) {
+  killOnNextLog = true;
+  logger.error(`Process encountered an unhandled error: ${err.stack}`);
+}
 
 process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
@@ -39,7 +59,15 @@ app
   .use(router.allowedMethods());
 
 if (process.env.NODE_ENV !== 'test') {
-  server = app.listen(Config.miraApiPort);
+  const server = app.listen(Config.miraApiPort);
+
+  process.on('SIGTERM', () => {
+    server.close(() => {
+      logger.info('Process exiting on SIGTERM');
+      process.exit(0);
+    });
+  });
+
   logger.info(`Listening on port ${Config.miraApiPort}`);
 }
 

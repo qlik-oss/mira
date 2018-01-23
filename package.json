@@ -34,6 +34,7 @@
     "koa": "2.2.0",
     "koa-router": "7.1.1",
     "prom-client": "10.1.0",
+    "rollbar": "^2.3.7",
     "swagger2": "0.0.24",
     "swagger2-koa": "0.0.36",
     "winston": "2.3.1"

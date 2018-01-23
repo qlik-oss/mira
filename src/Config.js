@@ -132,6 +132,23 @@ class Config {
       throw new Error('Running Mira in dns mode requires the mira discovery hostname (MIRA_DISCOVERY_HOSTNAME) to be set');
     }
     logger.info(`Mira discovery hostname is set to ${Config.discoveryHostname}`);
+
+    /**
+     * @prop {string} rollbarToken - The rollbar cloud access token used for error reporting.
+     * @static
+     */
+    Config.rollbarToken = process.env.MIRA_ROLLBAR_ACCESS_TOKEN || null;
+    logger.info(`Mira is ${Config.rollbarToken ? '' : 'not '}configured to use Rollbar`);
+
+    /**
+     * @prop {string} rollbarLevels - The log level(s) that should be reported to rollbar.
+     * @static
+     */
+    if (Config.rollbarToken) {
+      // e.g. `MIRA_ROLLBAR_LEVELS=warning,error`
+      Config.rollbarLevels = (process.env.MIRA_ROLLBAR_LEVELS || 'error').split(',');
+      logger.info(`Mira will report '${Config.rollbarLevels}' log levels to Rollbar`);
+    }
   }
 }
 
