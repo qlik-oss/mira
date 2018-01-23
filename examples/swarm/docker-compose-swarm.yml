@@ -13,7 +13,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   qix-engine:
-    image: qlikea/engine:12.121.0
+    image: qlikea/engine:12.125.0
     ports:
       - 9076:9076
     deploy:
