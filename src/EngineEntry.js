@@ -81,7 +81,7 @@ class EngineEntry {
   startStatusChecks() {
     if (!this.running) {
       this.running = true;
-      checkStatus.call(this);
+      setTimeout(() => checkStatus.call(this), this.updateInterval);
     }
   }
 

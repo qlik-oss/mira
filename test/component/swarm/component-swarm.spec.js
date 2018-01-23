@@ -4,8 +4,8 @@ const specData = require('../../test-data/SwarmDockerClient.spec.data.json');
 const sleep = require('../../test-utils/sleep');
 
 process.env.DOCKER_HOST = 'http://localhost:8001';
-process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
-process.env.MIRA_ENGINE_UPDATE_INTERVAL = 1000;
+process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 500;
+process.env.MIRA_ENGINE_UPDATE_INTERVAL = 500;
 
 describe('Mira in docker swarm mode', () => {
   let app;
