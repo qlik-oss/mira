@@ -109,7 +109,7 @@ class Config {
      * @static
      */
     Config.mode = process.env.MIRA_MODE || 'swarm'; // swarm is the default value
-    const SUPPORTED_MODES = ['local', 'swarm', 'kubernetes', 'dns'];
+    const SUPPORTED_MODES = ['local', 'swarm', 'kubernetes', 'dns', 'silent'];
     if (SUPPORTED_MODES.indexOf(Config.mode) === -1) {
       throw new Error(`Incorrect operation mode. Supported modes are: ${SUPPORTED_MODES.join(', ')}`);
     }
