@@ -61,7 +61,8 @@ describe('GET /metrics', () => {
     const res = await request(miraEndpoint).get('/v1/metrics');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
-    expect(res.body.length).to.not.equal(0);
+    expect(res.text.length).to.not.equal(0);
+    expect(res.text).to.contain('mira_build_info');
   });
 });
 

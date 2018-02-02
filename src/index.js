@@ -4,7 +4,6 @@ const swagger2koa = require('swagger2-koa');
 const Rollbar = require('rollbar');
 const path = require('path');
 const logger = require('./logger/Logger').get();
-
 const version = require('../version');
 
 logger.info(`Build info: ${JSON.stringify(version)}`);
