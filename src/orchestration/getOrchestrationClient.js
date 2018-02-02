@@ -18,7 +18,7 @@ function getOrchestrationClient(mode) {
       return KubernetesClient;
     case 'dns':
       return DnsClient;
-    case 'silent':
+    case 'none':
       return { listEngines: () => [] };
     default:
       return undefined;

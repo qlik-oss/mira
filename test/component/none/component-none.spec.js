@@ -1,6 +1,6 @@
 const request = require('supertest');
 
-describe('Mira in silent mode', () => {
+describe('Mira when not using any orchestration client', () => {
   let app;
   before(async () => {
     app = require('../../../src/index'); // eslint-disable-line global-require
