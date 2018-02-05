@@ -10,3 +10,4 @@ npm-debug.log
 /.npmrc
 coverage/
 .nyc_output
+version.json
