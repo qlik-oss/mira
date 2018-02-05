@@ -21,6 +21,11 @@ const healthEndpoint = 'health';
 const metricsEndpoint = 'metrics';
 const enginesEndpoint = 'engines';
 
+// Initialize endpoint counters
+const enginesCounter = new prom.Counter({ name: 'mira_api_engines_request_counter', help: 'Number of requests to /engines endpoint' });
+const healthCounter = new prom.Counter({ name: 'mira_api_health_request_counter', help: 'Number of requests to /health endpoint' });
+const metricsCounter = new prom.Counter({ name: 'mira_api_metrics_request_counter', help: 'Number of requests to /metrics endpoint' });
+
 /**
  * @swagger
  * /health:
@@ -36,6 +41,7 @@ const enginesEndpoint = 'engines';
  */
 router.get(`/${healthEndpoint}`, async (ctx) => {
   logger.debug(`GET /${apiVersion}/${healthEndpoint}`);
+  healthCounter.inc();
   ctx.body = {};
 });
 
@@ -56,6 +62,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
  */
 router.get(`/${metricsEndpoint}`, async (ctx) => {
   logger.debug(`GET /${apiVersion}/${metricsEndpoint}`);
+  metricsCounter.inc();
   if (ctx.accepts('text')) {
     ctx.body = prom.register.metrics();
   } else {
@@ -89,6 +96,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  */
 router.get(`/${enginesEndpoint}`, async (ctx) => {
   logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
+  enginesCounter.inc();
   try {
     ctx.body = await engineDiscovery.list(ctx.query);
   } catch (err) {
