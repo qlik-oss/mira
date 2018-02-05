@@ -29,11 +29,12 @@ const responseTimeSummary = new prom.Summary({
   help: 'Time in milliseconds consumed from Mira receiving a request until a response is sent',
 });
 
+// function for recording time consumed for a request and adding as metric
 function recordResponseTimes() {
   return function responseTime(ctx, next) {
-    const start = Date.now();
+    const requestTime = Date.now();
     return next().then(() => {
-      const diff = Math.ceil(Date.now() - start);
+      const diff = Math.ceil(Date.now() - requestTime);
       responseTimeSummary.observe(diff);
       if (diff > Config.allowedResponseTime) {
         logger.warn(`Request for endpoint ${ctx.request.url} took ${diff} ms, which is longer than allowed ${Config.allowedResponseTime} ms`);
