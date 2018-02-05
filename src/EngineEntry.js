@@ -20,15 +20,24 @@ async function checkStatus() {
     metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
     this.properties.engine.metrics = metrics;
     this.properties.engine.status = 'OK';
+    // Log and reset flag if last status check was failed
+    if (!this.statusSuccessful) {
+      logger.info(`Engine health and metrics check restored on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+      this.statusSuccessful = true;
+    }
   } catch (err) {
-    if (!health) {
-      logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
-      this.properties.engine.health = undefined;
-      this.properties.engine.status = 'UNHEALTHY';
-    } else if (!metrics) {
-      logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
-      this.properties.engine.metrics = undefined;
-      this.properties.engine.status = 'NO_METRICS';
+    // Only log on first failure
+    if (this.statusSuccessful) {
+      if (!health) {
+        logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+        this.properties.engine.health = undefined;
+        this.properties.engine.status = 'UNHEALTHY';
+      } else if (!metrics) {
+        logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
+        this.properties.engine.metrics = undefined;
+        this.properties.engine.status = 'NO_METRICS';
+      }
+      this.statusSuccessful = false;
     }
   }
   setTimeout(() => checkStatus.call(this), this.updateInterval);
@@ -53,6 +62,7 @@ class EngineEntry {
    */
   constructor(properties, updateInterval, statusFetcher) {
     this.running = false;
+    this.statusSuccessful = true;
     this.properties = properties;
     this.updateInterval = updateInterval;
     this.statusFetcher = statusFetcher || new EngineStatusFetcher();
