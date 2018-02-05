@@ -63,6 +63,7 @@ describe('GET /metrics', () => {
     expect(res.type).to.equal('text/plain');
     expect(res.text.length).to.not.equal(0);
     expect(res.text).to.contain('mira_build_info');
+    expect(res.text).to.contain('mira_api_response_time_ms');
   });
 });
 

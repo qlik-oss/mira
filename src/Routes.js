@@ -4,8 +4,7 @@ const Config = require('./Config');
 const Router = require('koa-router');
 const prom = require('prom-client');
 const logger = require('./logger/Logger').get();
-const version = require('../version');
-const os = require('os');
+
 
 const apiVersion = 'v1';
 const router = new Router({
@@ -17,25 +16,6 @@ const engineDiscovery = new EngineDiscovery(
   OrchestrationClient,
   Config.engineDiscoveryInterval,
   Config.engineUpdateInterval);
-
-// Create metric gauge containing build info from version.json
-new prom.Gauge({
-  name: `${version.name}_build_info`,
-  help: `A metric with a constant 1 value labeled by version, revision, platform, nodeVersion, os from which ${version.name} was built`,
-  labelNames: ['version', 'revision', 'buildTime', 'platform', 'nodeVersion', 'os', 'osRelease'],
-}).set({
-  version: version.version,
-  revision: version.SHA,
-  buildTime: version.buildTime,
-  platform: process.release.name,
-  nodeVersion: process.version,
-  os: process.platform,
-  osRelease: os.release(),
-}, 1);
-
-// Collect default prometheus metrics every 10 seconds
-const collectDefaultMetrics = prom.collectDefaultMetrics;
-collectDefaultMetrics();
 
 const healthEndpoint = 'health';
 const metricsEndpoint = 'metrics';
