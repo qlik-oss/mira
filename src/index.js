@@ -5,14 +5,13 @@ const Rollbar = require('rollbar');
 const path = require('path');
 const logger = require('./logger/Logger').get();
 const version = require('../version');
-
-logger.info(`Build info: ${JSON.stringify(version)}`);
-
 const Config = require('./Config');
 
 Config.init();
 
 const router = require('./Routes');
+
+logger.info(`Build info: ${JSON.stringify(version)}`);
 
 const app = new Koa();
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));
