@@ -9,6 +9,7 @@ const Config = require('./Config');
 
 Config.init();
 
+const metrics = require('./Metrics');
 const router = require('./Routes');
 
 logger.info(`Build info: ${JSON.stringify(version)}`);
@@ -57,6 +58,7 @@ process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
 
 app
+  .use(metrics())
   .use(swagger2koa.ui(document, '/openapi'))
   .use(router.routes())
   .use(router.allowedMethods());
