@@ -65,5 +65,13 @@ describe('SwarmDockerClient', () => {
       expect(listTasksStub).to.have.been.calledOnce;
       expect(engines[0].engine.ip).to.equal('10.0.4.6');
     });
+
+    it('should not return an engine that does not match the network was defined', async () => {
+      listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
+      sinon.stub(Config, 'engineNetwork').value('not_engine_network');
+      const engines = await DockerClient.listEngines();
+      expect(listTasksStub).to.have.been.calledOnce;
+      expect(engines.length).to.equal(0);
+    });
   });
 });

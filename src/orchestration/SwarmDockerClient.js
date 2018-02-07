@@ -81,19 +81,17 @@ class SwarmDockerClient {
   static async listEngines() {
     const engineTasks = await getTasks(SwarmDockerClient.docker, Config.discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
-      const labels = getLabels(task);
-      const engine = {
-        ip: getIpAddress(task),
-      };
       const key = task.ID;
       return {
         key,
-        engine,
+        engine: {
+          ip: getIpAddress(task),
+        },
         swarm: task,
-        labels,
+        labels: getLabels(task),
       };
     });
-    return engineInfoEntries;
+    return engineInfoEntries.filter(entry => entry.engine.ip);
   }
 }
 
