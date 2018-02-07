@@ -13,7 +13,7 @@ function getIpAddress(task) {
 
   if (task.NetworksAttachments) { // This might not be available during startup of a service
     task.NetworksAttachments.forEach((network) => {
-      if (!ipAddr && !network.Network.Spec.Ingress) {
+      if (!ipAddr && !network.Network.Spec.Ingress && (network.Network.Spec.Name === Config.engineNetwork || !Config.engineNetwork)) {
         const fullIpAddr = network.Addresses[0];
         const slashPos = fullIpAddr.indexOf('/');
         ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
@@ -22,7 +22,7 @@ function getIpAddress(task) {
   }
 
   if (!ipAddr) {
-    logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
+    logger.warn(`No suitable IP address found for task ${JSON.stringify(task)}`);
   }
 
   return ipAddr;
@@ -61,14 +61,18 @@ class SwarmDockerClient {
    * Mainly for testing purposes. Should normally not be used externally.
    * @returns {Docker} The Dockerode instance used for Docker Engine API access.
    */
-  static get docker() { return dockerode; }
+  static get docker() {
+    return dockerode;
+  }
 
   /**
    * Sets the Dockerode instance to use.
    * Mainly for testing purposes. Should normally not be used externally,
    * @param {Docker} value - The Dockerode instance to use for Docker Engine API access.
    */
-  static set docker(value) { dockerode = value; }
+  static set docker(value) {
+    dockerode = value;
+  }
 
   /**
    * Lists engines.
@@ -82,7 +86,12 @@ class SwarmDockerClient {
         ip: getIpAddress(task),
       };
       const key = task.ID;
-      return { key, engine, swarm: task, labels };
+      return {
+        key,
+        engine,
+        swarm: task,
+        labels,
+      };
     });
     return engineInfoEntries;
   }

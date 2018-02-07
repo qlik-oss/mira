@@ -1,6 +1,8 @@
 const Docker = require('dockerode');
 const DockerClient = require('../../../src/orchestration/SwarmDockerClient');
+const Config = require('../../../src/Config');
 const specData = require('./../../test-data/SwarmDockerClient.spec.data.json');
+const specDataMultipleNetworks = require('./../../test-data/SwarmMultipleNetworks.spec.data.json');
 
 const docker = new Docker();
 
@@ -47,6 +49,21 @@ describe('SwarmDockerClient', () => {
       expect(engines[0].kubernetes).to.be.undefined;
       expect(engines[1].local).to.be.undefined;
       expect(engines[1].kubernetes).to.be.undefined;
+    });
+
+    it('should take the first network address if an engine is running on multiple networks', async () => {
+      listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
+      const engines = await DockerClient.listEngines();
+      expect(listTasksStub).to.have.been.calledOnce;
+      expect(engines[0].engine.ip).to.equal('10.0.1.9');
+    });
+
+    it('should take the correct network address if an engine is running on multiple networks and a network has been defined', async () => {
+      listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
+      sinon.stub(Config, 'engineNetwork').value('engine_network');
+      const engines = await DockerClient.listEngines();
+      expect(listTasksStub).to.have.been.calledOnce;
+      expect(engines[0].engine.ip).to.equal('10.0.4.6');
     });
   });
 });

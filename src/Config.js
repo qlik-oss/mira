@@ -161,6 +161,15 @@ class Config {
       Config.allowedResponseTime = defaultAllowedResponseTime;
     }
     logger.info(`Maximum allowed response time for Mira is: ${Config.allowedResponseTime} ms`);
+
+    /**
+     * @prop {string} engineNetwork - The docker network that Mira will use for discovering QIX Engines.
+     * @static
+     */
+    Config.engineNetwork = process.env.MIRA_ENGINE_NETWORK;
+    if (Config.engineNetwork) {
+      logger.info(`Mira is configured to use network ${Config.engineNetwork} for discovering QIX Engines`);
+    }
   }
 }
 
