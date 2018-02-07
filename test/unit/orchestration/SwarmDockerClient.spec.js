@@ -51,7 +51,7 @@ describe('SwarmDockerClient', () => {
       expect(engines[1].kubernetes).to.be.undefined;
     });
 
-    it('should take the first network address if an engine is running on multiple networks', async () => {
+    it('should take the first network address if an engine is running on multiple networks and no network was specified', async () => {
       listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
       const engines = await DockerClient.listEngines();
       expect(listTasksStub).to.have.been.calledOnce;
@@ -66,7 +66,7 @@ describe('SwarmDockerClient', () => {
       expect(engines[0].engine.ip).to.equal('10.0.4.6');
     });
 
-    it('should not return an engine that does not match the network was defined', async () => {
+    it('should not return any engine if none match the network that was defined', async () => {
       listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
       sinon.stub(Config, 'engineNetwork').value('not_engine_network');
       const engines = await DockerClient.listEngines();

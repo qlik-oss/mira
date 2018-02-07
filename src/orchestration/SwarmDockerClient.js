@@ -61,18 +61,14 @@ class SwarmDockerClient {
    * Mainly for testing purposes. Should normally not be used externally.
    * @returns {Docker} The Dockerode instance used for Docker Engine API access.
    */
-  static get docker() {
-    return dockerode;
-  }
+  static get docker() { return dockerode; }
 
   /**
    * Sets the Dockerode instance to use.
    * Mainly for testing purposes. Should normally not be used externally,
    * @param {Docker} value - The Dockerode instance to use for Docker Engine API access.
    */
-  static set docker(value) {
-    dockerode = value;
-  }
+  static set docker(value) { dockerode = value; }
 
   /**
    * Lists engines.
