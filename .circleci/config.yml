@@ -62,7 +62,7 @@ jobs:
           command: |
             # Spin up a local setup with the previously built docker image.
             VER=$(cat workspace/version.txt)
-            TAG=:${VER} MIRA_ENGINE_DISCOVERY_INTERVAL=1000 docker-compose up -d
+            TAG=:${VER} MIRA_ENGINE_DISCOVERY_INTERVAL=1000 ACCEPT_EULA=yes docker-compose up -d
       - run:
           name: Check that services are up and running
           command: |
@@ -137,7 +137,9 @@ jobs:
             docker swarm init
             # Spin up a local setup with the previously built docker image.
             VER=$(cat /tmp/workspace/version.txt)
-            TAG=:${VER} docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
+            TAG=:${VER}
+            ACCEPT_EULA=yes
+            docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
       - run:
           name: Check health of the Mira service
           command: |
@@ -207,6 +209,9 @@ jobs:
           name: Add docker credentials as kubernetes secret
           command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
       - run:
+          name: Accept EULA
+          command: grep -rl AcceptEULA ./examples/kubernetes/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
+      - run:
           name: Kubernetes plain mira
           command: |
             VER=$(cat /tmp/workspace/version.txt)
@@ -261,7 +266,9 @@ jobs:
             docker swarm init
             # Spin up a local setup with the previously built docker image.
             VER=$(cat /tmp/workspace/version.txt)
-            TAG=:${VER} docker stack deploy -c ./examples/dns/docker-compose-dns.yml --with-registry-auth mira-dns
+            TAG=:${VER}
+            ACCEPT_EULA=yes
+            docker stack deploy -c ./examples/dns/docker-compose-dns.yml --with-registry-auth mira-dns
       - run:
           name: Check health of the Mira service
           command: |
