@@ -9,21 +9,18 @@ function getLabels(task) {
 }
 
 function getIpAddress(task) {
-  let ipAddr;
+  const networks = task.NetworksAttachments.filter(network => !network.Network.Spec.Ingress && (network.Network.Spec.Name === Config.engineNetwork || !Config.engineNetwork));
 
-  if (task.NetworksAttachments) { // This might not be available during startup of a service
-    task.NetworksAttachments.forEach((network) => {
-      if (!ipAddr && !network.Network.Spec.Ingress && (network.Network.Spec.Name === Config.engineNetwork || !Config.engineNetwork)) {
-        const fullIpAddr = network.Addresses[0];
-        const slashPos = fullIpAddr.indexOf('/');
-        ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
-      }
-    });
+  if (networks.length === 0) {
+    logger.warn(`No matching networks found for task ${task.ID}`);
+    return undefined;
+  } else if (networks.length > 1 && !Config.engineNetwork) {
+    logger.warn(`Found ${networks.length} networks for task ${task.ID}, but which docker network to use was not specified. Choosing address from network ${networks[0].Network.Spec.Name}.`);
   }
 
-  if (!ipAddr) {
-    logger.warn(`No suitable IP address found for task ${JSON.stringify(task)}`);
-  }
+  const fullIpAddr = networks[0].Addresses[0];
+  const slashPos = fullIpAddr.indexOf('/');
+  const ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
 
   return ipAddr;
 }
