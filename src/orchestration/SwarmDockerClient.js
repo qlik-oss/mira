@@ -9,21 +9,18 @@ function getLabels(task) {
 }
 
 function getIpAddress(task) {
-  let ipAddr;
+  const networks = task.NetworksAttachments.filter(network => !network.Network.Spec.Ingress && (network.Network.Spec.Name === Config.engineNetwork || !Config.engineNetwork));
 
-  if (task.NetworksAttachments) { // This might not be available during startup of a service
-    task.NetworksAttachments.forEach((network) => {
-      if (!ipAddr && !network.Network.Spec.Ingress) {
-        const fullIpAddr = network.Addresses[0];
-        const slashPos = fullIpAddr.indexOf('/');
-        ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
-      }
-    });
+  if (networks.length === 0) {
+    logger.warn(`No matching networks found for task ${task.ID}`);
+    return undefined;
+  } else if (networks.length > 1 && !Config.engineNetwork) {
+    logger.warn(`Found ${networks.length} networks for task ${task.ID}, but which docker network to use was not specified. Choosing address from network ${networks[0].Network.Spec.Name}.`);
   }
 
-  if (!ipAddr) {
-    logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
-  }
+  const fullIpAddr = networks[0].Addresses[0];
+  const slashPos = fullIpAddr.indexOf('/');
+  const ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
 
   return ipAddr;
 }
@@ -77,14 +74,17 @@ class SwarmDockerClient {
   static async listEngines() {
     const engineTasks = await getTasks(SwarmDockerClient.docker, Config.discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
-      const labels = getLabels(task);
-      const engine = {
-        ip: getIpAddress(task),
-      };
       const key = task.ID;
-      return { key, engine, swarm: task, labels };
+      return {
+        key,
+        engine: {
+          ip: getIpAddress(task),
+        },
+        swarm: task,
+        labels: getLabels(task),
+      };
     });
-    return engineInfoEntries;
+    return engineInfoEntries.filter(entry => entry.engine.ip);
   }
 }
 

@@ -1,0 +1,174 @@
+[
+  {
+    "ID": "ac1yt6jzmbvdj9z6namdblnn6",
+    "Version": {
+      "Index": 769
+    },
+    "CreatedAt": "2017-08-24T09:13:23.354140063Z",
+    "UpdatedAt": "2017-08-24T09:13:38.424336496Z",
+    "Labels": {},
+    "Spec": {
+      "ContainerSpec": {
+        "Image": "qlikea/engine:12.42.0",
+        "Labels": {
+          "com.docker.stack.namespace": "mira-stack",
+          "qix-engine": "",
+          "foo": "foo1",
+          "bar": "bar1",
+          "qix-engine-api-port": "9076",
+          "qix-engine-metrics-port": "9090"
+        },
+        "Privileges": {
+          "CredentialSpec": null,
+          "SELinuxContext": null
+        }
+      },
+      "Resources": {},
+      "Placement": {
+        "Constraints": [
+          "node.role == manager"
+        ]
+      },
+      "Networks": [{
+        "Target": "vtj9ni6c1mkv7v4ak4j3iqh9g",
+        "Aliases": [
+          "engine1"
+        ]
+      }],
+      "ForceUpdate": 0
+    },
+    "ServiceID": "t1s73kzykq9oenl414moh4htr",
+    "Slot": 2,
+    "NodeID": "4j4kqo4xx8ihfrkmuebvps11m",
+    "Status": {
+      "Timestamp": "2017-08-24T09:13:38.372687435Z",
+      "State": "running",
+      "Message": "started",
+      "ContainerStatus": {
+        "ContainerID": "3701dcfc9c0a0b66715630b3f7cacc2f2226ce4c53380f6f0d66833ec1630d2b",
+        "PID": 41297
+      },
+      "PortStatus": {}
+    },
+    "DesiredState": "running",
+    "NetworksAttachments": [{
+        "Network": {
+          "ID": "e67gn9n85r0q4tvjwth7d3tay",
+          "Version": {
+            "Index": 6
+          },
+          "CreatedAt": "2017-08-23T13:48:18.402425147Z",
+          "UpdatedAt": "2017-08-23T13:48:18.418368808Z",
+          "Spec": {
+            "Name": "ingress",
+            "Labels": {},
+            "DriverConfiguration": {},
+            "Ingress": true,
+            "IPAMOptions": {
+              "Driver": {},
+              "Configs": [{
+                "Subnet": "10.255.0.0/16",
+                "Gateway": "10.255.0.1"
+              }]
+            },
+            "Scope": "swarm"
+          },
+          "DriverState": {
+            "Name": "overlay",
+            "Options": {
+              "com.docker.network.driver.overlay.vxlanid_list": "4096"
+            }
+          },
+          "IPAMOptions": {
+            "Driver": {
+              "Name": "default"
+            },
+            "Configs": [{
+              "Subnet": "10.255.0.0/16",
+              "Gateway": "10.255.0.1"
+            }]
+          }
+        },
+        "Addresses": [
+          "10.255.0.12/16"
+        ]
+      },
+      {
+        "Network": {
+          "ID": "vtj9ni6c1mkv7v4ak4j3iqh9g",
+          "Version": {
+            "Index": 569
+          },
+          "CreatedAt": "2017-08-23T14:06:39.512982339Z",
+          "UpdatedAt": "2017-08-23T14:06:39.519284155Z",
+          "Spec": {
+            "Name": "mira-stack_default",
+            "Labels": {
+              "com.docker.stack.namespace": "mira-stack"
+            },
+            "DriverConfiguration": {
+              "Name": "overlay"
+            },
+            "Scope": "swarm"
+          },
+          "DriverState": {
+            "Name": "overlay",
+            "Options": {
+              "com.docker.network.driver.overlay.vxlanid_list": "4098"
+            }
+          },
+          "IPAMOptions": {
+            "Driver": {
+              "Name": "default"
+            },
+            "Configs": [{
+              "Subnet": "10.0.1.0/24",
+              "Gateway": "10.0.1.1"
+            }]
+          }
+        },
+        "Addresses": [
+          "10.0.1.9/24"
+        ]
+      },
+      {
+        "Network": {
+          "ID": "vtj9ni6c1mkv7v4ak4j3iqh98",
+          "Version": {
+            "Index": 569
+          },
+          "CreatedAt": "2017-08-23T14:06:39.512982339Z",
+          "UpdatedAt": "2017-08-23T14:06:39.519284155Z",
+          "Spec": {
+            "Name": "engine_network",
+            "Labels": {
+              "com.docker.stack.namespace": "mira-stack"
+            },
+            "DriverConfiguration": {
+              "Name": "overlay"
+            },
+            "Scope": "swarm"
+          },
+          "DriverState": {
+            "Name": "overlay",
+            "Options": {
+              "com.docker.network.driver.overlay.vxlanid_list": "4098"
+            }
+          },
+          "IPAMOptions": {
+            "Driver": {
+              "Name": "default"
+            },
+            "Configs": [{
+              "Subnet": "10.0.1.0/24",
+              "Gateway": "10.0.1.1"
+            }]
+          }
+        },
+        "Addresses": [
+          "10.0.4.6/24"
+        ]
+      }
+    ]
+  }
+]
