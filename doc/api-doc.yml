@@ -1,9 +1,8 @@
 info:
-  title: A QIX Engine discovery service for Qlik Elastic
+  title: A Qlik Associative Engine discovery service
   version: 0.1.2
   description: >-
-    REST API for discovering QIX Engines running in Docker containers. Different
-    modes exist, local, swarm and kubernetes mode.
+    REST API for discovering Qlik Associative Engines running in Docker containers.
 host: 'localhost:9100'
 schemes:
   - http
@@ -36,7 +35,7 @@ paths:
             description: Default prometheus client metrics
   /engines:
     get:
-      description: Lists available QIX Engines.
+      description: Lists available Qlik Associative Engines.
       produces:
         - application/json; charset=utf-8
       parameters:
@@ -65,21 +64,21 @@ definitions:
       - status
     properties:
       ip:
-        description: IP address to use when connecting to the QIX Engine.
+        description: IP address to use when connecting to the Qlik Associative Engine.
         type: string
       port:
-        description: Port to use when communicating with the QIX Engine API.
+        description: Port to use when communicating with the Qlik Associative Engine API.
         type: number
       metricsPort:
-        description: Port to use when retrieving the QIX Engine metrics.
+        description: Port to use when retrieving the Qlik Associative Engine metrics.
         type: number
       status:
         $ref: '#/definitions/containerStatus'
       health:
-        description: Last health endpoint response of the QIX Engine.
+        description: Last health endpoint response of the Qlik Associative Engine.
         type: object
       metrics:
-        description: Last metrics endpoint response of the QIX Engine.
+        description: Last metrics endpoint response of the Qlik Associative Engine.
   containerInfo:
     type: object
     required:
@@ -102,7 +101,7 @@ definitions:
         description: Pod information in verbatim format as returned by the Kubernetes API.
   containerStatus:
     type: string
-    description: Status of the QIX Engine.
+    description: Status of the Qlik Associative Engine.
     enum:
       - OK
       - UNHEALTHY

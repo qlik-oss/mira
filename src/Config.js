@@ -31,7 +31,7 @@ class Config {
     logger.info(`Mira API port set to: ${Config.miraApiPort}`);
 
     /**
-     * @prop {string} discoveryLabel - Label used to discover QIX Engine instances.
+     * @prop {string} discoveryLabel - Label used to discover Qlik Associative Engine instances.
      * @static
      */
     Config.discoveryLabel = process.env.MIRA_DISCOVERY_LABEL ?
@@ -39,7 +39,7 @@ class Config {
     logger.info(`Discovery label set to: ${Config.discoveryLabel}`);
 
     /**
-     * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the QIX Engine,
+     * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the Qlik Associative Engine,
      *   if not defined with MIRA_ENGINE_API_PORT_LABEL.
      * @static
      */
@@ -56,7 +56,7 @@ class Config {
     logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
 
     /**
-     * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the QIX Engine metrics,
+     * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the Qlik Associative Engine metrics,
      *   if not defined with MIRA_ENGINE_METRICS_PORT_LABEL.
      * @static
      */
@@ -70,7 +70,7 @@ class Config {
     if (!Config.engineMetricsPortLabel) {
       Config.engineMetricsPortLabel = defaultEngineMetricsPortLabel;
     }
-    logger.info(`QIX Engine Metrics port label set to: ${Config.engineMetricsPortLabel}`);
+    logger.info(`Qlik Associative Engine Metrics port label set to: ${Config.engineMetricsPortLabel}`);
 
     /**
      * @prop {number} engineDiscoveryInterval - The engine discovery interval in
@@ -82,7 +82,7 @@ class Config {
     if (!Config.engineDiscoveryInterval || isNaN(Config.engineDiscoveryInterval)) {
       Config.engineDiscoveryInterval = defaultEngineDiscoveryInterval;
     }
-    logger.info(`QIX Engine discovery interval set to: ${Config.engineDiscoveryInterval}`);
+    logger.info(`Qlik Associative Engine discovery interval set to: ${Config.engineDiscoveryInterval}`);
 
     /**
      * @prop {number} engineUpdateInterval - The engine health and metrics update interval in milliseconds.
@@ -92,7 +92,7 @@ class Config {
     if (!Config.engineUpdateInterval || isNaN(Config.engineUpdateInterval)) {
       Config.engineUpdateInterval = defaultEngineUpdateInterval;
     }
-    logger.info(`QIX Engine update interval set to: ${Config.engineUpdateInterval}`);
+    logger.info(`Qlik Associative Engine update interval set to: ${Config.engineUpdateInterval}`);
 
     /**
      * @prop {number} kubernetesProxyPort - The proxy port to the Kubernetes API server used in

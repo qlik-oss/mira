@@ -173,7 +173,7 @@ jobs:
             done
 
             if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES QIX Engines but expected $EXPECTED_NBR_ENGINES"
+              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
               exit 1
             fi
 
@@ -240,7 +240,7 @@ jobs:
             done
 
             if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES QIX Engines but expected $EXPECTED_NBR_ENGINES"
+              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
               exit 1
             fi
 
@@ -301,7 +301,7 @@ jobs:
             done
 
             if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES QIX Engines but expected $EXPECTED_NBR_ENGINES"
+              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
               exit 1
             fi
 
