@@ -12,6 +12,7 @@ services:
 
   engine1:
     image: qlikea/engine:12.134.0
+    command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9176:9076"
     labels:
@@ -19,6 +20,7 @@ services:
 
   engine2:
     image: qlikea/engine:12.134.0
+    command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9276:9076"
     labels:

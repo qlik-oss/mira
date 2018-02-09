@@ -87,17 +87,17 @@ $ npm run test:component
 
 These tests run Mira in isolation and does not depend on any external components.
 
-Integration tests depend on external components. Before they can run, they must be started using the [docker-compose.yml](./docker-compose.yml) file:
+Integration tests depend on external components. Before they can run, you must accept the [Qlik Core EULA](https://ca.qliktive.com/docs/master/beta/) by setting the `ACCEPT_EULA` environment variable, you start the services by using the [docker-compose.yml](./docker-compose.yml) file:
 
 ```sh
-$ docker-compose up -d
+$ ACCEPT_EULA=yes docker-compose up -d
 $ npm run test:integration
 ```
 
 To run integration tests towards a specific image tag, provide the `TAG` environment variable to `docker-compose`:
 
 ```bash
-$ TAG=:<YOUR TAG HERE> docker-compose up -d
+$ ACCEPT_EULA=yes TAG=:<YOUR TAG HERE> docker-compose up -d
 $ npm run test:integration
 ```
 
