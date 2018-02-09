@@ -74,7 +74,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  * @swagger
  * /engines:
  *   get:
- *     description:  Lists available QIX Engines.
+ *     description:  Lists available Qlik Associative Engines.
  *     produces:
  *       - application/json; charset=utf-8
  *     parameters:
@@ -116,21 +116,21 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *       - status
  *     properties:
  *       ip:
- *         description: IP address to use when connecting to the QIX Engine.
+ *         description: IP address to use when connecting to the Qlik Associative Engine.
  *         type: string
  *       port:
- *         description: Port to use when communicating with the QIX Engine API.
+ *         description: Port to use when communicating with the Qlik Associative Engine API.
  *         type: number
  *       metricsPort:
- *         description: Port to use when retrieving the QIX Engine metrics.
+ *         description: Port to use when retrieving the Qlik Associative Engine metrics.
  *         type: number
  *       status:
  *         $ref: '#/definitions/containerStatus'
  *       health:
- *          description: Last health endpoint response of the QIX Engine.
+ *          description: Last health endpoint response of the Qlik Associative Engine.
  *          type: object
  *       metrics:
- *          description: Last metrics endpoint response of the QIX Engine.
+ *          description: Last metrics endpoint response of the Qlik Associative Engine.
  *   containerInfo:
  *     type: object
  *     required:
@@ -149,7 +149,7 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *         description: Pod information in verbatim format as returned by the Kubernetes API.
  *   containerStatus:
  *     type: string
- *     description: Status of the QIX Engine.
+ *     description: Status of the Qlik Associative Engine.
  *     enum:
  *       - OK
  *       - UNHEALTHY

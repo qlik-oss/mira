@@ -1,4 +1,4 @@
-# Mira - A QIX Engine Discovery Service
+# Mira - A Qlik Associative Engine Discovery Service
 
 **NOTE: This repository is under heavy development**
 
@@ -6,7 +6,7 @@
 
 ## Overview
 
-Mira provides QIX Engine discovery in a Docker containerized environment. Mira is implemented on Node.js and supports different orchestration platforms such as Docker Swarm and Kubernetes. Mira can also operate in a simpler _DNS_ mode and a _Local_ mode.
+Mira provides Qlik Associative Engine discovery in a Docker containerized environment. Mira is implemented on Node.js and supports different orchestration platforms such as Docker Swarm and Kubernetes. Mira can also operate in a simpler _DNS_ mode and a _Local_ mode.
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
