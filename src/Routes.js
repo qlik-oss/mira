@@ -161,7 +161,7 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *       - ip
  *     properties:
  *       ip:
- *         description: IP address of the QIX Engine on a specific network
+ *         description: IP address of the Qlik Associative Engine on a specific network
  *         type: string
  *       name:
  *         description: Docker network name
