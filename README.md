@@ -1,4 +1,4 @@
-# Mira - A QIX Engine Discovery Service
+# Mira - A Qlik Associative Engine Discovery Service
 
 **NOTE: This repository is under heavy development**
 
@@ -6,7 +6,7 @@
 
 ## Overview
 
-Mira provides QIX Engine discovery in a Docker containerized environment. Mira is implemented on Node.js and supports different orchestration platforms such as Docker Swarm and Kubernetes. Mira can also operate in a simpler _DNS_ mode and a _Local_ mode.
+Mira provides Qlik Associative Engine discovery in a Docker containerized environment. Mira is implemented on Node.js and supports different orchestration platforms such as Docker Swarm and Kubernetes. Mira can also operate in a simpler _DNS_ mode and a _Local_ mode.
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
@@ -87,17 +87,17 @@ $ npm run test:component
 
 These tests run Mira in isolation and does not depend on any external components.
 
-Integration tests depend on external components. Before they can run, they must be started using the [docker-compose.yml](./docker-compose.yml) file:
+Integration tests depend on external components. Before they can run, you must accept the [Qlik Core EULA](https://ca.qliktive.com/docs/master/beta/) by setting the `ACCEPT_EULA` environment variable, you start the services by using the [docker-compose.yml](./docker-compose.yml) file:
 
 ```sh
-$ docker-compose up -d
+$ ACCEPT_EULA=yes docker-compose up -d
 $ npm run test:integration
 ```
 
 To run integration tests towards a specific image tag, provide the `TAG` environment variable to `docker-compose`:
 
 ```bash
-$ TAG=:<YOUR TAG HERE> docker-compose up -d
+$ ACCEPT_EULA=yes TAG=:<YOUR TAG HERE> docker-compose up -d
 $ npm run test:integration
 ```
 
