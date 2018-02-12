@@ -12,7 +12,7 @@ describe('GET /engines?format=condensed', () => {
     const res = await request(miraEndpoint).get('/v1/engines').query({ format: 'condensed' });
     expect(res.body[0].engine.port).to.equal(9076);
     expect(res.body[1].engine.port).to.equal(9076);
-    expect(res.body[0].engine.ip).to.not.equal(res.body[1].engine.ip);
+    expect(res.body[0].engine.networks[0].ip).to.not.equal(res.body[1].engine.networks[0].ip);
   });
   it('should include a status for health and metrics of each engine', async () => {
     const res = await request(miraEndpoint).get('/v1/engines').query({ format: 'condensed' });
@@ -30,7 +30,7 @@ describe('GET /engines', () => {
     const res = await request(miraEndpoint).get('/v1/engines');
     expect(res.body[0].engine.port).to.equal(9076);
     expect(res.body[1].engine.port).to.equal(9076);
-    expect(res.body[0].engine.ip).to.not.equal(res.body[1].engine.ip);
+    expect(res.body[0].engine.networks[0].ip).to.not.equal(res.body[1].engine.networks[0].ip);
   });
   it('should include health with info about allocated memory and total cpu', async () => {
     const res = await request(miraEndpoint).get('/v1/engines');
