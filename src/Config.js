@@ -161,6 +161,17 @@ class Config {
       Config.allowedResponseTime = defaultAllowedResponseTime;
     }
     logger.info(`Maximum allowed response time for Mira is: ${Config.allowedResponseTime} ms`);
+
+    /**
+     * @prop {string} engineNetworks - Docker networks Mira should use for status checking
+     * @static
+     */
+    const networks = process.env.MIRA_ENGINE_NETWORKS;
+    if (Config.mode === 'swarm' && networks) {
+      // e.g. `MIRA_ENGINE_NETWORKS=default_network,engine_network`
+      Config.engineNetworks = networks.split(',');
+      logger.info(`Mira will use docker networks ${Config.engineNetworks} for status checks`);
+    }
   }
 }
 

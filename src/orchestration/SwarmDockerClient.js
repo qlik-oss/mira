@@ -8,24 +8,44 @@ function getLabels(task) {
   return Object.assign({}, task.Spec.ContainerSpec.Labels);
 }
 
-function getIpAddress(task) {
-  let ipAddr;
+function getIpAddresses(task) {
+  const addresses = task.NetworksAttachments
+    .filter(network => !network.Network.Spec.Ingress)
+    .map((network) => {
+      const fullIpAddr = network.Addresses[0];
+      const slashPos = fullIpAddr.indexOf('/');
+      const ip = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
 
-  if (task.NetworksAttachments) { // This might not be available during startup of a service
-    task.NetworksAttachments.forEach((network) => {
-      if (!ipAddr && !network.Network.Spec.Ingress) {
-        const fullIpAddr = network.Addresses[0];
-        const slashPos = fullIpAddr.indexOf('/');
-        ipAddr = (slashPos >= 0) ? fullIpAddr.substring(0, slashPos) : fullIpAddr;
-      }
+      return { name: network.Network.Spec.Name, ip };
     });
+
+  if (!addresses || addresses.length === 0) {
+    logger.warn(`Encountered task with no networks ${JSON.stringify(task)}`);
+    return undefined;
   }
 
-  if (!ipAddr) {
-    logger.warn('Encountered task with no network attachments (when getting IP addr)', task);
+  return addresses;
+}
+
+function findStatusIp(task, networks) {
+  if (!networks) {
+    logger.warn(`No network found for task: ${JSON.stringify(task)}`);
+    return undefined;
+  } else if (networks.length === 1) {
+    return networks[0].ip;
+  } else if (!Config.engineNetworks) {
+    logger.warn(`Found multiple docker networks for task: ${JSON.stringify(task)}, but no network configured for environment variable MIRA_ENGINE_NETWORKS`);
+    return undefined;
   }
 
-  return ipAddr;
+  const statusNetworks = networks.filter(network => Config.engineNetworks.includes(network.name));
+
+  if (!statusNetworks || statusNetworks.length === 0) {
+    logger.warn(`No docker network found matching name in ${Config.engineNetworks} for task ${JSON.stringify(task)}`);
+    return undefined;
+  }
+
+  return statusNetworks[0].ip;
 }
 
 function getTasks(docker, discoveryLabel) {
@@ -61,14 +81,18 @@ class SwarmDockerClient {
    * Mainly for testing purposes. Should normally not be used externally.
    * @returns {Docker} The Dockerode instance used for Docker Engine API access.
    */
-  static get docker() { return dockerode; }
+  static get docker() {
+    return dockerode;
+  }
 
   /**
    * Sets the Dockerode instance to use.
    * Mainly for testing purposes. Should normally not be used externally,
    * @param {Docker} value - The Dockerode instance to use for Docker Engine API access.
    */
-  static set docker(value) { dockerode = value; }
+  static set docker(value) {
+    dockerode = value;
+  }
 
   /**
    * Lists engines.
@@ -78,13 +102,18 @@ class SwarmDockerClient {
     const engineTasks = await getTasks(SwarmDockerClient.docker, Config.discoveryLabel);
     const engineInfoEntries = engineTasks.map((task) => {
       const labels = getLabels(task);
-      const engine = {
-        ip: getIpAddress(task),
-      };
+      const networks = getIpAddresses(task);
+      const statusIp = findStatusIp(task, networks);
       const key = task.ID;
-      return { key, engine, swarm: task, labels };
+      return {
+        key,
+        engine: { networks },
+        swarm: task,
+        labels,
+        statusIp,
+      };
     });
-    return engineInfoEntries;
+    return engineInfoEntries.filter(entry => entry.statusIp);
   }
 }
 

@@ -30,7 +30,7 @@ async function discover() {
       if (!this.engineMap.has(item.key)) {
         const engineEntry = new EngineEntry(
           item, this.updateInterval);
-        logger.info(`Engine discovered at address: ${engineEntry.properties.engine.ip}:${engineEntry.properties.engine.port} with key: ${item.key}`);
+        logger.info(`Engine discovered at address: ${item.statusIp}:${engineEntry.properties.engine.port} with key: ${item.key}`);
         this.engineMap.add(item.key, engineEntry);
       }
     });
@@ -87,7 +87,7 @@ class EngineDiscovery {
     if (query.format === 'condensed') {
       return engines.map(item => ({
         engine: {
-          ip: item.properties.engine.ip,
+          networks: item.properties.engine.networks,
           port: item.properties.engine.port,
           metricsPort: item.properties.engine.metricsPort,
           status: item.properties.engine.status,

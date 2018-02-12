@@ -18,20 +18,20 @@ describe('EngineEntry', () => {
     });
 
     it('should construct with arguments', () => {
-      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
-      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9998, metricsPort: 9999 }, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' } });
+      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
+      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9998, metricsPort: 9999 }, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' });
       expect(entry.updateInterval).to.equal(10);
     });
 
     it('should fallback to default api port if label is not set', () => {
-      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
-      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9076, metricsPort: 9999 }, labels: { 'qix-engine-metrics-port': '9999' } });
+      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
+      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9076, metricsPort: 9999 }, labels: { 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' });
       expect(entry.updateInterval).to.equal(10);
     });
 
     it('should fallback to default metrics port if label is not set', () => {
-      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098' } }, 10, healthFetcher);
-      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9098, metricsPort: 9090 }, labels: { 'qix-engine-api-port': '9098' } });
+      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
+      expect(entry.properties).to.deep.equal({ engine: { ip: '10.10.10.10', port: 9098, metricsPort: 9090 }, labels: { 'qix-engine-api-port': '9098' }, statusIp: '10.10.10.10' });
       expect(entry.updateInterval).to.equal(10);
     });
   });
@@ -43,7 +43,7 @@ describe('EngineEntry', () => {
         fetchStub = sinon.stub(healthFetcher, 'fetch');
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
-        entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
+        entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
       });
 
       it('should fetch health periodically', async () => {
@@ -82,7 +82,7 @@ describe('EngineEntry', () => {
     describe('with unhealthy engines', () => {
       beforeEach(() => {
         healthFetcher = new EngineStatusFetcher({ get: () => { } });
-        entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
+        entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
       });
 
       it('should set health to undefined and status to unhealthy if healthcheck fails', async () => {
@@ -123,7 +123,7 @@ describe('EngineEntry', () => {
       fetchStub = sinon.stub(healthFetcher, 'fetch');
       fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(async () => Promise.resolve(healthOk));
       fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(async () => Promise.resolve(metrics));
-      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' } }, 10, healthFetcher);
+      entry = new EngineEntry({ engine: { ip: '10.10.10.10' }, labels: { 'qix-engine-api-port': '9098', 'qix-engine-metrics-port': '9999' }, statusIp: '10.10.10.10' }, 10, healthFetcher);
     });
 
     it('should stop fetching health', async () => {

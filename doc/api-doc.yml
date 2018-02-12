@@ -59,14 +59,15 @@ definitions:
   engineInfo:
     type: object
     required:
-      - ip
+      - networks
       - port
       - metricsPort
       - status
     properties:
-      ip:
-        description: IP address to use when connecting to the QIX Engine.
-        type: string
+      networks:
+        description: List of networks for QIX Engine
+        type: array
+        $ref: '#/definitions/containerNetwork'
       port:
         description: Port to use when communicating with the QIX Engine API.
         type: number
@@ -107,6 +108,17 @@ definitions:
       - OK
       - UNHEALTHY
       - NO_METRICS
+  containerNetwork:
+    type: object
+    required:
+      - ip
+    properties:
+      ip:
+        description: IP address of the QIX Engine on a specific network
+        type: string
+      name:
+        description: Docker network name
+        type: string
 responses: {}
 parameters: {}
 securityDefinitions: {}

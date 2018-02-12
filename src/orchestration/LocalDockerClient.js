@@ -51,11 +51,10 @@ class LocalDockerClient {
           });
           const engineInfoEntries = runningContainers.map((local) => {
             const labels = local.Labels;
-            const engine = {
-              ip: getIpAddress(local),
-            };
+            const ip = getIpAddress(local);
+            const engine = { networks: [{ ip }] };
             const key = local.Id;
-            return { key, engine, local, labels };
+            return { key, engine, local, labels, statusIp: ip };
           });
           resolve(engineInfoEntries);
         } else {
