@@ -5,7 +5,7 @@ describe('EngineDiscovery', () => {
   let FakeDockerClient;
   let listEnginesStub;
 
-  beforeEach(() => {
+  before(() => {
     FakeDockerClient = { listEngines: () => [] };
   });
 
@@ -25,9 +25,9 @@ describe('EngineDiscovery', () => {
   });
 
   describe('#list({ format: "condensed" })', () => {
-    const engine1 = { key: 'e1', engine: { ip: '10.0.0.1', port: 9077, metricsPort: 9999, status: 'OK' } };
-    const engine2 = { key: 'e2', engine: { ip: '10.0.0.2', port: 9077, metricsPort: 9999, status: 'OK' } };
-    const engine3 = { key: 'e3', engine: { ip: '10.0.0.3', port: 9077, metricsPort: 9999, status: 'OK' } };
+    const engine1 = { key: 'e1', engine: { networks: [{ name: 'default_network', ip: '10.0.0.1' }], port: 9077, metricsPort: 9999, status: 'OK' }, statusIp: '10.0.0.1' };
+    const engine2 = { key: 'e2', engine: { networks: [{ name: 'default_network', ip: '10.0.0.2' }], port: 9077, metricsPort: 9999, status: 'OK' }, statusIp: '10.0.0.2' };
+    const engine3 = { key: 'e3', engine: { networks: [{ name: 'default_network', ip: '10.0.0.3' }], port: 9077, metricsPort: 9999, status: 'OK' }, statusIp: '10.0.0.3' };
     const engines1 = [engine1, engine2];
     const engines2 = [engine2, engine3];
 
@@ -57,9 +57,9 @@ describe('EngineDiscovery', () => {
   });
 
   describe('#list()', () => {
-    const engine1 = { key: 'e1', engine: { ip: '10.0.0.1', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
-    const engine2 = { key: 'e2', engine: { ip: '10.0.0.2', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
-    const engine3 = { key: 'e3', engine: { ip: '10.0.0.3', port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' } };
+    const engine1 = { key: 'e1', engine: { networks: [{ name: 'default_network', ip: '10.0.0.1' }], port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' }, statusIp: '10.0.0.1' };
+    const engine2 = { key: 'e2', engine: { networks: [{ name: 'default_network', ip: '10.0.0.2' }], port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' }, statusIp: '10.0.0.2' };
+    const engine3 = { key: 'e3', engine: { networks: [{ name: 'default_network', ip: '10.0.0.3' }], port: 9077, metricsPort: 9999, health: { status: 'Feeling good' }, metrics: { status: 'Performance is good' }, status: 'OK' }, statusIp: '10.0.0.3' };
     const engines1 = [engine1, engine2];
     const engines2 = [engine2, engine3];
 

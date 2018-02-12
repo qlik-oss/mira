@@ -15,25 +15,25 @@ async function checkStatus() {
   }
 
   try {
-    health = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.port, '/healthcheck');
+    health = await this.statusFetcher.fetch(this.properties.statusIp, this.properties.engine.port, '/healthcheck');
     this.properties.engine.health = health;
-    metrics = await this.statusFetcher.fetch(this.properties.engine.ip, this.properties.engine.metricsPort, '/metrics');
+    metrics = await this.statusFetcher.fetch(this.properties.statusIp, this.properties.engine.metricsPort, '/metrics');
     this.properties.engine.metrics = metrics;
     this.properties.engine.status = 'OK';
     // Log and reset flag if last status check was failed
     if (!this.statusSuccessful) {
-      logger.info(`Engine health and metrics check restored on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+      logger.info(`Engine health and metrics check restored on ${this.properties.statusIp}:${this.properties.engine.port}`);
       this.statusSuccessful = true;
     }
   } catch (err) {
     // Only log on first failure
     if (this.statusSuccessful) {
       if (!health) {
-        logger.warn(`Engine health check failed on ${this.properties.engine.ip}:${this.properties.engine.port}`);
+        logger.warn(`Engine health check failed on ${this.properties.statusIp}:${this.properties.engine.port}`);
         this.properties.engine.health = undefined;
         this.properties.engine.status = 'UNHEALTHY';
       } else if (!metrics) {
-        logger.warn(`Engine metrics check failed on ${this.properties.engine.ip}:${this.properties.engine.metricsPort}`);
+        logger.warn(`Engine metrics check failed on ${this.properties.statusIp}:${this.properties.engine.metricsPort}`);
         this.properties.engine.metrics = undefined;
         this.properties.engine.status = 'NO_METRICS';
       }

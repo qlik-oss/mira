@@ -28,13 +28,13 @@ class DnsClient {
     }
 
     const engineInfoEntries = records.map((record) => {
-      const engine = {
-        ip: record.address,
-      };
+      const ip = record.address;
+      const engine = { networks: [{ ip }] };
       const key = record.address.replace(/\./g, '');
       return {
         key,
         engine,
+        statusIp: ip,
       };
     });
     return engineInfoEntries;

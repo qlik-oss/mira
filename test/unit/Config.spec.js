@@ -93,6 +93,8 @@ describe('Config', () => {
     afterEach(() => {
       delete process.env.MIRA_MODE;
       delete process.env.MIRA_QIX_ENGINE_HOSTNAME;
+      delete process.env.MIRA_SWARM_ENGINE_NETWORKS;
+      Config.engineNetworks = undefined; // Since init is static we need to reset config value
     });
 
     it('should return correct default value after initialization', () => {
@@ -123,6 +125,34 @@ describe('Config', () => {
       Config.init();
       expect(Config.mode).to.equal(miraMode);
       expect(Config.discoveryHostname).to.equal(qixHostname);
+    });
+
+    it('should set engine networks if multiple networks were defined and using swarm mode', () => {
+      process.env.MIRA_MODE = 'swarm';
+      process.env.MIRA_SWARM_ENGINE_NETWORKS = 'default_network,engine_network';
+      Config.init();
+      expect(Config.engineNetworks).to.deep.equal(['default_network', 'engine_network']);
+    });
+
+    it('should set engine network if one network was defined and using swarm mode', () => {
+      process.env.MIRA_MODE = 'swarm';
+      process.env.MIRA_SWARM_ENGINE_NETWORKS = 'default_network';
+      Config.init();
+      expect(Config.engineNetworks).to.deep.equal(['default_network']);
+    });
+
+    it('should not set any engine network if no network was defined', () => {
+      process.env.MIRA_MODE = 'swarm';
+      Config.engineNetworks = undefined;
+      Config.init();
+      expect(Config.engineNetworks).to.equal(undefined);
+    });
+
+    it('should not set any engine network if not using swarm mode', () => {
+      process.env.MIRA_MODE = 'none';
+      process.env.MIRA_SWARM_ENGINE_NETWORKS = 'default_network,engine_network';
+      Config.init();
+      expect(Config.engineNetworks).to.equal(undefined);
     });
   });
 });

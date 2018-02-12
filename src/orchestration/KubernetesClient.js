@@ -52,9 +52,10 @@ class KubernetesClient {
       });
     const engineInfoEntries = runningPods.map((pod) => {
       const labels = pod.metadata.labels;
-      const engine = { ip: pod.status.podIP };
+      const ip = pod.status.podIP;
+      const engine = { networks: [{ ip }] };
       const key = pod.metadata.uid;
-      return { key, engine, kubernetes: pod, labels };
+      return { key, engine, kubernetes: pod, labels, statusIp: ip };
     });
 
     return engineInfoEntries;

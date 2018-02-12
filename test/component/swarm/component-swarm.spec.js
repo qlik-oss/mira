@@ -14,16 +14,16 @@ describe('Mira in docker swarm mode', () => {
     // Mock docker.sock
     nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
       .reply(200, specData.endpointsResponse);
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, {
+    nock(`http://${specData.miraOutput[0].engine.networks[0].ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, {
       health: 'health is ok',
     });
-    nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, {
+    nock(`http://${specData.miraOutput[1].engine.networks[0].ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, {
       health: 'health is ok',
     });
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
+    nock(`http://${specData.miraOutput[0].engine.networks[0].ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
       metrics: 'some metrics',
     });
-    nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
+    nock(`http://${specData.miraOutput[0].engine.networks[0].ip}:${specData.miraOutput[0].engine.metricsPort}`).get('/metrics').times(10).reply(200, {
       metrics: 'some metrics',
     });
     app = require('../../../src/index'); // eslint-disable-line global-require

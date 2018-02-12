@@ -110,14 +110,15 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *   engineInfo:
  *     type: object
  *     required:
- *       - ip
+ *       - networks
  *       - port
  *       - metricsPort
  *       - status
  *     properties:
- *       ip:
- *         description: IP address to use when connecting to the Qlik Associative Engine.
- *         type: string
+ *       networks:
+ *         description: List of networks for the Qlik Associative Engine
+ *         type: array
+ *         $ref: '#/definitions/containerNetwork'
  *       port:
  *         description: Port to use when communicating with the Qlik Associative Engine API.
  *         type: number
@@ -154,6 +155,17 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *       - OK
  *       - UNHEALTHY
  *       - NO_METRICS
+ *   containerNetwork:
+ *     type: object
+ *     required:
+ *       - ip
+ *     properties:
+ *       ip:
+ *         description: IP address of the Qlik Associative Engine on a specific network
+ *         type: string
+ *       name:
+ *         description: Docker network name
+ *         type: string
  */
 
 module.exports = router;

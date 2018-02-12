@@ -2,7 +2,8 @@ info:
   title: A Qlik Associative Engine discovery service
   version: 0.1.2
   description: >-
-    REST API for discovering Qlik Associative Engines running in Docker containers.
+    REST API for discovering Qlik Associative Engines running in Docker
+    containers.
 host: 'localhost:9100'
 schemes:
   - http
@@ -58,14 +59,15 @@ definitions:
   engineInfo:
     type: object
     required:
-      - ip
+      - networks
       - port
       - metricsPort
       - status
     properties:
-      ip:
-        description: IP address to use when connecting to the Qlik Associative Engine.
-        type: string
+      networks:
+        description: List of networks for the Qlik Associative Engine
+        type: array
+        $ref: '#/definitions/containerNetwork'
       port:
         description: Port to use when communicating with the Qlik Associative Engine API.
         type: number
@@ -106,6 +108,17 @@ definitions:
       - OK
       - UNHEALTHY
       - NO_METRICS
+  containerNetwork:
+    type: object
+    required:
+      - ip
+    properties:
+      ip:
+        description: IP address of the Qlik Associative Engine on a specific network
+        type: string
+      name:
+        description: Docker network name
+        type: string
 responses: {}
 parameters: {}
 securityDefinitions: {}
