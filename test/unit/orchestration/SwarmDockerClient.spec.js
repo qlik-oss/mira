@@ -53,7 +53,7 @@ describe('SwarmDockerClient', () => {
 
     it('should return multiple IP address for an engine running on multiple networks', async () => {
       process.env.MIRA_MODE = 'swarm';
-      process.env.MIRA_ENGINE_NETWORKS = 'engine_network';
+      process.env.MIRA_SWARM_ENGINE_NETWORKS = 'engine_network';
       Config.init();
       listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
       const engines = await DockerClient.listEngines();
