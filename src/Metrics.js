@@ -23,10 +23,12 @@ new prom.Gauge({
 const collectDefaultMetrics = prom.collectDefaultMetrics;
 collectDefaultMetrics();
 
-// Create metric summary for api response times
-const responseTimeSummary = new prom.Summary({
-  name: `${version.name}_api_response_time_ms`,
-  help: `Time in milliseconds consumed from ${version.name} receiving a request until a response is sent`,
+// Create metric histogram for api response times
+
+const responseTimeHistogram = new prom.Histogram({
+  name: 'http_request_duration_seconds',
+  help: `Time in seconds consumed from ${version.name} receiving a request until a response is sent per path`,
+  labelNames: ['path'],
 });
 
 // function for recording time consumed for a request and adding as metric
@@ -34,10 +36,10 @@ function recordResponseTimes() {
   return async function responseTime(ctx, next) {
     const requestTime = Date.now();
     await next();
-    const diff = Math.ceil(Date.now() - requestTime);
-    responseTimeSummary.observe(diff);
+    const diff = Math.ceil((Date.now() - requestTime) / 1000);
+    responseTimeHistogram.observe({ path: ctx.request.url }, diff);
     if (diff > Config.allowedResponseTime) {
-      logger.warn(`Request for endpoint ${ctx.request.url} took ${diff} ms, which is longer than allowed ${Config.allowedResponseTime} ms`);
+      logger.warn(`Request for endpoint ${ctx.request.url} took ${diff} s, which is longer than allowed ${Config.allowedResponseTime} s`);
     }
   };
 }

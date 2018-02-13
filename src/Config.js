@@ -6,7 +6,7 @@ const defaultEngineMetricsPort = 9090;
 const defaultEngineDiscoveryInterval = 10000;
 const defaultEngineUpdateInterval = 10000;
 const defaultKubernetesProxyPort = 8001;
-const defaultAllowedResponseTime = 1000;
+const defaultAllowedResponseTimeSeconds = 1;
 const defaultDiscoveryLabel = 'qix-engine';
 const defaultEngineAPIPortLabel = 'qix-engine-api-port';
 const defaultEngineMetricsPortLabel = 'qix-engine-metrics-port';
@@ -132,7 +132,7 @@ class Config {
     if (Config.mode === 'dns' && !Config.discoveryHostname) {
       throw new Error('Running Mira in dns mode requires the mira discovery hostname (MIRA_DISCOVERY_HOSTNAME) to be set');
     }
-    logger.info(`Mira discovery hostname is set to ${Config.discoveryHostname}`);
+    logger.info(`Mira discovery hostname for dns mode is ${Config.discoveryHostname ? `set to ${Config.discoveryHostname}` : 'not set'}`);
 
     /**
      * @prop {string} rollbarToken - The rollbar cloud access token used for error reporting.
@@ -152,15 +152,15 @@ class Config {
     }
 
     /**
-     * @prop {number} allowedResponseTime - The maximum allowed time in milliseconds from when a request is received by Mira
+     * @prop {number} allowedResponseTime - The maximum allowed time in seconds from when a request is received by Mira
      * until a response is being sent.
      * @static
      */
     Config.allowedResponseTime = parseInt(process.env.MIRA_ALLOWED_RESPONSE_TIME, 10);
     if (!Config.allowedResponseTime || isNaN(Config.allowedResponseTime)) {
-      Config.allowedResponseTime = defaultAllowedResponseTime;
+      Config.allowedResponseTime = defaultAllowedResponseTimeSeconds;
     }
-    logger.info(`Maximum allowed response time for Mira is: ${Config.allowedResponseTime} ms`);
+    logger.info(`Maximum allowed response time for Mira is: ${Config.allowedResponseTime} second(s)`);
 
     /**
      * @prop {string} engineNetworks - Docker networks Mira should use for status checking. Only applicable in swarm mode.
