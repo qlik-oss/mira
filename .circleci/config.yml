@@ -138,7 +138,7 @@ jobs:
             # Spin up a local setup with the previously built docker image.
             VER=$(cat /tmp/workspace/version.txt)
             TAG=:${VER}
-            ACCEPT_EULA=yes
+            export ACCEPT_EULA=yes
             docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
       - run:
           name: Check health of the Mira service
@@ -267,7 +267,7 @@ jobs:
             # Spin up a local setup with the previously built docker image.
             VER=$(cat /tmp/workspace/version.txt)
             TAG=:${VER}
-            ACCEPT_EULA=yes
+            export ACCEPT_EULA=yes
             docker stack deploy -c ./examples/dns/docker-compose-dns.yml --with-registry-auth mira-dns
       - run:
           name: Check health of the Mira service

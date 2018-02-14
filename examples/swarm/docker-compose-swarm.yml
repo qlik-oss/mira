@@ -14,6 +14,7 @@ services:
 
   qix-engine:
     image: qlikea/engine:12.138.0
+    command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - 9076:9076
     deploy:
