@@ -13,7 +13,6 @@ const defaultEngineMetricsPortLabel = 'qix-engine-metrics-port';
  * Class representing the configuration options for running the service.
  */
 class Config {
-
   /**
    * Initializes the configuration.
    * This method must be called before any of the static properties of the class are available.
@@ -166,7 +165,7 @@ class Config {
     const configuration = {};
     Object.keys(Config).forEach((key) => {
       const val = Config[key];
-      if (val && !key.startsWith('default')) {
+      if (val) {
         configuration[key] = val;
       }
     });
