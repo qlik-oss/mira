@@ -39,6 +39,14 @@ describe('Mira in kubernetes mode', () => {
       expect(res.body[0].engine.status).to.equal('OK');
     });
 
+    it('should return all the container labels', async () => {
+      const res = await request(app.listen()).get('/v1/engines');
+      expect(res.body[0].engine.labels.service).to.equal('engine');
+      expect(res.body[0].engine.labels['qix-engine']).to.equal('');
+      expect(res.body[0].engine.labels['qix-engine-api-port']).to.equal('9076');
+      expect(res.body[0].engine.labels['qix-engine-metrics-port']).to.equal('9090');
+    });
+
     it('should return the local and swarm properties as undefined', async () => {
       const res = await request(app.listen()).get('/v1/engines');
       expect(res.body[0].local).to.be.undefined;

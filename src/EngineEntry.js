@@ -68,7 +68,7 @@ class EngineEntry {
     this.statusFetcher = statusFetcher || new EngineStatusFetcher();
 
     // Set api and metrics port of the engine
-    const labels = this.properties.labels || {};
+    const labels = this.properties.engine.labels || {};
 
     if (labels[Config.engineAPIPortLabel]) {
       this.properties.engine.port = parseInt(labels[Config.engineAPIPortLabel], 10);

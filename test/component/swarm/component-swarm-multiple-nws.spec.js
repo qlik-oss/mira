@@ -8,7 +8,7 @@ process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
 process.env.MIRA_ENGINE_UPDATE_INTERVAL = 1000;
 process.env.MIRA_SWARM_ENGINE_NETWORKS = 'engine_network';
 
-describe.only('Mira in docker swarm mode with multiple networks', () => {
+describe('Mira in docker swarm mode with multiple networks', () => {
   let app;
 
   before(async () => {
