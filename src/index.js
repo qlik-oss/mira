@@ -12,7 +12,8 @@ Config.init();
 const metrics = require('./Metrics');
 const router = require('./Routes');
 
-logger.info(`Build info: ${JSON.stringify(version)}`);
+logger.info(`Mira build info: ${JSON.stringify(version)}`);
+logger.info(`Mira configuration: ${JSON.stringify(Config.getConfiguration())}`);
 
 const app = new Koa();
 const document = swagger.loadDocumentSync(path.join(__dirname, './../doc/api-doc.yml'));

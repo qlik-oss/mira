@@ -1,5 +1,3 @@
-const logger = require('./logger/Logger').get();
-
 const defaultMiraApiPort = 9100;
 const defaultEngineAPIPort = 9076;
 const defaultEngineMetricsPort = 9090;
@@ -28,7 +26,6 @@ class Config {
     if (!Config.miraApiPort || isNaN(Config.miraApiPort)) {
       Config.miraApiPort = defaultMiraApiPort;
     }
-    logger.info(`Mira API port set to: ${Config.miraApiPort}`);
 
     /**
      * @prop {string} discoveryLabel - Label used to discover Qlik Associative Engine instances.
@@ -36,7 +33,6 @@ class Config {
      */
     Config.discoveryLabel = process.env.MIRA_DISCOVERY_LABEL ?
       process.env.MIRA_DISCOVERY_LABEL.trim() : defaultDiscoveryLabel;
-    logger.info(`Discovery label set to: ${Config.discoveryLabel}`);
 
     /**
      * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the Qlik Associative Engine,
@@ -53,7 +49,6 @@ class Config {
     if (!Config.engineAPIPortLabel) {
       Config.engineAPIPortLabel = defaultEngineAPIPortLabel;
     }
-    logger.info(`Engine API port label set to: ${Config.engineAPIPortLabel}`);
 
     /**
      * @prop {number} defaultEngineMetricsPort - The default port to use for retrieving the Qlik Associative Engine metrics,
@@ -70,7 +65,6 @@ class Config {
     if (!Config.engineMetricsPortLabel) {
       Config.engineMetricsPortLabel = defaultEngineMetricsPortLabel;
     }
-    logger.info(`Qlik Associative Engine Metrics port label set to: ${Config.engineMetricsPortLabel}`);
 
     /**
      * @prop {number} engineDiscoveryInterval - The engine discovery interval in
@@ -82,7 +76,6 @@ class Config {
     if (!Config.engineDiscoveryInterval || isNaN(Config.engineDiscoveryInterval)) {
       Config.engineDiscoveryInterval = defaultEngineDiscoveryInterval;
     }
-    logger.info(`Qlik Associative Engine discovery interval set to: ${Config.engineDiscoveryInterval}`);
 
     /**
      * @prop {number} engineUpdateInterval - The engine health and metrics update interval in milliseconds.
@@ -92,7 +85,6 @@ class Config {
     if (!Config.engineUpdateInterval || isNaN(Config.engineUpdateInterval)) {
       Config.engineUpdateInterval = defaultEngineUpdateInterval;
     }
-    logger.info(`Qlik Associative Engine update interval set to: ${Config.engineUpdateInterval}`);
 
     /**
      * @prop {number} kubernetesProxyPort - The proxy port to the Kubernetes API server used in
@@ -103,7 +95,6 @@ class Config {
     if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
       Config.kubernetesProxyPort = defaultKubernetesProxyPort;
     }
-    logger.info(`Kubernetes api server port set to: ${Config.kubernetesProxyPort}`);
 
     /**
      * @prop {string} mode - The operation mode of mira which can be 'local' or 'swarm'.
@@ -114,14 +105,12 @@ class Config {
     if (SUPPORTED_MODES.indexOf(Config.mode) === -1) {
       throw new Error(`Incorrect operation mode. Supported modes are: ${SUPPORTED_MODES.join(', ')}`);
     }
-    logger.info(`Mira is running in ${Config.mode} mode`);
 
     /**
      * @prop {boolean} containerized - If mira is running inside a docker container or not.
      * @static
      */
     Config.containerized = process.env.MIRA_CONTAINERIZED && process.env.MIRA_CONTAINERIZED.toLowerCase() === 'true';
-    logger.info(`Mira is ${Config.containerized ? '' : 'not '}running inside a docker container`);
 
 
     /**
@@ -132,14 +121,12 @@ class Config {
     if (Config.mode === 'dns' && !Config.discoveryHostname) {
       throw new Error('Running Mira in dns mode requires the mira discovery hostname (MIRA_DISCOVERY_HOSTNAME) to be set');
     }
-    logger.info(`Mira discovery hostname for dns mode is ${Config.discoveryHostname ? `set to ${Config.discoveryHostname}` : 'not set'}`);
 
     /**
      * @prop {string} rollbarToken - The rollbar cloud access token used for error reporting.
      * @static
      */
     Config.rollbarToken = process.env.MIRA_ROLLBAR_ACCESS_TOKEN || null;
-    logger.info(`Mira is ${Config.rollbarToken ? '' : 'not '}configured to use Rollbar`);
 
     /**
      * @prop {string} rollbarLevels - The log level(s) that should be reported to rollbar.
@@ -148,7 +135,6 @@ class Config {
     if (Config.rollbarToken) {
       // e.g. `MIRA_ROLLBAR_LEVELS=warning,error`
       Config.rollbarLevels = (process.env.MIRA_ROLLBAR_LEVELS || 'error').split(',');
-      logger.info(`Mira will report '${Config.rollbarLevels}' log levels to Rollbar`);
     }
 
     /**
@@ -160,7 +146,6 @@ class Config {
     if (!Config.allowedResponseTime || isNaN(Config.allowedResponseTime)) {
       Config.allowedResponseTime = defaultAllowedResponseTimeSeconds;
     }
-    logger.info(`Maximum allowed response time for Mira is: ${Config.allowedResponseTime} second(s)`);
 
     /**
      * @prop {string} engineNetworks - Docker networks Mira should use for status checking. Only applicable in swarm mode.
@@ -170,8 +155,21 @@ class Config {
     if (Config.mode === 'swarm' && networks) {
       // e.g. `MIRA_SWARM_ENGINE_NETWORKS=default_network,engine_network`
       Config.engineNetworks = networks.split(',');
-      logger.info(`Mira will use docker networks ${Config.engineNetworks} for status checks`);
     }
+  }
+
+  /**
+   * Returns an object with the configured properties
+  */
+  static getConfiguration() {
+    const configuration = {};
+    Object.keys(Config).forEach((key) => {
+      const val = Config[key];
+      if (val) {
+        configuration[key] = val;
+      }
+    });
+    return configuration;
   }
 }
 
