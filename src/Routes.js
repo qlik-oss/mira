@@ -124,6 +124,9 @@ router.get(`/${enginesEndpoint}`, async (ctx) => {
  *          type: object
  *       metrics:
  *          description: Last metrics endpoint response of the Qlik Associative Engine.
+ *       labels:
+ *          description: Container labels
+ *          type: object
  *   containerInfo:
  *     type: object
  *     required:
