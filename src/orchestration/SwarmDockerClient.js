@@ -107,9 +107,8 @@ class SwarmDockerClient {
       const key = task.ID;
       return {
         key,
-        engine: { networks },
+        engine: { networks, labels },
         swarm: task,
-        labels,
         statusIp,
       };
     });
