@@ -36,6 +36,7 @@ function pre_flight_checks() {
 function check_release_type() {
   if [ "$RELEASE_TYPE" != patch ] && [ "$RELEASE_TYPE" != minor ] && [ "$RELEASE_TYPE" != major ]; then
     echo "Invalid RELEASE_TYPE specified"
+    print_usage
     exit 1
   fi
 }
