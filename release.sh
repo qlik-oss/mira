@@ -5,14 +5,14 @@ REPO=qlik-ea/mira
 
 function print_usage {
   echo "Usage:"
-  echo "  release.sh"
+  echo "  RELEASE_TYPE=patch release.sh"
   echo "  release.sh (-?, -h, --help)"
   echo
   echo "Options:"
   echo "  -?, -h, --help  - Prints this usage information."
   echo
   echo "Environment variables:"
-  echo "  - RELEASE_TYPE - Optional. Set to patch, minor or major. Defaults to patch."
+  echo "  - RELEASE_TYPE - Required. Set to patch, minor or major."
   echo
   echo "If RELEASE_TYPE is major, or minor, the released version will be the bumped version"
   echo "and development continues on the next patch version."
