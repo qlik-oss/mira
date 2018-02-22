@@ -18,7 +18,7 @@ Contributions are welcome and encouraged! See more info at [Open Source at Qlik 
 
 ## Docker Image
 
-Mira is distributed to end users as a the [qlikea/mira](https://hub.docker.com/r/qlikea/mira) Docker image. Also see the [Dockerfile](./Dockerfile). The version file needs to be generated before building the Docker image locally.
+Mira is distributed to end users as a the [qlikea/mira](https://hub.docker.com/r/qlikea/mira) Docker image. Also see the [Dockerfile](./Dockerfile). The [version file needs to be generated](#generating-version-file) before building the Docker image locally.
 
 ## Running Mira as a Plain Node.js Process
 
