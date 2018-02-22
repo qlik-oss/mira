@@ -5,14 +5,14 @@ REPO=qlik-ea/mira
 
 function print_usage {
   echo "Usage:"
-  echo "  release.sh"
+  echo "  RELEASE_TYPE=patch release.sh"
   echo "  release.sh (-?, -h, --help)"
   echo
   echo "Options:"
   echo "  -?, -h, --help  - Prints this usage information."
   echo
   echo "Environment variables:"
-  echo "  - RELEASE_TYPE - Optional. Set to patch, minor or major. Defaults to patch."
+  echo "  - RELEASE_TYPE - Required. Set to patch, minor or major."
   echo
   echo "If RELEASE_TYPE is major, or minor, the released version will be the bumped version"
   echo "and development continues on the next patch version."
@@ -34,13 +34,9 @@ function pre_flight_checks() {
 }
 
 function check_release_type() {
-  if [ "$RELEASE_TYPE" == "" ]; then
-    echo "No RELEASE_TYPE specified - assuming patch"
-    export RELEASE_TYPE=patch
-  fi
-
   if [ "$RELEASE_TYPE" != patch ] && [ "$RELEASE_TYPE" != minor ] && [ "$RELEASE_TYPE" != major ]; then
     echo "Invalid RELEASE_TYPE specified"
+    print_usage
     exit 1
   fi
 }
