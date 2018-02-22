@@ -8,14 +8,16 @@ RUN npm install --quiet --production
 COPY doc/api-doc.yml doc/
 COPY src src/
 COPY version.json ./
+COPY docker-entrypoint.sh ./
 
 # Only copy needed pieces from the build step
 FROM node:8.9.3-alpine
 
 WORKDIR /app
 COPY --from=builder /app .
+RUN chmod +x ./docker-entrypoint.sh
 
-RUN apk --update add curl
+RUN apk update && apk add bash && apk add curl && rm -rf /var/cache/apk/*
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK CMD curl -fs http://localhost:$MIRA_API_PORT/v1/health || exit 1
@@ -26,4 +28,4 @@ EXPOSE $MIRA_API_PORT
 
 ENV MIRA_CONTAINERIZED true
 
-ENTRYPOINT ["node", "./src/index.js"]
+ENTRYPOINT ["./docker-entrypoint.sh", "node", "./src/index.js"]
