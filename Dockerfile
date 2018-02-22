@@ -15,6 +15,7 @@ FROM node:8.9.3-alpine
 
 WORKDIR /app
 COPY --from=builder /app .
+RUN chmod +x ./docker-entrypoint.sh
 
 RUN apk --update add curl
 
