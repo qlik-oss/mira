@@ -28,4 +28,4 @@ EXPOSE $MIRA_API_PORT
 
 ENV MIRA_CONTAINERIZED true
 
-ENTRYPOINT ["./docker-entrypoint.sh", "node", "./src/index.js"]
+ENTRYPOINT ["./docker-entrypoint.sh", "node ./src/index.js"]
