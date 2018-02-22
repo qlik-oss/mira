@@ -8,6 +8,7 @@ RUN npm install --quiet --production
 COPY doc/api-doc.yml doc/
 COPY src src/
 COPY version.json ./
+COPY docker-entrypoint.sh ./
 
 # Only copy needed pieces from the build step
 FROM node:8.9.3-alpine
