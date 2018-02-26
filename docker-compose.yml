@@ -16,7 +16,7 @@ services:
     ports:
       - "9176:9076"
     labels:
-      qix-engine:
+      qix-engine: qix-engine
 
   engine2:
     image: qlikea/engine:12.139.0
@@ -24,4 +24,4 @@ services:
     ports:
       - "9276:9076"
     labels:
-      qix-engine:
+      qix-engine: qix-engine

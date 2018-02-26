@@ -18,7 +18,7 @@
         }
       ],
       "Labels": {
-        "qix-engine": "",
+        "qix-engine": "qix-engine",
         "foo": "foo1",
         "bar": "bar1",
         "qix-engine-api-port": "9176",
