@@ -20,4 +20,4 @@ services:
     deploy:
       replicas: 2
     labels:
-      qix-engine: "qix-engine"
+      qix-engine: ""

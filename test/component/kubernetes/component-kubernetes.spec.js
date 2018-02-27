@@ -42,7 +42,7 @@ describe('Mira in kubernetes mode', () => {
     it('should return all the container labels', async () => {
       const res = await request(app.listen()).get('/v1/engines');
       expect(res.body[0].engine.labels.service).to.equal('engine');
-      expect(res.body[0].engine.labels['qix-engine']).to.equal('qix-engine');
+      expect(res.body[0].engine.labels['qix-engine']).to.equal('');
       expect(res.body[0].engine.labels['qix-engine-api-port']).to.equal('9076');
       expect(res.body[0].engine.labels['qix-engine-metrics-port']).to.equal('9090');
     });

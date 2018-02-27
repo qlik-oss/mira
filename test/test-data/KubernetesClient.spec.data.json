@@ -17,7 +17,7 @@
           "resourceVersion": "113204",
           "creationTimestamp": "2017-08-22T11:17:50Z",
           "labels": {
-            "qix-engine": "qix-engine",
+            "qix-engine": "",
             "pod-template-hash": "4163433257",
             "service": "engine",
             "qix-engine-api-port": "9076",
