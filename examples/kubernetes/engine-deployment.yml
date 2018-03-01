@@ -13,7 +13,7 @@ spec:
       labels:
         app: engine
         service: engine
-        qix-engine:
+        qix-engine: ""
     spec:
       containers:
       - name: engine
