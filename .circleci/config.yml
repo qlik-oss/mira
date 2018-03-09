@@ -191,20 +191,23 @@ jobs:
       - run:
           name: Install Kubectl
           command: |
-            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
       - run:
           name: Install Minikube
           command: |
-            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+            curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
       - run:
           name: Start Minikube
           command: |
-            sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
+            sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0 --extra-config=apiserver.Authorization.Mode=RBAC
             sudo minikube update-context
             sleep 10
       - run:
           name: Add docker credentials as kubernetes secret
           command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
+      - run:
+          name: Give default service account view access to Kubernetes API
+          command: sudo kubectl create -f ./examples/kubernetes/rbac/rbac-config.yaml
       - run:
           name: Accept EULA
           command: grep -rl AcceptEULA ./examples/kubernetes/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
