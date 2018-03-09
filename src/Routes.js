@@ -2,7 +2,7 @@ const EngineDiscovery = require('./EngineDiscovery');
 const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
 const Router = require('koa-router');
-const prom = require('prom-client');
+const prom = require('http-metrics-middleware').promClient;
 const logger = require('./logger/Logger').get();
 
 

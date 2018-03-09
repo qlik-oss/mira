@@ -64,7 +64,6 @@ describe('GET /metrics', () => {
     expect(res.text.length).to.not.equal(0);
     expect(res.text).to.contain('mira_build_info');
     expect(res.text).to.contain('http_request_duration_seconds');
-    expect(res.text).to.contain('http_request_duration_seconds_total');
   });
 });
 

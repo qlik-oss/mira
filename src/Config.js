@@ -4,7 +4,6 @@ const defaultEngineMetricsPort = 9090;
 const defaultEngineDiscoveryInterval = 10000;
 const defaultEngineUpdateInterval = 10000;
 const defaultKubernetesProxyPort = 8001;
-const defaultAllowedResponseTimeSeconds = 1;
 const defaultDiscoveryLabel = 'qix-engine';
 const defaultEngineAPIPortLabel = 'qix-engine-api-port';
 const defaultEngineMetricsPortLabel = 'qix-engine-metrics-port';
@@ -135,16 +134,6 @@ class Config {
     if (Config.rollbarToken) {
       // e.g. `MIRA_ROLLBAR_LEVELS=warning,error`
       Config.rollbarLevels = (process.env.MIRA_ROLLBAR_LEVELS || 'error').split(',');
-    }
-
-    /**
-     * @prop {number} allowedResponseTime - The maximum allowed time in seconds from when a request is received by Mira
-     * until a response is being sent.
-     * @static
-     */
-    Config.allowedResponseTime = parseInt(process.env.MIRA_ALLOWED_RESPONSE_TIME, 10);
-    if (!Config.allowedResponseTime || isNaN(Config.allowedResponseTime)) {
-      Config.allowedResponseTime = defaultAllowedResponseTimeSeconds;
     }
 
     /**
