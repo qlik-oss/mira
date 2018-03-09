@@ -9,9 +9,13 @@ const Config = require('./Config');
 
 Config.init();
 
-const metrics = require('./Metrics');
+const MetricsMiddleware = require('http-metrics-middleware');
+const c2k = require('koa-connect');
+
+const metrics = new MetricsMiddleware();
 const router = require('./Routes');
 
+metrics.initBuildInfo(version.name, version.version, version.revision, version.buildTime);
 logger.info(`Mira build info: ${JSON.stringify(version)}`);
 logger.info(`Mira configuration: ${JSON.stringify(Config.getConfiguration())}`);
 
@@ -59,7 +63,7 @@ process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
 
 app
-  .use(metrics())
+  .use(c2k(metrics.initRoutes()))
   .use(swagger2koa.ui(document, '/openapi'))
   .use(router.routes())
   .use(router.allowedMethods());
