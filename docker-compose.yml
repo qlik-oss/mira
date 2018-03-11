@@ -11,7 +11,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   engine1:
-    image: qlikea/engine:12.145.0
+    image: qlikea/engine:12.150.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9176:9076"
@@ -19,7 +19,7 @@ services:
       qix-engine: ""
 
   engine2:
-    image: qlikea/engine:12.145.0
+    image: qlikea/engine:12.150.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9276:9076"
