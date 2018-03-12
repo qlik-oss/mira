@@ -4,7 +4,6 @@ const logger = require('./logger/Logger').get();
  * Class providing a central repository for discovered QIX engine instances.
  */
 class EngineMap {
-
   /**
    * Creates new {@link EngineMap}.
    */

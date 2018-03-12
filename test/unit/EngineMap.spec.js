@@ -41,7 +41,7 @@ describe('EngineMap', () => {
   it('should handle empty deletes', () => {
     engineMap.add('a', getEntry());
     engineMap.add('b', getEntry());
-    const entries = engineMap.entries;
+    const { entries } = engineMap;
     engineMap.delete([]);
     expect(entries).to.deep.equal(engineMap.entries);
   });

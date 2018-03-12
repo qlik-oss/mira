@@ -28,8 +28,7 @@ async function discover() {
     this.engineMap.delete(keysToDelete);
     engines.forEach((item) => {
       if (!this.engineMap.has(item.key)) {
-        const engineEntry = new EngineEntry(
-          item, this.updateInterval);
+        const engineEntry = new EngineEntry(item, this.updateInterval);
         logger.info(`Engine discovered at address: ${item.statusIp}:${engineEntry.properties.engine.port} with key: ${item.key}`);
         this.engineMap.add(item.key, engineEntry);
       }

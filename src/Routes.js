@@ -15,7 +15,8 @@ const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
   OrchestrationClient,
   Config.engineDiscoveryInterval,
-  Config.engineUpdateInterval);
+  Config.engineUpdateInterval,
+);
 
 const healthEndpoint = 'health';
 const metricsEndpoint = 'metrics';
