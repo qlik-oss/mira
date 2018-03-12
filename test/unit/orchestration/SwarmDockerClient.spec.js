@@ -58,7 +58,7 @@ describe('SwarmDockerClient', () => {
       listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specDataMultipleNetworks));
       const engines = await DockerClient.listEngines();
       expect(listTasksStub).to.have.been.calledOnce;
-      const networks = engines[0].engine.networks;
+      const { networks } = engines[0].engine;
       expect(networks.length).to.equal(2);
       expect(networks).to.deep.include({
         name: 'mira-stack_default',

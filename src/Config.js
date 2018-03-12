@@ -22,7 +22,7 @@ class Config {
      * @static
      */
     Config.miraApiPort = parseInt(process.env.MIRA_API_PORT, 10);
-    if (!Config.miraApiPort || isNaN(Config.miraApiPort)) {
+    if (!Config.miraApiPort || Number.isNaN(Config.miraApiPort)) {
       Config.miraApiPort = defaultMiraApiPort;
     }
 
@@ -72,7 +72,7 @@ class Config {
      * @static
      */
     Config.engineDiscoveryInterval = parseInt(process.env.MIRA_ENGINE_DISCOVERY_INTERVAL, 10);
-    if (!Config.engineDiscoveryInterval || isNaN(Config.engineDiscoveryInterval)) {
+    if (!Config.engineDiscoveryInterval || Number.isNaN(Config.engineDiscoveryInterval)) {
       Config.engineDiscoveryInterval = defaultEngineDiscoveryInterval;
     }
 
@@ -81,7 +81,7 @@ class Config {
      * @static
      */
     Config.engineUpdateInterval = parseInt(process.env.MIRA_ENGINE_UPDATE_INTERVAL, 10);
-    if (!Config.engineUpdateInterval || isNaN(Config.engineUpdateInterval)) {
+    if (!Config.engineUpdateInterval || Number.isNaN(Config.engineUpdateInterval)) {
       Config.engineUpdateInterval = defaultEngineUpdateInterval;
     }
 
@@ -91,7 +91,7 @@ class Config {
      * @static
      */
     Config.kubernetesProxyPort = parseInt(process.env.MIRA_KUBERNETES_PROXY_PORT, 10);
-    if (!Config.kubernetesProxyPort || isNaN(Config.kubernetesProxyPort)) {
+    if (!Config.kubernetesProxyPort || Number.isNaN(Config.kubernetesProxyPort)) {
       Config.kubernetesProxyPort = defaultKubernetesProxyPort;
     }
 

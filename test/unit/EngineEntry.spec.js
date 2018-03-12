@@ -48,7 +48,7 @@ describe('EngineEntry', () => {
 
       it('should fetch health periodically', async () => {
         entry.startStatusChecks();
-        await sleep(30);  // Should make room for at least two time-outs.
+        await sleep(30); // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
         expect(entry.properties.engine.health).to.deep.equal(healthOk);
@@ -57,7 +57,7 @@ describe('EngineEntry', () => {
 
       it('should fetch metrics periodically', async () => {
         entry.startStatusChecks();
-        await sleep(30);  // Should make room for at least two time-outs.
+        await sleep(30); // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/metrics');
         expect(entry.properties.engine.metrics).to.deep.equal(metrics);
@@ -67,7 +67,7 @@ describe('EngineEntry', () => {
       it('should be possible to restart', async () => {
         entry.startStatusChecks();
         await sleep(30);
-        const callCount = fetchStub.callCount;
+        const { callCount } = fetchStub;
         entry.startStatusChecks();
         await sleep(30);
         entry.stopStatusChecks();
@@ -90,7 +90,7 @@ describe('EngineEntry', () => {
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').throws('Not feeling so good!');
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
         entry.startStatusChecks();
-        await sleep(30);  // Should make room for at least two time-outs.
+        await sleep(30); // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
         expect(entry.properties.engine.health).to.be.undefined;
@@ -102,7 +102,7 @@ describe('EngineEntry', () => {
         fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
         fetchStub.withArgs('10.10.10.10', 9999, '/metrics').throws('Too busy!');
         entry.startStatusChecks();
-        await sleep(30);  // Should make room for at least two time-outs.
+        await sleep(30); // Should make room for at least two time-outs.
         expect(fetchStub.callCount >= 2).to.be.true;
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9098, '/healthcheck');
         expect(fetchStub).to.be.calledWith('10.10.10.10', 9999, '/metrics');

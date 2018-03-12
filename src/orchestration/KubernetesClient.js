@@ -16,7 +16,7 @@ function kubeHttpGet(path) {
       });
       response.on('error', (d) => {
         response.resume();
-        reject(`Kubernetes ${path} returned HTTP error (response.on): ${d}`);
+        reject(new Error(`Kubernetes ${path} returned HTTP error (response.on): ${d}`));
       });
       response.on('end', () => {
         try {
@@ -26,7 +26,7 @@ function kubeHttpGet(path) {
         }
       });
     }).on('error', (d) => {
-      reject(`Kubernetes ${path} returned HTTP error (get.on): ${d}`);
+      reject(new Error(`Kubernetes ${path} returned HTTP error (get.on): ${d}`));
     });
   });
 }
@@ -41,21 +41,22 @@ class KubernetesClient {
    */
   static async listEngines() {
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
-    const runningPods = pods.items.filter(
-      (pod) => {
-        if (pod.status.phase.toLowerCase() === 'running') {
-          logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
-          return true;
-        }
-        logger.debug(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
-        return false;
-      });
+    const runningPods = pods.items.filter((pod) => {
+      if (pod.status.phase.toLowerCase() === 'running') {
+        logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
+        return true;
+      }
+      logger.debug(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
+      return false;
+    });
     const engineInfoEntries = runningPods.map((pod) => {
-      const labels = pod.metadata.labels;
+      const { labels } = pod.metadata;
       const ip = pod.status.podIP;
       const engine = { networks: [{ ip }], labels };
       const key = pod.metadata.uid;
-      return { key, engine, kubernetes: pod, statusIp: ip };
+      return {
+        key, engine, kubernetes: pod, statusIp: ip,
+      };
     });
 
     return engineInfoEntries;

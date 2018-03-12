@@ -54,7 +54,9 @@ class LocalDockerClient {
             const ip = getIpAddress(local);
             const engine = { networks: [{ ip }], labels };
             const key = local.Id;
-            return { key, engine, local, statusIp: ip };
+            return {
+              key, engine, local, statusIp: ip,
+            };
           });
           resolve(engineInfoEntries);
         } else {
