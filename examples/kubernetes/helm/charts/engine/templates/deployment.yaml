@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    prometheus.io/scrape: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+        service: engine
+        qix-engine: ""
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        args: ["-S","AcceptEULA={{ required "You need to accept the Qlik Core EULA in your values.yaml file." .Values.acceptEULA }}"]
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+        - containerPort: {{ .Values.service.prometheusPort }}
+      imagePullSecrets:
+      - name: {{ .Values.global.imagePullSecrets }}

@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        ports:
+        - containerPort: {{ default 9100 .Values.service.internalPort }}
+        env:
+        - name: MIRA_MODE
+          value: {{default "kubernetes" .Values.miraMode}}
+      - name: {{ .Values.sideCartContainerName }}
+        image: {{ .Values.sideCartContainerImage }}
+        args: {{ .Values.sideCartContainerArgs }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+      imagePullSecrets:
+      - name: {{ .Values.global.imagePullSecrets }}

@@ -1,0 +1,15 @@
+global:
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: dockerhub
+  # Set serviceType to NodePort if running in minikube
+  serviceType: LoadBalancer
+
+engine:
+  image: qlikea/engine:12.150.0
+  # change to "yes" if you accept the Qlik Core EULA:
+  acceptEULA: ""
+
+mira:
+  image: qlikea/mira:0.1.0
+  sideCartContainerName: kubectl
+  sideCartContainerImage: gcr.io/google_containers/kubectl:v0.18.0-350-gfb3305edcf6c1a

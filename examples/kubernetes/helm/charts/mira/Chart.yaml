@@ -1,0 +1,7 @@
+apiVersion: v1
+description: Mira engine discovery
+name: mira
+version: 0.1.0
+home: https://github.com/qlik-ea/mira
+sources:
+  - https://github.com/qlik-ea/mira

@@ -155,30 +155,15 @@ jobs:
               exit 1
             fi
       - run:
-          name: Verify number of engines found
+          name: Verify number of QIX Engines found
           command: |
-            set +e
+            ./.circleci/verify_qix_engines.sh "http://localhost:9100"
 
-            # Check that Mira returns correct number of qix engines
-            RETRIES=0
-            EXPECTED_NBR_ENGINES=2
-            while (( NBR_ENGINES != "$EXPECTED_NBR_ENGINES" && RETRIES != 10 )); do
-              NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
-              echo "Mira returned $NBR_ENGINES qix engines"
-              sleep 2
-              RETRIES=$((RETRIES + 1 ))
-            done
-
-            if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
-              exit 1
-            fi
-
-  # Job for testing Mira in kubernetes
+  # Job for testing Mira in kubernetes mode with helm and plain charts
   kubernetes:
     machine: true
     environment:
-      CHANGE_MINIKUBE_NONE_USER: true
+      CHANGE_MINIKUBE_NONE_USER: "true"
       DOCKER_REPO: qlikea/mira
     working_directory: ~/mira
     steps:
@@ -188,6 +173,16 @@ jobs:
           name: Import previously built docker image
           command: docker load < /tmp/workspace/mira_image.tar
       - checkout
+      - run:
+          name: Install Helm
+          command: |
+            curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+      - run:
+          name: Lint charts
+          command: |
+            helm lint ./examples/kubernetes/helm/charts/mira
       - run:
           name: Install Kubectl
           command: |
@@ -201,21 +196,58 @@ jobs:
           command: |
             sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0 --extra-config=apiserver.Authorization.Mode=RBAC
             sudo minikube update-context
-            sleep 10
+      - run:
+          name: Install socat (needed by helm)
+          command: |
+            sudo apt-get update
+            sudo apt-get install socat
+      - run:
+          name: Install nsenter (needed by helm)
+          command: |
+            cd /tmp; curl https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.25/util-linux-2.25.tar.gz | tar -zxf-; cd util-linux-2.25;
+            sudo apt-get install autopoint autoconf libtool automake
+            ./configure --without-python --disable-all-programs --enable-nsenter --without-ncurses
+            sudo make nsenter; sudo cp nsenter /usr/local/bin
       - run:
           name: Add docker credentials as kubernetes secret
           command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
       - run:
+          name: Create service account for cluster-admin role (Helm)
+          command: sudo kubectl create -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
+      - run:
+          name: Helm init and wait for tiller to be running
+          command: sudo helm init --service-account tiller --debug; sudo kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system;
+      - run:
+          name: Helm install helm charts
+          command: sudo helm install ./examples/kubernetes/helm/ --set global.setType=NodePort,mira.image=$DOCKER_REPO:$VER,engine.acceptEULA=yes --name test --debug
+      - run:
+          name: Check health of services
+          command: |
+            # Check mira health
+            MIRA_URL=$(sudo minikube service test-mira --url)
+            curl -fs "$MIRA_URL/v1/health"
+      - run:
+          name: Verify number of QIX Engines found
+          command: |
+            MIRA_URL=$(sudo minikube service test-mira --url)
+            ./.circleci/verify_qix_engines.sh $MIRA_URL
+      - run:
+          name: Helm delete
+          command: sudo helm delete test --debug
+      - run:
+          name: Delete service account for cluster-admin role (Helm)
+          command: sudo kubectl delete -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
+      - run:
           name: Give default service account view access to Kubernetes API
-          command: sudo kubectl create -f ./examples/kubernetes/rbac/rbac-config.yaml
+          command: sudo kubectl create -f ./examples/kubernetes/plain/rbac/rbac-config.yaml
       - run:
           name: Accept EULA
-          command: grep -rl AcceptEULA ./examples/kubernetes/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
+          command: grep -rl AcceptEULA ./examples/kubernetes/plain/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
       - run:
           name: Kubernetes plain mira
           command: |
             VER=$(cat /tmp/workspace/version.txt)
-            sudo kubectl create -f ./examples/kubernetes/
+            sudo kubectl create -f ./examples/kubernetes/plain
             sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
       - run:
           name: Check health of services
@@ -224,25 +256,10 @@ jobs:
             MIRA_URL=$(sudo minikube service mira --url)
             curl -fs "$MIRA_URL/v1/health"
       - run:
-          name: Verify number of engines found
+          name: Verify number of QIX Engines found
           command: |
-            set +e
-
-            MIRA_URL=$(sudo minikube service mira --url)
-            # Check that Mira returns correct number of qix engines
-            RETRIES=0
-            EXPECTED_NBR_ENGINES=2
-            while (( NBR_ENGINES != "$EXPECTED_NBR_ENGINES" && RETRIES != 10 )); do
-              NBR_ENGINES=$(curl "$MIRA_URL/v1/engines" | grep -o \"metricsPort\" | wc -w)
-              echo "Mira returned $NBR_ENGINES qix engines"
-              sleep 2
-              RETRIES=$((RETRIES + 1 ))
-            done
-
-            if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
-              exit 1
-            fi
+            MIRA_URL=$(sudo minikube service test-mira --url)
+            ./.circleci/verify_qix_engines.sh $MIRA_URL
 
   # Job for testing Mira in dns mode
   dns:
@@ -284,23 +301,9 @@ jobs:
               exit 1
             fi
       - run:
-          name: Verify number of engines found
+          name: Verify number of QIX Engines found
           command: |
-            set +e
-            # Check that Mira returns correct number of qix engines
-            RETRIES=0
-            EXPECTED_NBR_ENGINES=2
-            while (( NBR_ENGINES != "$EXPECTED_NBR_ENGINES" && RETRIES != 10 )); do
-              NBR_ENGINES=$(curl "http://localhost:9100/v1/engines" | grep -o \"metricsPort\" | wc -w)
-              echo "Mira returned $NBR_ENGINES qix engines"
-              sleep 2
-              RETRIES=$((RETRIES + 1 ))
-            done
-
-            if [ "$NBR_ENGINES" != "$EXPECTED_NBR_ENGINES" ]; then
-              echo "Found $NBR_ENGINES Qlik Associative Engines but expected $EXPECTED_NBR_ENGINES"
-              exit 1
-            fi
+            ./.circleci/verify_qix_engines.sh "http://localhost:9100"
 
   # Job for publishing Docker image to Docker hub
   publish:
