@@ -9,4 +9,4 @@ service:
   externalPort: 9100
   internalPort: 9100
 global:
-  serviceType: LoadBalancer
+  serviceType: ClusterIP

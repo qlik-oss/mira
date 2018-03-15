@@ -2,7 +2,7 @@ global:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: dockerhub
   # Set serviceType to NodePort if running in minikube
-  serviceType: LoadBalancer
+  serviceType: ClusterIP
 
 engine:
   image: qlikea/engine:12.150.0
