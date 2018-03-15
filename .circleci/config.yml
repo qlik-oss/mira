@@ -219,7 +219,9 @@ jobs:
           command: sudo helm init --service-account tiller --debug; sudo kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system;
       - run:
           name: Helm install helm charts
-          command: sudo helm install ./examples/kubernetes/helm/ --set global.serviceType=NodePort,mira.image=$DOCKER_REPO:$VER,engine.acceptEULA=yes --name test --debug
+          command: |
+            VER=$(cat /tmp/workspace/version.txt)
+            sudo helm install ./examples/kubernetes/helm/ --set global.serviceType=NodePort,mira.image=$DOCKER_REPO:$VER,engine.acceptEULA=yes --name test --debug
       - run:
           name: Check health of services
           command: |

@@ -1,4 +1,3 @@
-replicaCount: 1
 miraMode: kubernetes
 image: qlikea/mira:0.1.0
 sideCartContainerName: kubectl
