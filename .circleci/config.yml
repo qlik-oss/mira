@@ -217,9 +217,10 @@ jobs:
           name: Helm init and wait for tiller to be running
           command: sudo helm init --service-account tiller --debug; sudo kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system;
       - run:
-          name: Helm install helm charts
+          name: Helm install charts
           command: |
             VER=$(cat /tmp/workspace/version.txt)
+            sudo helm dependency build ./examples/kubernetes/helm/
             sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
       - run:
           name: Check health of services
