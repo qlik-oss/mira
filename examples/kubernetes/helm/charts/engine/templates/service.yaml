@@ -3,19 +3,19 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ default "ClusterIP" .Values.service.serviceType }}
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ default 9076 .Values.service.externalPort }}
+    - port: {{ .Values.service.externalPort }}
       protocol: TCP
       name: {{ .Values.service.name }}
-    - port: {{ default 9090 .Values.service.prometheusPort }}
+    - port: {{ .Values.service.prometheusPort }}
       protocol: TCP
       name: {{ .Values.service.promName }}
   selector:
-    app: {{ template "name" . }}
+    app: {{ template "fullname" . }}
     release: {{ .Release.Name }}

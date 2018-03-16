@@ -105,6 +105,8 @@ See [package.json](./package.json) for more test script variants.
 
 ### Releasing
 
+#### Mira service release
+
 The helper script [release.sh](./release.sh) provides a convenient way to release a new version of the service and to automatically bump versions as needed.
 
 Check usage information in [release.sh](./release.sh) on how to perform the release and version bumping by running:
@@ -112,3 +114,16 @@ Check usage information in [release.sh](./release.sh) on how to perform the rele
 ```
 $ release.sh -?
 ```
+
+##### Helm chart release
+
+Mira provides a set of [Helm](https://docs.helm.sh/) charts that can be used to deploy the service to `Kubernetes`.
+If the Helm charts has been updated you will need to create a new package.
+This is done by running the following script and checking in the changes:
+
+```sh
+./repo/create_helm_package.sh <version number>
+```
+
+The script will create a Helm package and add it to the [index](./repo/index.yaml) in the repo.
+Once checked into the repo the chart can be added as a dependency to other services.

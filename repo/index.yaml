@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  mira:
+  - apiVersion: v1
+    created: 2018-03-16T11:18:52.9119421+01:00
+    description: Mira QIX Engine discovery service
+    digest: 09c89c82ced491624d369a93cf9ab88bf5f3ad1e512e3745cd67e8e8026fa48d
+    home: https://github.com/qlik-ea/mira
+    name: mira
+    sources:
+    - https://github.com/qlik-ea/mira
+    urls:
+    - mira-0.0.1.tgz
+    version: 0.0.1
+generated: 2018-03-16T11:18:52.9114435+01:00

@@ -221,7 +221,7 @@ jobs:
           name: Helm install helm charts
           command: |
             VER=$(cat /tmp/workspace/version.txt)
-            sudo helm install ./examples/kubernetes/helm/ --set global.serviceType=NodePort,mira.image=$DOCKER_REPO:$VER,engine.acceptEULA=yes --name test --debug
+            sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
       - run:
           name: Check health of services
           command: |
@@ -260,7 +260,7 @@ jobs:
       - run:
           name: Verify number of QIX Engines found
           command: |
-            MIRA_URL=$(sudo minikube service test-mira --url)
+            MIRA_URL=$(sudo minikube service mira --url)
             ./.circleci/verify_qix_engines.sh $MIRA_URL
 
   # Job for testing Mira in dns mode
@@ -336,7 +336,7 @@ jobs:
 
 workflows:
   version: 2
-  build_test_and_deploy:
+  build_test_and_publish:
     jobs:
       - build
       - swarm:
