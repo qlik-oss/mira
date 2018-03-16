@@ -22,7 +22,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: ["-S","AcceptEULA={{ required "You need to accept the Qlik Core EULA in your values.yaml file." .Values.acceptEULA }}"]
         ports:
         - containerPort: {{ .Values.service.internalPort }}

@@ -44,7 +44,7 @@ spec:
         - name: {{ .Values.sideCartContainerName }}
           image: {{ .Values.sideCartContainerImage }}
           args: {{ .Values.sideCartContainerArgs }}
-          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
       {{ if eq .Values.useRollbar true }}
       volumes:
         - name: rollbar-token

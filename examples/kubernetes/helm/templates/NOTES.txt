@@ -1,8 +1,0 @@
-You have now deployed the Qlik Core stack.
-
-Your release is named: {{ .Release.Name }}.
-
-To learn more about the release, try:
-
-  $ helm status {{ .Release.Name }}
-  $ helm get {{ .Release.Name }}

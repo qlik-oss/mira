@@ -3,6 +3,7 @@ replicaCount: 1
 image:
   repository: qlikea/mira
   tag: 0.1.0
+  pullPolicy: IfNotPresent
 sideCartContainerName: kubectl
 sideCartContainerArgs: "[ \"proxy\", \"-p\", \"8001\" ]"
 sideCartContainerImage: gcr.io/google_containers/kubectl:v0.18.0-350-gfb3305edcf6c1a
