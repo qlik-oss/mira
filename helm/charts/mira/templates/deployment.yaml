@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccount: {{ .Values.serviceAccount }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MIRA_MODE
+              value: {{ .Values.miraMode}}
+              {{ if eq .Values.useRollbar true }}
+            - name: MIRA_ROLLBAR_ACCESS_TOKEN_FILE
+              value: /run/secrets/rollbar-token/rollbar-token
+              {{ end }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: {{ .Values.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: {{ .Values.service.internalPort }}
+          {{ if eq .Values.useRollbar true }}
+          volumeMounts:
+            - mountPath: /run/secrets/rollbar-token
+              name: rollbar-token
+              readOnly: true
+          {{ end }}
+        - name: {{ .Values.sideCartContainerName }}
+          image: {{ .Values.sideCartContainerImage }}
+          args: {{ .Values.sideCartContainerArgs }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+      {{ if eq .Values.useRollbar true }}
+      volumes:
+        - name: rollbar-token
+          secret:
+            secretName: rollbar-token
+            items:
+            - key: rollbar-token
+              path: rollbar-token
+              {{ end }}

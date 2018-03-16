@@ -11,3 +11,5 @@ npm-debug.log
 coverage/
 .nyc_output
 version.json
+requirements.lock
+examples/**/*.tgz

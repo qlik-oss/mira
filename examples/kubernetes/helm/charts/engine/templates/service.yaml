@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.externalPort }}
+      protocol: TCP
+      name: {{ .Values.service.name }}
+    - port: {{ .Values.service.prometheusPort }}
+      protocol: TCP
+      name: {{ .Values.service.promName }}
+  selector:
+    app: {{ template "fullname" . }}
+    release: {{ .Release.Name }}

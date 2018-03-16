@@ -1,0 +1,12 @@
+replicaCount: 2
+image:
+  repository: qlikea/engine
+  tag: 12.150.0
+  pullPolicy: IfNotPresent
+service:
+  name: qix
+  externalPort: 9076
+  internalPort: 9076
+  promName: prometheus
+  prometheusPort: 9090
+  type: ClusterIP
