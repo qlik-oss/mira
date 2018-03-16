@@ -163,7 +163,7 @@ jobs:
   kubernetes:
     machine: true
     environment:
-      CHANGE_MINIKUBE_NONE_USER: "true"
+      CHANGE_MINIKUBE_NONE_USER: true
       DOCKER_REPO: qlikea/mira
     working_directory: ~/mira
     steps:
@@ -182,7 +182,7 @@ jobs:
       - run:
           name: Lint charts
           command: |
-            helm lint ./examples/kubernetes/helm/charts/mira
+            helm lint ./helm/charts/mira
       - run:
           name: Install Kubectl
           command: |
