@@ -1,15 +1,19 @@
 #!/bin/bash
 
 PACKAGE_VERSION=$1
-CHART_PATH="../examples/kubernetes/helm/charts/mira"
+CHART_PATH="./charts/mira"
+EXAMPLE_PATH="../examples/kubernetes/helm"
 
 cd "$(dirname "$0")"
 
-# Update helm chart version in example
+# Update miras helm chart version
 sed -i '/version/c version: '"$PACKAGE_VERSION" "$CHART_PATH"'/Chart.yaml'
 
+# Update the required helm chart version in the example
+sed -i '/^\([[:space:]]*version: *\).*/s//\1'"$PACKAGE_VERSION"'/' "$EXAMPLE_PATH"'/requirements.yaml'
+
 # Create a helm package
-helm package -d . --version $PACKAGE_VERSION $CHART_PATH
+helm package -d ./repo --version $PACKAGE_VERSION $CHART_PATH
 
 # Check that packaging was successful
 EXIT_CODE=$?
@@ -19,4 +23,4 @@ if [[ $EXIT_CODE != 0 ]]; then
 fi
 
 # Add the new package to index
-helm repo index .
+helm repo index ./repo

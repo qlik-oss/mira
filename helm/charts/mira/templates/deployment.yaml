@@ -23,8 +23,10 @@ spec:
           env:
             - name: MIRA_MODE
               value: {{ .Values.miraMode}}
+              {{ if eq .Values.useRollbar true }}
             - name: MIRA_ROLLBAR_ACCESS_TOKEN_FILE
               value: /run/secrets/rollbar-token/rollbar-token
+              {{ end }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:

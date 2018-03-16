@@ -122,8 +122,8 @@ If the Helm charts has been updated you will need to create a new package.
 This is done by running the following script and checking in the changes:
 
 ```sh
-./repo/create_helm_package.sh <version number>
+./helm/create_package.sh <version number>
 ```
 
-The script will create a Helm package and add it to the [index](./repo/index.yaml) in the repo.
+The script will create a Helm package and add it to the [index](./helm/repo/index.yaml) in the repo.
 Once checked into the repo the chart can be added as a dependency to other services.
