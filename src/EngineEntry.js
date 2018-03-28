@@ -85,6 +85,16 @@ class EngineEntry {
     }
   }
 
+  updateOrchestrationProperties(properties) {
+    const keys = Object.keys(properties);
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i];
+      if (key !== 'key' && key !== 'engine' && key !== 'statusIp') {
+        this.properties[key] = properties[key];
+      }
+    }
+  }
+
   /**
    * Starts periodical status checking.
    */
