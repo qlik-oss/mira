@@ -85,6 +85,14 @@ class EngineEntry {
     }
   }
 
+  updateOrchestrationProperties(properties) {
+    Object.keys(properties).forEach((key) => {
+      if (key !== 'key' && key !== 'engine' && key !== 'statusIp') {
+        this.properties[key] = properties[key];
+      }
+    });
+  }
+
   /**
    * Starts periodical status checking.
    */

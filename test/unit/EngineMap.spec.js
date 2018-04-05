@@ -62,6 +62,13 @@ describe('EngineMap', () => {
     expect(engineMap.has('dummy')).to.equal(false);
   });
 
+  it('should return', () => {
+    const entry = getEntry();
+    engineMap.add('foo', entry);
+    expect(engineMap.get('foo')).to.equal(entry);
+    expect(engineMap.get('dummy')).to.equal(undefined);
+  });
+
   it('should return all entries', () => {
     const entry1 = getEntry();
     const entry2 = getEntry();

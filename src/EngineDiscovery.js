@@ -31,6 +31,11 @@ async function discover() {
         const engineEntry = new EngineEntry(item, this.updateInterval);
         logger.info(`Engine discovered at address: ${item.statusIp}:${engineEntry.properties.engine.port} with key: ${item.key}`);
         this.engineMap.add(item.key, engineEntry);
+      } else {
+        const engineEntry = this.engineMap.get(item.key);
+        if (engineEntry) {
+          engineEntry.updateOrchestrationProperties(item);
+        }
       }
     });
 

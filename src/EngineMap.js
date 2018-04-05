@@ -76,6 +76,15 @@ class EngineMap {
   has(key) {
     return Object.prototype.hasOwnProperty.call(this.entries, key);
   }
+
+  /**
+   * Returns the engine with the supplied key
+   * @param {string} key - the unique engine identifier.
+   * @returns the engine entry or undefined if missing
+   */
+  get(key) {
+    return this.entries[key];
+  }
 }
 
 module.exports = EngineMap;

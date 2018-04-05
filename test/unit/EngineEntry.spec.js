@@ -155,6 +155,25 @@ describe('EngineEntry', () => {
     });
   });
 
+  describe('#updateOrchestrationProperties()', () => {
+    beforeEach(() => {
+      healthFetcher = new EngineStatusFetcher({ get: () => { } });
+      fetchStub = sinon.stub(healthFetcher, 'fetch');
+      fetchStub.withArgs('10.10.10.10', 9098, '/healthcheck').returns(Promise.resolve(healthOk));
+      fetchStub.withArgs('10.10.10.10', 9999, '/metrics').returns(Promise.resolve(metrics));
+    });
+
+    it('should properties to be updated', () => {
+      entry = new EngineEntry({ engine: { labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' } }, statusIp: '10.10.10.10' }, 10, healthFetcher);
+      expect(entry.properties).to.deep.equal({ engine: { port: 9998, metricsPort: 9999, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' } }, statusIp: '10.10.10.10' });
+
+      const newProps = { kubernetes: { newInfo: 'yes' } };
+      entry.updateOrchestrationProperties(newProps);
+      expect(entry.properties).to.deep.equal({ engine: { port: 9998, metricsPort: 9999, labels: { 'qix-engine-api-port': '9998', 'qix-engine-metrics-port': '9999' } }, statusIp: '10.10.10.10', kubernetes: { newInfo: 'yes' } });
+    });
+  });
+
+
   afterEach(() => {
     fetchStub.reset();
   });
