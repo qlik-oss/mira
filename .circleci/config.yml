@@ -7,7 +7,7 @@ jobs:
       - image: circleci/node:8.9.3
     working_directory: ~/mira
     environment:
-      DOCKER_REPO: qlikea/mira
+      DOCKER_REPO: qlikcore/mira
     steps:
       - checkout
       - restore_cache:
@@ -164,7 +164,7 @@ jobs:
     machine: true
     environment:
       CHANGE_MINIKUBE_NONE_USER: true
-      DOCKER_REPO: qlikea/mira
+      DOCKER_REPO: qlikcore/mira
     working_directory: ~/mira
     steps:
       - attach_workspace:
@@ -268,7 +268,7 @@ jobs:
   dns:
     machine: true
     environment:
-      DOCKER_REPO: qlikea/mira
+      DOCKER_REPO: qlikcore/mira
     working_directory: ~/mira
     steps:
       - attach_workspace:
@@ -314,7 +314,7 @@ jobs:
     - image: circleci/node:8.9.3
     working_directory: ~/mira
     environment:
-      DOCKER_REPO: qlikea/mira
+      DOCKER_REPO: qlikcore/mira
     steps:
       - attach_workspace:
           at: /tmp/workspace

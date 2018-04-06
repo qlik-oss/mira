@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
-  repository: qlikea/engine
-  tag: 12.150.0
+  repository: qlikcore/engine
+  tag: 12.160.0
   pullPolicy: IfNotPresent
 service:
   name: qix

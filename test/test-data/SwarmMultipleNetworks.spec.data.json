@@ -9,7 +9,7 @@
     "Labels": {},
     "Spec": {
       "ContainerSpec": {
-        "Image": "qlikea/engine:12.42.0",
+        "Image": "qlikcore/engine:12.42.0",
         "Labels": {
           "com.docker.stack.namespace": "mira-stack",
           "qix-engine": "",

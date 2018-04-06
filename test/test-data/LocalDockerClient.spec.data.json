@@ -5,7 +5,7 @@
       "Names": [
         "/mira_engine1_1"
       ],
-      "Image": "qlikea/engine:12.38.0",
+      "Image": "qlikcore/engine:12.38.0",
       "ImageID": "sha256:8f00a39a3f0151ae7d80744eafd6ee71474df010349d44c9cf455a76baf59b1f",
       "Command": "./entrypoint.sh",
       "Created": 1502866132,
@@ -55,7 +55,7 @@
       "Names": [
         "/mira_engine2_1"
       ],
-      "Image": "qlikea/engine:12.38.0",
+      "Image": "qlikcore/engine:12.38.0",
       "ImageID": "sha256:8f00a39a3f0151ae7d80744eafd6ee71474df010349d44c9cf455a76baf59b1f",
       "Command": "./entrypoint.sh",
       "Created": 1502866132,
@@ -105,7 +105,7 @@
       "Names": [
         "/mira_engine3_1"
       ],
-      "Image": "qlikea/engine:12.38.0",
+      "Image": "qlikcore/engine:12.38.0",
       "ImageID": "sha256:8f00a39a3f0151ae7d80744eafd6ee71474df010349d44c9cf455a76baf59b1f",
       "Command": "./entrypoint.sh",
       "Created": 1502866132,

@@ -1,7 +1,7 @@
 miraMode: kubernetes
 replicaCount: 1
 image:
-  repository: qlikea/mira
+  repository: qlikcore/mira
   tag: 0.1.0
   pullPolicy: IfNotPresent
 sideCartContainerName: kubectl
