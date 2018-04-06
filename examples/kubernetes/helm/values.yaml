@@ -1,6 +1,5 @@
 global:
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: dockerhub
 
 engine:
   # change to "yes" if you accept the Qlik Core EULA:

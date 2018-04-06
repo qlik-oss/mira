@@ -38,9 +38,6 @@ jobs:
             - node_modules
       - setup_remote_docker
       - run:
-          name: Login to Docker
-          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-      - run:
           name: Update version
           command: |
             set -e
@@ -129,14 +126,11 @@ jobs:
           command: docker load < /tmp/workspace/mira_image.tar
       - checkout
       - run:
-          name: Login to Docker
-          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-      - run:
           name: Spin up core in a local docker swarm
           command: |
             docker swarm init
             # Spin up a local setup with the previously built docker image.
-            TAG=:$(cat /tmp/workspace/version.txt) ACCEPT_EULA=yes docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml --with-registry-auth mira-swarm
+            TAG=:$(cat /tmp/workspace/version.txt) ACCEPT_EULA=yes docker stack deploy -c ./examples/swarm/docker-compose-swarm.yml mira-swarm
       - run:
           name: Check health of the Mira service
           command: |
@@ -209,9 +203,6 @@ jobs:
             ./configure --without-python --disable-all-programs --enable-nsenter --without-ncurses
             sudo make nsenter; sudo cp nsenter /usr/local/bin
       - run:
-          name: Add docker credentials as kubernetes secret
-          command: sudo kubectl create secret docker-registry dockerhub --docker-username=$DOCKER_USER --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL
-      - run:
           name: Create service account for cluster-admin role (Helm)
           command: sudo kubectl create -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
       - run:
@@ -278,14 +269,11 @@ jobs:
           command: docker load < /tmp/workspace/mira_image.tar
       - checkout
       - run:
-          name: Login to Docker
-          command: docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-      - run:
           name: Spin up core in a local docker swarm
           command: |
             docker swarm init
             # Spin up a local setup with the previously built docker image.
-            TAG=:$(cat /tmp/workspace/version.txt) ACCEPT_EULA=yes docker stack deploy -c ./examples/dns/docker-compose-dns.yml --with-registry-auth mira-dns
+            TAG=:$(cat /tmp/workspace/version.txt) ACCEPT_EULA=yes docker stack deploy -c ./examples/dns/docker-compose-dns.yml mira-dns
       - run:
           name: Check health of the Mira service
           command: |
