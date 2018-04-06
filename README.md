@@ -2,7 +2,7 @@
 
 **NOTE: This repository is under heavy development**
 
-[![CircleCI](https://circleci.com/gh/qlik-ea/mira.svg?style=svg&circle-token=62ace9e8f1d6ad8bef7ec52b61615217322c63d3)](https://circleci.com/gh/qlik-ea/mira)
+[![CircleCI](https://circleci.com/gh/qlik-oss/mira.svg?style=svg)](https://circleci.com/gh/qlik-oss/mira)
 
 ## Overview
 
@@ -18,7 +18,7 @@ Contributions are welcome and encouraged! See more info at [Open Source at Qlik 
 
 ## Docker Image
 
-Mira is distributed to end users as a the [qlikea/mira](https://hub.docker.com/r/qlikea/mira) Docker image. Also see the [Dockerfile](./Dockerfile). The [version file needs to be generated](#generating-version-file) before building the Docker image locally.
+Mira is distributed to end users as a the [qlikcore/mira](https://hub.docker.com/r/qlikcore/mira) Docker image. Also see the [Dockerfile](./Dockerfile). The [version file needs to be generated](#generating-version-file) before building the Docker image locally.
 
 ## Running Mira as a Plain Node.js Process
 

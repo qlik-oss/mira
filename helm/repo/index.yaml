@@ -5,10 +5,10 @@ entries:
     created: 2018-03-16T15:32:19.9562436+01:00
     description: Mira QIX Engine discovery service
     digest: 1ba7bd6cc8c2f9ef8e51f4398cc564a585dc50551b825096a41cb686736e1a40
-    home: https://github.com/qlik-ea/mira
+    home: https://github.com/qlik-oss/mira
     name: mira
     sources:
-    - https://github.com/qlik-ea/mira
+    - https://github.com/qlik-oss/mira
     urls:
     - mira-0.0.1.tgz
     version: 0.0.1

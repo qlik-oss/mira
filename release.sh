@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-REPO=qlik-ea/mira
+REPO=qlikcore/mira
 
 function print_usage {
   echo "Usage:"

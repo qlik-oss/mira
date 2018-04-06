@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/qlik-ea/mira.git"
+    "url": "https://github.com/qlik-oss/mira.git"
   },
   "bugs": {
-    "url": "https://github.com/qlik-ea/mira/issues"
+    "url": "https://github.com/qlik-oss/mira/issues"
   },
-  "homepage": "https://github.com/qlik-ea/mira#readme",
+  "homepage": "https://github.com/qlik-oss/mira#readme",
   "dependencies": {
     "dockerode": "2.4.3",
     "http-metrics-middleware": "1.0.1",
