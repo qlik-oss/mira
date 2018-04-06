@@ -27,5 +27,3 @@ spec:
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         - containerPort: {{ .Values.service.prometheusPort }}
-      imagePullSecrets:
-      - name: {{ .Values.global.imagePullSecrets }}
