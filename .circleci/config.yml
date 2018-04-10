@@ -319,7 +319,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               VER=$(cat /tmp/workspace/version.txt)
-              docker tag $DOCKER_REPO:$VER $DOCKER_REPO:latest
+              docker tag $DOCKER_REPO:$VER
             fi
             docker push $DOCKER_REPO
 
