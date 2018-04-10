@@ -317,10 +317,6 @@ jobs:
       - run:
           name: Push image to Docker Hub
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              VER=$(cat /tmp/workspace/version.txt)
-              docker tag $DOCKER_REPO:$VER
-            fi
             docker push $DOCKER_REPO
 
 workflows:
