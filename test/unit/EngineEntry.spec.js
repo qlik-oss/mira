@@ -1,6 +1,11 @@
 const EngineEntry = require('../../src/EngineEntry');
 const EngineStatusFetcher = require('../../src/EngineStatusFetcher');
 const sleep = require('../test-utils/sleep');
+const Config = require('../../src/Config');
+
+before(() => {
+  Config.init();
+});
 
 describe('EngineEntry', () => {
   let entry;

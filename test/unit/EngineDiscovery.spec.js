@@ -1,22 +1,32 @@
 const EngineDiscovery = require('../../src/EngineDiscovery');
+const EngineEntry = require('../../src/EngineEntry');
 const sleep = require('../test-utils/sleep');
 
 describe('EngineDiscovery', () => {
   let FakeDockerClient;
   let listEnginesStub;
+  let engineDiscovery;
+  let startStatusChecks;
 
   before(() => {
     FakeDockerClient = { listEngines: () => [] };
+    startStatusChecks = sinon.stub(EngineEntry.prototype, 'startStatusChecks');
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    engineDiscovery.stop();
     listEnginesStub.restore();
+  });
+
+  after(() => {
+    startStatusChecks.restore();
   });
 
   describe('#constructor()', () => {
     it('should construct and start periodical discovery scans', async () => {
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns([]);
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 5000);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').resolves([]);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 5000);
+      await engineDiscovery.start();
       await sleep(50);
       expect(engineDiscovery).to.not.be.null;
       expect(engineDiscovery).to.not.be.undefined;
@@ -50,8 +60,9 @@ describe('EngineDiscovery', () => {
     const engines2 = [engine2, engine3];
 
     it('should list all discovered engines a compressed format', async () => {
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').resolves(engines1);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      await engineDiscovery.start();
       await sleep(50);
       let listedEngines = await engineDiscovery.list({ format: 'condensed' });
 
@@ -61,7 +72,7 @@ describe('EngineDiscovery', () => {
       expect(second.engine).to.deep.equal(engine2.engine);
 
       listEnginesStub.restore();
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').resolves(engines2);
       await sleep(50);
       listedEngines = await engineDiscovery.list({ format: 'condensed' });
 
@@ -98,8 +109,9 @@ describe('EngineDiscovery', () => {
     const engines2 = [engine2, engine3];
 
     it('should list all discovered engines in a verbose format', async () => {
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines1);
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').resolves(engines1);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      await engineDiscovery.start();
       await sleep(50);
       let listedEngines = await engineDiscovery.list({});
 
@@ -109,7 +121,7 @@ describe('EngineDiscovery', () => {
       expect(second.engine).to.deep.equal(engine2.engine);
 
       listEnginesStub.restore();
-      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').returns(engines2);
+      listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').resolves(engines2);
       await sleep(50);
       listedEngines = await engineDiscovery.list({});
 
@@ -125,7 +137,8 @@ describe('EngineDiscovery', () => {
         .returns(engines1)
         .throws(new Error('Orchestration not responding'));
 
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      await engineDiscovery.start();
       await sleep(50);
 
       try {
@@ -136,7 +149,8 @@ describe('EngineDiscovery', () => {
 
     it('should throw error if the first discovery failed', async () => {
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines').throws(new Error('Orchestration not responding'));
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      await engineDiscovery.start();
       await sleep(50);
 
       try {
@@ -148,12 +162,13 @@ describe('EngineDiscovery', () => {
     it('should list all discovered engines if a previous but not last discovery was failed', async () => {
       listEnginesStub = sinon.stub(FakeDockerClient, 'listEngines')
         .onFirstCall()
-        .returns(engines1)
+        .resolves(engines1)
         .onSecondCall()
         .throws(new Error('Orchestration not responding'))
-        .returns(engines2);
+        .resolves(engines2);
 
-      const engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
+      await engineDiscovery.start();
       await sleep(100);
 
       const listedEngines = await engineDiscovery.list({});

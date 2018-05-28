@@ -1,6 +1,11 @@
 const nock = require('nock');
 const KubernetesClient = require('../../../src/orchestration/KubernetesClient');
 const specData = require('./../../test-data/KubernetesClient.spec.data.json');
+const Config = require('../../../src/Config');
+
+before(() => {
+  Config.init();
+});
 
 describe('KubernetesClient', () => {
   describe('#listEngines', async () => {
