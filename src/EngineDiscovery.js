@@ -46,11 +46,15 @@ async function discover() {
   } catch (err) {
     // Log error and delete engine cache if this is the first failure
     if (this.discoverySuccessful) {
-      logger.error(`Unable to discover engines with error: ${err}.`);
+      logger.error(`Unable to discover engines with error: ${err}. Invalidating engine cache.`);
+      // this.engineMap.deleteAll();
       this.discoverySuccessful = false;
     }
   }
-  setTimeout(() => discover.call(this), this.discoveryInterval);
+
+  if (this.discover) {
+    setTimeout(() => discover.call(this), this.discoveryInterval);
+  }
 }
 
 /**
@@ -70,9 +74,18 @@ class EngineDiscovery {
     this.updateInterval = updateInterval;
     this.engineMap = new EngineMap();
     this.discoverySuccessful = true;
+  }
 
-    // Start discovery!
-    discover.call(this);
+  // Start discovery!
+  async start() {
+    this.discover = true;
+    await discover.call(this);
+  }
+
+  // Used for stopping service while testing
+  stop() {
+    this.engineMap.deleteAll();
+    this.discover = false;
   }
 
   /**

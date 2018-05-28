@@ -6,6 +6,10 @@ const Config = require('../../../src/Config');
 
 const docker = new Docker();
 
+before(() => {
+  Config.init();
+});
+
 describe('SwarmDockerClient', () => {
   let listTasksStub;
 

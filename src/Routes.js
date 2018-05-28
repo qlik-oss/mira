@@ -18,6 +18,8 @@ const engineDiscovery = new EngineDiscovery(
   Config.engineUpdateInterval,
 );
 
+engineDiscovery.start();
+
 const healthEndpoint = 'health';
 const metricsEndpoint = 'metrics';
 const enginesEndpoint = 'engines';
