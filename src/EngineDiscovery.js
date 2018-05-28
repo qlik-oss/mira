@@ -46,7 +46,7 @@ async function discover() {
   } catch (err) {
     // Log error and delete engine cache if this is the first failure
     if (this.discoverySuccessful) {
-      logger.error(`Unable to discover engines with error: ${err}. Invalidating engine cache.`);
+      logger.error(`Unable to discover engines with error: ${err}.`);
       // this.engineMap.deleteAll();
       this.discoverySuccessful = false;
     }
