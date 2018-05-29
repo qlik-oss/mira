@@ -2,7 +2,7 @@
 
 **NOTE: This repository is under heavy development**
 
-[![CircleCI](https://circleci.com/gh/qlik-oss/mira.svg?style=svg)](https://circleci.com/gh/qlik-oss/mira)
+[![CircleCI](https://circleci.com/gh/qlik-oss/mira.svg?style=svg)](https://circleci.com/gh/qlik-oss/mira) [![Greenkeeper badge](https://badges.greenkeeper.io/qlik-oss/mira.svg)](https://greenkeeper.io/)
 
 ## Overview
 
