@@ -8,5 +8,6 @@ module.exports = {
   },
   mocha: {
     bail: false,
+    timeout: 5000,
   },
 };
