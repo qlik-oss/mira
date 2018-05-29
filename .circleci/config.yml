@@ -25,8 +25,13 @@ jobs:
             npm run lint
       - run:
           name: Run Unit Tests
-          command:
+          command: |
             npm run test:unit
+            if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
+              echo "Uploading coverage results to coveralls.io..."
+              npm install -s nyc@11.8.0 coveralls@3.0.1
+              npx nyc report --reporter=text-lcov --temp-directory=./coverage/.nyc_output | npx coveralls
+            fi
       - store_artifacts:
           path: ./coverage
       - run:
