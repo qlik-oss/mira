@@ -63,10 +63,10 @@ process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
 
 app
-  .use(c2k(metrics.initRoutes()))
-  .use(swagger2koa.ui(document, '/openapi'))
-  .use(router.routes())
-  .use(router.allowedMethods());
+.use(c2k(metrics.initRoutes()))
+.use(swagger2koa.ui(document, '/openapi'))
+.use(router.routes())
+.use(router.allowedMethods());
 
 if (process.env.NODE_ENV !== 'test') {
   const server = app.listen(Config.miraApiPort);

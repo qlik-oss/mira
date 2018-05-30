@@ -7,9 +7,7 @@ const logger = require('./logger/Logger').get();
 
 
 const apiVersion = 'v1';
-const router = new Router({
-  prefix: `/${apiVersion}`,
-});
+const router = new Router({});
 
 const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
@@ -44,30 +42,6 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
 
 /**
  * @swagger
- * /metrics:
- *   get:
- *     description: Returns metrics of the Mira service
- *     produces:
- *       - application/json; charset=utf-8
- *       - text/plain; charset=utf-8
- *     responses:
- *       200:
- *         description: successful operation
- *         schema:
- *           type: array
- *           description: Default prometheus client metrics
- */
-router.get(`/${metricsEndpoint}`, async (ctx) => {
-  logger.debug(`GET /${apiVersion}/${metricsEndpoint}`);
-  if (ctx.accepts('text')) {
-    ctx.body = prom.register.metrics();
-  } else {
-    ctx.body = prom.register.getMetricsAsJSON();
-  }
-});
-
-/**
- * @swagger
  * /engines:
  *   get:
  *     description:  Lists available Qlik Associative Engines.
@@ -90,7 +64,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *       503:
  *         description: Service Unavailable
  */
-router.get(`/${enginesEndpoint}`, async (ctx) => {
+router.get(`/${apiVersion}/${enginesEndpoint}`, async (ctx) => {
   logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
   try {
     ctx.body = await engineDiscovery.list(ctx.query);
