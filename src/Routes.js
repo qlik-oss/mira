@@ -2,7 +2,6 @@ const EngineDiscovery = require('./EngineDiscovery');
 const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
 const Router = require('koa-router');
-const prom = require('http-metrics-middleware').promClient;
 const logger = require('./logger/Logger').get();
 
 
@@ -19,7 +18,6 @@ const engineDiscovery = new EngineDiscovery(
 engineDiscovery.start();
 
 const healthEndpoint = 'health';
-const metricsEndpoint = 'metrics';
 const enginesEndpoint = 'engines';
 
 /**
@@ -40,9 +38,26 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
   ctx.body = {};
 });
 
+// This is just for the swagger generation of the api-doc. The actual /metrics endpoint is defined in the http-metrics-middleware library.
 /**
  * @swagger
- * /engines:
+ * /metrics:
+ *   get:
+ *     description: Returns metrics of the Mira service
+ *     produces:
+ *       - application/json; charset=utf-8
+ *       - text/plain; charset=utf-8
+ *     responses:
+ *       200:
+ *         description: successful operation
+ *         schema:
+ *           type: array
+ *           description: Default prometheus client metrics
+ */
+
+/**
+ * @swagger
+ * /v1/engines:
  *   get:
  *     description:  Lists available Qlik Associative Engines.
  *     produces:

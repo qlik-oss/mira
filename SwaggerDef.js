@@ -7,7 +7,6 @@ module.exports = {
   },
   host: 'localhost:9100',
   schemes: ['http'],
-  basePath: '/v1',
   'x-qlik-visibility': 'private',
   'x-qlik-stability': 'experimental',
 };
