@@ -21,7 +21,7 @@ describe('Mira in local docker mode with no engines', () => {
   });
 
   it('GET /health should return OK', async () => {
-    const res = await request(app.listen()).get('/v1/health');
+    const res = await request(app.listen()).get('/health');
     expect(res.statusCode).to.equal(200);
   });
 

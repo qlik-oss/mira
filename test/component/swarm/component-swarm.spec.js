@@ -71,7 +71,7 @@ describe('Mira in docker swarm mode', () => {
 
   describe('GET /health', () => {
     it('should return OK', async () => {
-      const res = await request(app.listen()).get('/v1/health');
+      const res = await request(app.listen()).get('/health');
       expect(res.statusCode).to.equal(200);
     });
   });

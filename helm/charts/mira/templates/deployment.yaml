@@ -31,11 +31,11 @@ spec:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:
             httpGet:
-              path: /v1/health
+              path: /health
               port: {{ .Values.service.internalPort }}
           readinessProbe:
             httpGet:
-              path: /v1/health
+              path: /health
               port: {{ .Values.service.internalPort }}
           {{ if eq .Values.useRollbar true }}
           volumeMounts:

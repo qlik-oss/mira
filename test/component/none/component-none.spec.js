@@ -12,12 +12,12 @@ describe('Mira when not using any orchestration client', () => {
   });
 
   it('GET /health should return OK', async () => {
-    const res = await request(app.listen()).get('/v1/health');
+    const res = await request(app.listen()).get('/health');
     expect(res.statusCode).to.equal(200);
   });
 
   it('GET /metrics should return metrics in a string if accept header is not set', async () => {
-    const res = await request(app.listen()).get('/v1/metrics').expect('Content-Type', 'text/plain; charset=utf-8');
+    const res = await request(app.listen()).get('/metrics').expect('Content-Type', 'text/plain; charset=utf-8');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text).to.be.a('string');
