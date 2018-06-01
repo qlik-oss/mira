@@ -22,7 +22,7 @@ const enginesEndpoint = 'engines';
 
 /**
  * @swagger
- * health:
+ * /health:
  *   get:
  *     description: Returns health status of the Mira service
  *     produces:
@@ -41,7 +41,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
 // This is just for the swagger generation of the api-doc. The actual /metrics endpoint is defined in the http-metrics-middleware library.
 /**
  * @swagger
- * metrics:
+ * /metrics:
  *   get:
  *     description: Returns metrics of the Mira service
  *     produces:
@@ -57,7 +57,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
 
 /**
  * @swagger
- * v1/engines:
+ * /v1/engines:
  *   get:
  *     description:  Lists available Qlik Associative Engines.
  *     produces:
