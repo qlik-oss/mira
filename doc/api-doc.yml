@@ -1,18 +1,18 @@
 info:
   title: A Qlik Associative Engine discovery service
-  version: 0.1.2
+  version: 0.2.2
   description: >-
     REST API for discovering Qlik Associative Engines running in Docker
     containers.
 host: 'localhost:9100'
 schemes:
   - http
-basePath: /v1
+basePath: /
 x-qlik-visibility: private
 x-qlik-stability: experimental
 swagger: '2.0'
 paths:
-  /health:
+  health:
     get:
       description: Returns health status of the Mira service
       produces:
@@ -22,7 +22,7 @@ paths:
           description: successful operation
           schema:
             type: object
-  /metrics:
+  metrics:
     get:
       description: Returns metrics of the Mira service
       produces:
@@ -34,7 +34,7 @@ paths:
           schema:
             type: array
             description: Default prometheus client metrics
-  /engines:
+  v1/engines:
     get:
       description: Lists available Qlik Associative Engines.
       produces:
