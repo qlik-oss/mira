@@ -42,7 +42,7 @@
     "winston": "2.4.2"
   },
   "devDependencies": {
-    "after-work.js": "4.3.1",
+    "after-work.js": "4.3.2",
     "cross-env": "5.1.6",
     "dredd": "5.1.8",
     "eslint": "4.19.1",
