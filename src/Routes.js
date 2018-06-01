@@ -45,7 +45,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
  *   get:
  *     description: Returns metrics of the Mira service
  *     produces:
- *       - application/json; charset=utf-8
+ *       - application/json
  *       - text/plain; charset=utf-8
  *     responses:
  *       200:
