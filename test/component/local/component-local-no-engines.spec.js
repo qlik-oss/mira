@@ -26,21 +26,21 @@ describe('Mira in local docker mode with no engines', () => {
   });
 
   it('GET /metrics should return metrics in a string if accept header is not set', async () => {
-    const res = await request(app.listen()).get('/metrics').expect('Content-Type', 'text/plain; charset=utf-8');
+    const res = await request(app.listen()).get('/metrics').expect('Content-Type', 'text/plain');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text).to.be.a('string');
   });
 
   it('GET /metrics should return metrics in json format if accept header is set to json', async () => {
-    const res = await request(app.listen()).get('/metrics').set('Accept', 'application/json').expect('Content-Type', 'application/json; charset=utf-8');
+    const res = await request(app.listen()).get('/metrics').set('Accept', 'application/json').expect('Content-Type', 'application/json');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('application/json');
     expect(res.body).not.to.be.empty;
   });
 
   it('GET /metrics should return metrics in a string if accept header is set to text', async () => {
-    const res = await request(app.listen()).get('/metrics').set('Accept', 'text/plain').expect('Content-Type', 'text/plain; charset=utf-8');
+    const res = await request(app.listen()).get('/metrics').set('Accept', 'text/plain').expect('Content-Type', 'text/plain');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text).to.be.a('string');

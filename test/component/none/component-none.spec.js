@@ -17,7 +17,7 @@ describe('Mira when not using any orchestration client', () => {
   });
 
   it('GET /metrics should return metrics in a string if accept header is not set', async () => {
-    const res = await request(app.listen()).get('/metrics').expect('Content-Type', 'text/plain; charset=utf-8');
+    const res = await request(app.listen()).get('/metrics').expect('Content-Type', 'text/plain');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text).to.be.a('string');
