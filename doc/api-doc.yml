@@ -7,7 +7,7 @@ info:
 host: 'localhost:9100'
 schemes:
   - http
-x-qlik-visibility: private
+x-qlik-visibility: public
 x-qlik-stability: experimental
 swagger: '2.0'
 paths:
