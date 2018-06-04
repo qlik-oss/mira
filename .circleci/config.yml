@@ -10,6 +10,11 @@ jobs:
       DOCKER_REPO: qlikcore/mira
     steps:
       - checkout
+      - run:
+          name: greenkeeper - Update
+          command: |
+            sudo npm install -g greenkeeper-lockfile@1
+            greenkeeper-lockfile-update
       - restore_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -144,7 +149,7 @@ jobs:
             # Verify Mira health
             RETRIES=0
             while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
-              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/health)
               sleep 2
               RETRIES=$((RETRIES + 1 ))
             done
@@ -224,7 +229,7 @@ jobs:
           command: |
             # Check mira health
             MIRA_URL=$(sudo minikube service test-mira --url)
-            curl -fs "$MIRA_URL/v1/health"
+            curl -fs "$MIRA_URL/health"
       - run:
           name: Verify number of QIX Engines found
           command: |
@@ -253,7 +258,7 @@ jobs:
           command: |
             # Check mira health
             MIRA_URL=$(sudo minikube service mira --url)
-            curl -fs "$MIRA_URL/v1/health"
+            curl -fs "$MIRA_URL/health"
       - run:
           name: Verify number of QIX Engines found
           command: |
@@ -287,7 +292,7 @@ jobs:
             # Verify Mira health
             RETRIES=0
             while (( MIRA_STATUS != "200" && RETRIES != 30 )); do
-              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/v1/health)
+              MIRA_STATUS=$(curl -s -o /dev/null -w %{http_code} http://localhost:9100/health)
               sleep 2
               RETRIES=$((RETRIES + 1 ))
             done

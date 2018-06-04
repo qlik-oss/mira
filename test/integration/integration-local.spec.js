@@ -51,14 +51,14 @@ describe('GET /engines', () => {
 
 describe('GET /health', () => {
   it('should return OK', async () => {
-    const res = await request(miraEndpoint).get('/v1/health');
+    const res = await request(miraEndpoint).get('/health');
     expect(res.statusCode).to.equal(200);
   });
 });
 
 describe('GET /metrics', () => {
   it('should return Miras own metrics', async () => {
-    const res = await request(miraEndpoint).get('/v1/metrics');
+    const res = await request(miraEndpoint).get('/metrics');
     expect(res.statusCode).to.equal(200);
     expect(res.type).to.equal('text/plain');
     expect(res.text.length).to.not.equal(0);
