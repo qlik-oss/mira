@@ -20,7 +20,7 @@ RUN chmod +x ./docker-entrypoint.sh
 RUN apk update && apk add bash && apk add curl && rm -rf /var/cache/apk/*
 
 # check every 30s to ensure this service returns HTTP 200
-HEALTHCHECK CMD curl -fs http://localhost:$MIRA_API_PORT/v1/health || exit 1
+HEALTHCHECK CMD curl -fs http://localhost:$MIRA_API_PORT/health || exit 1
 
 ARG MIRA_API_PORT=9100
 ENV MIRA_API_PORT $MIRA_API_PORT

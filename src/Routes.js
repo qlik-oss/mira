@@ -2,14 +2,11 @@ const EngineDiscovery = require('./EngineDiscovery');
 const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
 const Router = require('koa-router');
-const prom = require('http-metrics-middleware').promClient;
 const logger = require('./logger/Logger').get();
 
 
 const apiVersion = 'v1';
-const router = new Router({
-  prefix: `/${apiVersion}`,
-});
+const router = new Router({});
 
 const OrchestrationClient = getOrchestrationClient(Config.mode);
 const engineDiscovery = new EngineDiscovery(
@@ -21,7 +18,6 @@ const engineDiscovery = new EngineDiscovery(
 engineDiscovery.start();
 
 const healthEndpoint = 'health';
-const metricsEndpoint = 'metrics';
 const enginesEndpoint = 'engines';
 
 /**
@@ -42,13 +38,14 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
   ctx.body = {};
 });
 
+// This is just for the swagger generation of the api-doc. The actual /metrics endpoint is defined in the http-metrics-middleware library.
 /**
  * @swagger
  * /metrics:
  *   get:
  *     description: Returns metrics of the Mira service
  *     produces:
- *       - application/json; charset=utf-8
+ *       - application/json
  *       - text/plain; charset=utf-8
  *     responses:
  *       200:
@@ -57,18 +54,10 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
  *           type: array
  *           description: Default prometheus client metrics
  */
-router.get(`/${metricsEndpoint}`, async (ctx) => {
-  logger.debug(`GET /${apiVersion}/${metricsEndpoint}`);
-  if (ctx.accepts('text')) {
-    ctx.body = prom.register.metrics();
-  } else {
-    ctx.body = prom.register.getMetricsAsJSON();
-  }
-});
 
 /**
  * @swagger
- * /engines:
+ * /v1/engines:
  *   get:
  *     description:  Lists available Qlik Associative Engines.
  *     produces:
@@ -90,7 +79,7 @@ router.get(`/${metricsEndpoint}`, async (ctx) => {
  *       503:
  *         description: Service Unavailable
  */
-router.get(`/${enginesEndpoint}`, async (ctx) => {
+router.get(`/${apiVersion}/${enginesEndpoint}`, async (ctx) => {
   logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
   try {
     ctx.body = await engineDiscovery.list(ctx.query);
