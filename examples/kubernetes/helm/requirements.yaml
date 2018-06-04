@@ -1,4 +1,0 @@
-dependencies:
-  - name: mira
-    version: 0.0.1
-    repository: file://../../../helm/charts/mira/
