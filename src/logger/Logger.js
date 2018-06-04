@@ -10,10 +10,11 @@ class Logger {
    */
   static get() {
     if (!Logger.logger) {
-      Logger.logger = winston.createLogger({
+      Logger.logger = new (winston.Logger)({
         transports: [
           new (winston.transports.Console)({
             level: process.env.MIRA_LOG_LEVEL || 'info',
+            humanReadableUnhandledException: true,
             formatter: options => JSON.stringify({
               logseverity: options.level.toUpperCase(),
               message: options.message,
