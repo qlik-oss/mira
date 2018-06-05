@@ -20,6 +20,9 @@ jobs:
           command:
             npm install --quiet
       - run:
+          name: greenkeeper - Upload
+          command: greenkeeper-lockfile-upload
+      - run:
           name: Run ESLint
           command:
             npm run lint
