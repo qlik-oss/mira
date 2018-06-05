@@ -184,6 +184,11 @@ jobs:
             chmod 700 get_helm.sh
             ./get_helm.sh
       - run:
+          name: Lint charts
+          command: |
+            helm lint ./examples/kubernetes/helm/charts/mira
+            helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
+      - run:
           name: Install Kubectl
           command: |
             curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
