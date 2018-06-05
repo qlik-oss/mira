@@ -189,7 +189,8 @@ jobs:
       - run:
           name: Lint charts
           command: |
-            helm lint ./helm/charts/mira
+            helm lint ./examples/kubernetes/helm/charts/mira
+            helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
       - run:
           name: Install Kubectl
           command: |
