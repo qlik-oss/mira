@@ -1,6 +1,6 @@
 {
   "name": "mira",
-  "version": "0.2.1-0",
+  "version": "0.3.0",
   "description": "Qlik Associative Engine Discovery Service",
   "author": "QlikTech International AB",
   "private": true,
