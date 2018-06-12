@@ -39,7 +39,7 @@
     "rollbar": "2.4.1",
     "swagger2": "1.0.1",
     "swagger2-koa": "1.0.1",
-    "winston": "2.4.2"
+    "winston": "2.4.3"
   },
   "devDependencies": {
     "after-work.js": "4.3.2",
