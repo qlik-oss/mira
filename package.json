@@ -1,6 +1,6 @@
 {
   "name": "mira",
-  "version": "0.2.1-0",
+  "version": "0.3.1-0",
   "description": "Qlik Associative Engine Discovery Service",
   "author": "QlikTech International AB",
   "private": true,
@@ -44,7 +44,7 @@
   "devDependencies": {
     "after-work.js": "4.3.2",
     "cross-env": "5.1.6",
-    "dredd": "5.1.8",
+    "dredd": "5.1.9",
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.12.0",

@@ -25,6 +25,9 @@ jobs:
           command:
             npm install --quiet
       - run:
+          name: greenkeeper - Upload
+          command: greenkeeper-lockfile-upload
+      - run:
           name: Run ESLint
           command:
             npm run lint
@@ -186,7 +189,8 @@ jobs:
       - run:
           name: Lint charts
           command: |
-            helm lint ./helm/charts/mira
+            helm lint ./examples/kubernetes/helm/charts/mira
+            helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
       - run:
           name: Install Kubectl
           command: |
