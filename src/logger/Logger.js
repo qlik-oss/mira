@@ -1,6 +1,17 @@
 const winston = require('winston');
 
 /**
+ * Formatting the log according to the service contract
+ */
+const formatter = winston.format(info => (
+  {
+    logseverity: info.level.toUpperCase(),
+    timestamp: new Date(Date.now()).toISOString(),
+    message: info.message,
+  }
+));
+
+/**
  * Class providing a shared logger instance to be used in all files.
  */
 class Logger {
@@ -14,11 +25,10 @@ class Logger {
         transports: [
           new (winston.transports.Console)({
             level: process.env.MIRA_LOG_LEVEL || 'info',
-            formatter: options => JSON.stringify({
-              logseverity: options.level.toUpperCase(),
-              message: options.message,
-              timestamp: new Date(Date.now()).toISOString(),
-            }),
+            format: winston.format.combine(
+              formatter(),
+              winston.format.json(),
+            ),
           }),
         ],
       });
