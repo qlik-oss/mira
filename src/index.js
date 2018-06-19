@@ -12,7 +12,7 @@ Config.init();
 const MetricsMiddleware = require('http-metrics-middleware');
 const c2k = require('koa-connect');
 
-const metrics = new MetricsMiddleware();
+const metrics = new MetricsMiddleware({ timeBuckets: [0.01, 0.05, 0.1, 0.5, 1, 5] });
 const router = require('./Routes');
 
 metrics.initBuildInfo(version.name, version.version, version.revision, version.buildTime);
