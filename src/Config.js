@@ -30,8 +30,8 @@ class Config {
      * @prop {string} discoveryLabel - Label used to discover Qlik Associative Engine instances.
      * @static
      */
-    Config.discoveryLabel = process.env.MIRA_DISCOVERY_LABEL ?
-      process.env.MIRA_DISCOVERY_LABEL.trim() : defaultDiscoveryLabel;
+    Config.discoveryLabel = process.env.MIRA_DISCOVERY_LABEL
+      ? process.env.MIRA_DISCOVERY_LABEL.trim() : defaultDiscoveryLabel;
 
     /**
      * @prop {number} defaultEngineAPIPort - The default port to use for communicating with the Qlik Associative Engine,

@@ -3,14 +3,13 @@ const swagger = require('swagger2');
 const swagger2koa = require('swagger2-koa');
 const Rollbar = require('rollbar');
 const path = require('path');
+const MetricsMiddleware = require('http-metrics-middleware');
+const c2k = require('koa-connect');
 const logger = require('./logger/Logger').get();
 const version = require('../version');
 const Config = require('./Config');
 
 Config.init();
-
-const MetricsMiddleware = require('http-metrics-middleware');
-const c2k = require('koa-connect');
 
 const metrics = new MetricsMiddleware({ timeBuckets: [0.01, 0.05, 0.1, 0.5, 1, 5] });
 const router = require('./Routes');
