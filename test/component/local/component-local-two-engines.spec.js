@@ -1,6 +1,6 @@
 const nock = require('nock');
-const specData = require('../../test-data/LocalDockerClient.spec.data.json');
 const request = require('supertest');
+const specData = require('../../test-data/LocalDockerClient.spec.data.json');
 const sleep = require('../../test-utils/sleep');
 
 process.env.DOCKER_HOST = 'http://localhost:8001';

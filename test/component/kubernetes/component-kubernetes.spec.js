@@ -1,7 +1,7 @@
 const nock = require('nock');
+const request = require('supertest');
 const specData = require('../../test-data/KubernetesClient.spec.data.json');
 const sleep = require('../../test-utils/sleep');
-const request = require('supertest');
 
 process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
 process.env.MIRA_ENGINE_UPDATE_INTERVAL = 1000;
