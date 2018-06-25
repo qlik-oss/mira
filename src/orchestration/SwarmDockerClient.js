@@ -31,9 +31,11 @@ function findStatusIp(task, networks) {
   if (!networks) {
     logger.warn(`No network found for task: ${JSON.stringify(task)}`);
     return undefined;
-  } else if (networks.length === 1) {
+  }
+  if (networks.length === 1) {
     return networks[0].ip;
-  } else if (!Config.engineNetworks) {
+  }
+  if (!Config.engineNetworks) {
     logger.warn(`Found multiple docker networks for task: ${JSON.stringify(task)}, but no network configured for environment variable MIRA_SWARM_ENGINE_NETWORKS`);
     return undefined;
   }

@@ -1,7 +1,7 @@
+const Router = require('koa-router');
 const EngineDiscovery = require('./EngineDiscovery');
 const getOrchestrationClient = require('./orchestration/getOrchestrationClient');
 const Config = require('./Config');
-const Router = require('koa-router');
 const logger = require('./logger/Logger').get();
 
 
