@@ -4,7 +4,7 @@ jobs:
   # Job for build src, run unit & component test and build docker image
   build:
     docker:
-      - image: circleci/node:8.9.3
+      - image: circleci/node:8.11.3
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikcore/mira
