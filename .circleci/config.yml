@@ -10,11 +10,6 @@ jobs:
       DOCKER_REPO: qlikcore/mira
     steps:
       - checkout
-      - run:
-          name: greenkeeper - Update
-          command: |
-            sudo npm install -g greenkeeper-lockfile@1
-            greenkeeper-lockfile-update
       - restore_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -24,9 +19,6 @@ jobs:
           name: Install dependencies
           command:
             npm install --quiet
-      - run:
-          name: greenkeeper - Upload
-          command: greenkeeper-lockfile-upload
       - run:
           name: Run ESLint
           command:
