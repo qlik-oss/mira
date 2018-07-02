@@ -12,7 +12,7 @@ Mira provides Qlik Associative Engine discovery in a Docker containerized enviro
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
-For Mira's end-user documentation, see [Qlik Core](https://qlikcore.com/docs/services/mira/) documentation site.
+For Mira's end-user documentation, see [Qlik Core](https://qlikcore.com/services/mira/) documentation site.
 
 ## Contributing
 
