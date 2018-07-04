@@ -93,10 +93,6 @@ class EngineDiscovery {
    * @returns {Promise<EngineReturnSpec[]>} Promise to an array of engines.
    */
   async list(query) {
-    if (!this.discoverySuccessful) {
-      throw new Error('Last engine discovery failed');
-    }
-
     const engines = this.engineMap.all();
 
     if (query.format === 'condensed') {
