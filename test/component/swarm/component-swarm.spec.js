@@ -78,24 +78,3 @@ describe('Mira in docker swarm mode', () => {
 
   after(() => nock.cleanAll());
 });
-
-describe('Mira in docker swarm mode but no access to docker daemon', () => {
-  let app;
-
-  before(async () => {
-    // Mock docker.sock
-    nock('http://localhost:8001').filteringPath(() => '/tasks').get('/tasks').times(10)
-      .reply(503, 'This node is not a swarm manager.');
-    app = require('../../../src/index'); // eslint-disable-line global-require
-    await sleep(1000); // Sleep to make room for status checks to succeed
-  });
-
-  describe('GET /engines', () => {
-    it('should return 503 Service Unavailable', async () => {
-      const res = await request(app.listen()).get('/v1/engines');
-      expect(res.status).to.equal(503);
-    });
-  });
-
-  after(() => nock.cleanAll());
-});
