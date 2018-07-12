@@ -33,7 +33,7 @@
   "dependencies": {
     "dockerode": "2.5.5",
     "http-metrics-middleware": "1.1.0",
-    "koa": "2.5.1",
+    "koa": "2.5.2",
     "koa-connect": "2.0.1",
     "koa-router": "7.4.0",
     "rollbar": "2.4.2",
