@@ -14,7 +14,7 @@ services:
         constraints: [node.role == manager]
 
   qix-engine:
-    image: qlikcore/engine:12.193.0
+    image: qlikcore/engine:12.207.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - 9076:9076
