@@ -38,7 +38,7 @@
     "koa-router": "7.4.0",
     "rollbar": "2.4.4",
     "swagger2": "1.0.1",
-    "swagger2-koa": "1.0.1",
+    "swagger2-koa": "1.0.2",
     "winston": "3.0.0"
   },
   "devDependencies": {
