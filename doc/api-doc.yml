@@ -106,7 +106,7 @@ definitions:
          pod:
           type: object
           description: Pod information in verbatim format as returned by the Kubernetes API.
-         replicaset:
+         replicaSet:
           type: object
           description: Replicaset information in verbatim format as returned by the Kubernetes API.
          deployment:
