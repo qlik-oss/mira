@@ -194,7 +194,7 @@ jobs:
       - run:
           name: Start Minikube
           command: |
-            sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0
+            sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0 --extra-config=apiserver.Authorization.Mode=RBAC
             sudo minikube update-context
       - run:
           name: Install socat (needed by helm)
