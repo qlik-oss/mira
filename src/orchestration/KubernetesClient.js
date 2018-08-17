@@ -40,6 +40,21 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
+    const replicaSets = await kubeHttpGet('/apis/apps/v1/replicasets');
+
+    const replicaMap = new Map();
+    replicaSets.items.forEach((item) => {
+      replicaMap.set(item.metadata.uid, item);
+    });
+
+    const deployments = await kubeHttpGet('/apis/apps/v1/deployments');
+
+    const deploymentMap = new Map();
+    deployments.items.forEach((item) => {
+      deploymentMap.set(item.metadata.uid, item);
+    });
+
+
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
@@ -54,8 +69,15 @@ class KubernetesClient {
       const ip = pod.status.podIP;
       const engine = { networks: [{ ip }], labels };
       const key = pod.metadata.uid;
+      const replicaSet = replicaMap.get(pod.metadata.ownerReferences[0].uid);
+      const deployment = replicaSet ? deploymentMap.get(replicaSet.metadata.ownerReferences[0].uid) : undefined;
+      const kubernetes = {
+        pod,
+        replicaSet,
+        deployment,
+      };
       return {
-        key, engine, kubernetes: pod, statusIp: ip,
+        key, engine, kubernetes, statusIp: ip,
       };
     });
 
