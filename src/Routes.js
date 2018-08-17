@@ -134,7 +134,16 @@ router.get(`/${apiVersion}/${enginesEndpoint}`, async (ctx) => {
  *         description: Task information in verbatim format as returned by the Docker Engine Remote API.
  *       kubernetes:
  *         type: object
- *         description: Pod information in verbatim format as returned by the Kubernetes API.
+ *         properties:
+ *           pod:
+ *             type: object
+ *             description: Pod information in verbatim format as returned by the Kubernetes API.
+ *           replicaSet:
+ *             type: object
+ *             description: Replicaset information in verbatim format as returned by the Kubernetes API.
+ *           deployment:
+ *             type: object
+ *             description: Deployment information in verbatim format as returned by the Kubernetes API.
  *   containerStatus:
  *     type: string
  *     description: Status of the Qlik Associative Engine.
