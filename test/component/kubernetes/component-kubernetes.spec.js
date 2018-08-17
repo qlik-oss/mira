@@ -1,6 +1,8 @@
 const nock = require('nock');
 const request = require('supertest');
 const specData = require('../../test-data/KubernetesClient.spec.data.json');
+const replicaSetSpecData = require('./../../test-data/Replicaset.spec.data.json');
+const deploymentSpecData = require('./../../test-data/Deployment.spec.data.json');
 const sleep = require('../../test-utils/sleep');
 
 process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
@@ -11,6 +13,8 @@ describe('Mira in kubernetes mode', () => {
 
   before(async () => {
     nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').times(10).reply(200, specData.endpointsResponse);
+    nock('http://localhost:8001').get('/apis/apps/v1/replicasets').reply(200, replicaSetSpecData.endpointsResponse);
+    nock('http://localhost:8001').get('/apis/apps/v1/deployments').reply(200, deploymentSpecData.endpointsResponse);
     // Engine healthcheck mocks
     nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
     nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
@@ -28,8 +32,12 @@ describe('Mira in kubernetes mode', () => {
 
     it('should set the kubernetes property to holding the container info', async () => {
       const res = await request(app.listen()).get('/v1/engines');
-      expect(res.body[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
-      expect(res.body[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
+      expect(res.body[0].kubernetes.pod).to.deep.equal(specData.endpointsResponse.items[0]);
+      expect(res.body[0].kubernetes.replicaSet).to.deep.equal(replicaSetSpecData.endpointsResponse.items[0]);
+      expect(res.body[0].kubernetes.deployment).to.deep.equal(deploymentSpecData.endpointsResponse.items[0]);
+      expect(res.body[1].kubernetes.pod).to.deep.equal(specData.endpointsResponse.items[1]);
+      expect(res.body[1].kubernetes.replicaSet).to.deep.equal(replicaSetSpecData.endpointsResponse.items[0]);
+      expect(res.body[1].kubernetes.deployment).to.deep.equal(deploymentSpecData.endpointsResponse.items[0]);
     });
 
     it('should set the health and metrics properties', async () => {
