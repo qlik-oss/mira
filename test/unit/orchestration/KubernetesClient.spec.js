@@ -1,16 +1,23 @@
 const nock = require('nock');
 const KubernetesClient = require('../../../src/orchestration/KubernetesClient');
-const specData = require('./../../test-data/KubernetesClient.spec.data.json');
+const podSpecData = require('./../../test-data/KubernetesClient.spec.data.json');
+const replicaSetSpecData = require('./../../test-data/Replicaset.spec.data.json');
+const deploymentSpecData = require('./../../test-data/Deployment.spec.data.json');
 const Config = require('../../../src/Config');
 
 before(() => {
   Config.init();
 });
 
+beforeEach(() => {
+  nock('http://localhost:8001').get('/apis/apps/v1/replicasets').reply(200, replicaSetSpecData.endpointsResponse);
+  nock('http://localhost:8001').get('/apis/apps/v1/deployments').reply(200, deploymentSpecData.endpointsResponse);
+});
+
 describe('KubernetesClient', () => {
   describe('#listEngines', async () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {
-      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, specData.endpointsResponse);
+      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
       const engines = await KubernetesClient.listEngines();
       const rawEngines = engines.map(pod => ({
         engine: pod.engine,
@@ -25,14 +32,18 @@ describe('KubernetesClient', () => {
     });
 
     it('should set the kubernetes property to hold the container info', async () => {
-      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, specData.endpointsResponse);
+      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
       const engines = await KubernetesClient.listEngines();
-      expect(engines[0].kubernetes).to.deep.equal(specData.endpointsResponse.items[0]);
-      expect(engines[1].kubernetes).to.deep.equal(specData.endpointsResponse.items[1]);
+      expect(engines[0].kubernetes.pod).to.deep.equal(podSpecData.endpointsResponse.items[0]);
+      expect(engines[0].kubernetes.replicaSet).to.deep.equal(replicaSetSpecData.endpointsResponse.items[0]);
+      expect(engines[0].kubernetes.deployment).to.deep.equal(deploymentSpecData.endpointsResponse.items[0]);
+      expect(engines[1].kubernetes.pod).to.deep.equal(podSpecData.endpointsResponse.items[1]);
+      expect(engines[1].kubernetes.replicaSet).to.deep.equal(replicaSetSpecData.endpointsResponse.items[0]);
+      expect(engines[1].kubernetes.deployment).to.deep.equal(deploymentSpecData.endpointsResponse.items[0]);
     });
 
     it('should not set the local and swarm properties', async () => {
-      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, specData.endpointsResponse);
+      nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
       const engines = await KubernetesClient.listEngines();
       expect(engines[0].local).to.be.undefined;
       expect(engines[0].swarm).to.be.undefined;

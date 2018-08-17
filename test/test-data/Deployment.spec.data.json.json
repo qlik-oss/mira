@@ -1,0 +1,210 @@
+{
+  "endpointsResponse": {
+    "kind": "DeploymentList",
+    "apiVersion": "apps/v1",
+    "metadata": {
+      "selfLink": "/apis/apps/v1/deployments",
+      "resourceVersion": "7357251"
+    },
+    "items": [
+      {
+        "metadata": {
+          "name": "engine",
+          "namespace": "default",
+          "selfLink": "/apis/apps/v1/namespaces/default/deployments/engine",
+          "uid": "aab2fc4b-88d6-11e8-be43-42010a9a0133",
+          "resourceVersion": "5589838",
+          "generation": 3,
+          "creationTimestamp": "2018-07-16T09:00:20Z",
+          "labels": {
+            "app": "engine"
+          },
+          "annotations": {
+            "deployment.kubernetes.io/revision": "3",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"engine\"},\"name\":\"engine\",\"namespace\":\"default\"},\"spec\":{\"replicas\":2,\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"engine\",\"qix-engine\":\"\"}},\"spec\":{\"affinity\":{\"podAntiAffinity\":{\"requiredDuringSchedulingIgnoredDuringExecution\":[{\"labelSelector\":{\"matchExpressions\":[{\"key\":\"app\",\"operator\":\"In\",\"values\":[\"engine\"]}]},\"topologyKey\":\"kubernetes.io/hostname\"}]}},\"containers\":[{\"args\":[\"-S\",\"AcceptEULA=yes\",\"-S\",\"LicenseServiceUrl=http://license-service:9200\",\"-S\",\"DocumentDirectory=/doc\",\"-S\",\"EnableABAC=1\",\"-S\",\"SystemAllowRulePath=/rules/read_engine_rules.txt\"],\"image\":\"qlikcore/engine:12.215.0\",\"imagePullPolicy\":\"IfNotPresent\",\"lifecycle\":{\"preStop\":{\"exec\":{\"command\":[\"sh\",\"-c\",\"/engine-prestop-hook/engine-prestop-hook.sh\"]}}},\"name\":\"engine\",\"ports\":[{\"containerPort\":9076},{\"containerPort\":9090}],\"volumeMounts\":[{\"mountPath\":\"/doc\",\"name\":\"app-nfs\"},{\"mountPath\":\"/engine-prestop-hook\",\"name\":\"engine-prestop-hook\"},{\"mountPath\":\"/rules\",\"name\":\"access-control\"}]}],\"imagePullSecrets\":[{\"name\":\"dockerhub\"}],\"initContainers\":[{\"command\":[\"sh\",\"-c\",\"chown -R 65534:65534 /doc\"],\"image\":\"alpine:3.5\",\"name\":\"volume-mount-owner\",\"volumeMounts\":[{\"mountPath\":\"/doc\",\"name\":\"app-nfs\"}]}],\"nodeSelector\":{\"cloud.google.com/gke-nodepool\":\"default-pool\"},\"terminationGracePeriodSeconds\":600,\"volumes\":[{\"configMap\":{\"defaultMode\":493,\"name\":\"engine-prestop-hook\"},\"name\":\"engine-prestop-hook\"},{\"name\":\"app-nfs\",\"persistentVolumeClaim\":{\"claimName\":\"nfs\"}},{\"configMap\":{\"name\":\"access-control\"},\"name\":\"access-control\"}]}}}}\n"
+          }
+        },
+        "spec": {
+          "replicas": 2,
+          "selector": {
+            "matchLabels": {
+              "qix-engine": "",
+              "app": "engine"
+            }
+          },
+          "template": {
+            "metadata": {
+              "creationTimestamp": null,
+              "labels": {
+                "app": "engine",
+                "qix-engine": ""
+              },
+              "annotations": {
+                "prometheus.io/scrape": "true"
+              }
+            },
+            "spec": {
+              "volumes": [
+                {
+                  "name": "engine-prestop-hook",
+                  "configMap": {
+                    "name": "engine-prestop-hook",
+                    "defaultMode": 493
+                  }
+                },
+                {
+                  "name": "app-nfs",
+                  "persistentVolumeClaim": {
+                    "claimName": "nfs"
+                  }
+                },
+                {
+                  "name": "access-control",
+                  "configMap": {
+                    "name": "access-control",
+                    "defaultMode": 420
+                  }
+                }
+              ],
+              "initContainers": [
+                {
+                  "name": "volume-mount-owner",
+                  "image": "alpine:3.5",
+                  "command": [
+                    "sh",
+                    "-c",
+                    "chown -R 65534:65534 /doc"
+                  ],
+                  "resources": {},
+                  "volumeMounts": [
+                    {
+                      "name": "app-nfs",
+                      "mountPath": "/doc"
+                    }
+                  ],
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "imagePullPolicy": "IfNotPresent"
+                }
+              ],
+              "containers": [
+                {
+                  "name": "engine",
+                  "image": "qlikcore/engine:12.215.0",
+                  "args": [
+                    "-S",
+                    "AcceptEULA=yes",
+                    "-S",
+                    "LicenseServiceUrl=http://license-service:9200",
+                    "-S",
+                    "DocumentDirectory=/doc",
+                    "-S",
+                    "EnableABAC=1",
+                    "-S",
+                    "SystemAllowRulePath=/rules/read_engine_rules.txt"
+                  ],
+                  "ports": [
+                    {
+                      "containerPort": 9076,
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9090,
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "resources": {},
+                  "volumeMounts": [
+                    {
+                      "name": "app-nfs",
+                      "mountPath": "/doc"
+                    },
+                    {
+                      "name": "engine-prestop-hook",
+                      "mountPath": "/engine-prestop-hook"
+                    },
+                    {
+                      "name": "access-control",
+                      "mountPath": "/rules"
+                    }
+                  ],
+                  "lifecycle": {
+                    "preStop": {
+                      "exec": {
+                        "command": [
+                          "sh",
+                          "-c",
+                          "/engine-prestop-hook/engine-prestop-hook.sh"
+                        ]
+                      }
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "imagePullPolicy": "IfNotPresent"
+                }
+              ],
+              "restartPolicy": "Always",
+              "terminationGracePeriodSeconds": 600,
+              "dnsPolicy": "ClusterFirst",
+              "nodeSelector": {
+                "cloud.google.com/gke-nodepool": "default-pool"
+              },
+              "securityContext": {},
+              "imagePullSecrets": [
+                {
+                  "name": "dockerhub"
+                }
+              ],
+              "affinity": {
+                "podAntiAffinity": {
+                  "requiredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "labelSelector": {
+                        "matchExpressions": [
+                          {
+                            "key": "app",
+                            "operator": "In",
+                            "values": [
+                              "engine"
+                            ]
+                          }
+                        ]
+                      },
+                      "topologyKey": "kubernetes.io/hostname"
+                    }
+                  ]
+                }
+              },
+              "schedulerName": "default-scheduler"
+            }
+          },
+          "strategy": {
+            "type": "RollingUpdate",
+            "rollingUpdate": {
+              "maxUnavailable": 1,
+              "maxSurge": 1
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 3,
+          "replicas": 2,
+          "updatedReplicas": 2,
+          "readyReplicas": 2,
+          "availableReplicas": 2,
+          "conditions": [
+            {
+              "type": "Available",
+              "status": "True",
+              "lastUpdateTime": "2018-07-16T09:13:37Z",
+              "lastTransitionTime": "2018-07-16T09:13:37Z",
+              "reason": "MinimumReplicasAvailable",
+              "message": "Deployment has minimum availability."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
