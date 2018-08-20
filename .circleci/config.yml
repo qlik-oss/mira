@@ -159,109 +159,109 @@ jobs:
             ./.circleci/verify_qix_engines.sh "http://localhost:9100"
 
   # Job for testing Mira in kubernetes mode with helm and plain charts
-  kubernetes:
-    machine: true
-    environment:
-      CHANGE_MINIKUBE_NONE_USER: true
-      DOCKER_REPO: qlikcore/mira
-    working_directory: ~/mira
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          name: Import previously built docker image
-          command: docker load < /tmp/workspace/mira_image.tar
-      - checkout
-      - run:
-          name: Install Helm
-          command: |
-            curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-            chmod 700 get_helm.sh
-            ./get_helm.sh
-      - run:
-          name: Lint charts
-          command: |
-            helm lint ./examples/kubernetes/helm/charts/mira
-            helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
-      - run:
-          name: Install Kubectl
-          command: |
-            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-      - run:
-          name: Install Minikube
-          command: |
-            curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-      - run:
-          name: Start Minikube
-          command: |
-            sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0 --extra-config=apiserver.Authorization.Mode=RBAC
-            sudo minikube update-context
-      - run:
-          name: Install socat (needed by helm)
-          command: |
-            sudo apt-get update
-            sudo apt-get install socat
-      - run:
-          name: Install nsenter (needed by helm)
-          command: |
-            cd /tmp; curl https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.25/util-linux-2.25.tar.gz | tar -zxf-; cd util-linux-2.25;
-            sudo apt-get install autopoint autoconf libtool automake
-            ./configure --without-python --disable-all-programs --enable-nsenter --without-ncurses
-            sudo make nsenter; sudo cp nsenter /usr/local/bin
-      - run:
-          name: Create service account for cluster-admin role (Helm)
-          command: sudo kubectl create -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
-      - run:
-          name: Helm init and wait for tiller to be running
-          command: sudo helm init --service-account tiller --debug; sudo kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system;
-      - run:
-          name: Helm install charts
-          command: |
-            VER=$(cat /tmp/workspace/version.txt)
-            sudo helm dependency build ./examples/kubernetes/helm/
-            sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
-      - run:
-          name: Check health of services
-          command: |
-            # Check mira health
-            MIRA_URL=$(sudo minikube service test-mira --url)
-            curl -fs "$MIRA_URL/health"
-      - run:
-          name: Verify number of QIX Engines found
-          command: |
-            MIRA_URL=$(sudo minikube service test-mira --url)
-            ./.circleci/verify_qix_engines.sh $MIRA_URL
-      - run:
-          name: Helm delete
-          command: sudo helm delete test --debug
-      - run:
-          name: Delete service account for cluster-admin role (Helm)
-          command: sudo kubectl delete -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
-      - run:
-          name: Give default service account view access to Kubernetes API
-          command: sudo kubectl create -f ./examples/kubernetes/plain/rbac/rbac-config.yaml
-      - run:
-          name: Accept EULA
-          command: grep -rl AcceptEULA ./examples/kubernetes/plain/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
-      - run:
-          name: Kubernetes plain mira
-          command: |
-            VER=$(cat /tmp/workspace/version.txt)
-            sudo kubectl create -f ./examples/kubernetes/plain
-            sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
-      - run:
-          name: Check health of services
-          command: |
-            # Check mira health
-            MIRA_URL=$(sudo minikube service mira --url)
-            curl -fs "$MIRA_URL/health"
-      - run:
-          name: Verify number of QIX Engines found
-          command: |
-            MIRA_URL=$(sudo minikube service mira --url)
-            ./.circleci/verify_qix_engines.sh $MIRA_URL
-
-  # Job for testing Mira in dns mode
+#  kubernetes:
+#    machine: true
+#    environment:
+#      CHANGE_MINIKUBE_NONE_USER: true
+#      DOCKER_REPO: qlikcore/mira
+#    working_directory: ~/mira
+#    steps:
+#      - attach_workspace:
+#          at: /tmp/workspace
+#      - run:
+#          name: Import previously built docker image
+#          command: docker load < /tmp/workspace/mira_image.tar
+#      - checkout
+#      - run:
+#          name: Install Helm
+#          command: |
+#            curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+#            chmod 700 get_helm.sh
+#            ./get_helm.sh
+#      - run:
+#          name: Lint charts
+#          command: |
+#            helm lint ./examples/kubernetes/helm/charts/mira
+#            helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
+#      - run:
+#          name: Install Kubectl
+#          command: |
+#            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+#      - run:
+#          name: Install Minikube
+#          command: |
+#            curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+#      - run:
+#          name: Start Minikube
+#          command: |
+#            sudo minikube start --vm-driver=none --kubernetes-version=v1.9.0 --extra-config=apiserver.Authorization.Mode=RBAC
+#            sudo minikube update-context
+#      - run:
+#          name: Install socat (needed by helm)
+#          command: |
+#            sudo apt-get update
+#            sudo apt-get install socat
+#      - run:
+#          name: Install nsenter (needed by helm)
+#          command: |
+#            cd /tmp; curl https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.25/util-linux-2.25.tar.gz | tar -zxf-; cd util-linux-2.25;
+#            sudo apt-get install autopoint autoconf libtool automake
+#            ./configure --without-python --disable-all-programs --enable-nsenter --without-ncurses
+#            sudo make nsenter; sudo cp nsenter /usr/local/bin
+#      - run:
+#          name: Create service account for cluster-admin role (Helm)
+#          command: sudo kubectl create -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
+#      - run:
+#          name: Helm init and wait for tiller to be running
+#          command: sudo helm init --service-account tiller --debug; sudo kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system;
+#      - run:
+#          name: Helm install charts
+#          command: |
+#            VER=$(cat /tmp/workspace/version.txt)
+#            sudo helm dependency build ./examples/kubernetes/helm/
+#            sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
+#      - run:
+#          name: Check health of services
+#          command: |
+#            # Check mira health
+#            MIRA_URL=$(sudo minikube service test-mira --url)
+#            curl -fs "$MIRA_URL/health"
+#      - run:
+#          name: Verify number of QIX Engines found
+#          command: |
+#            MIRA_URL=$(sudo minikube service test-mira --url)
+#            ./.circleci/verify_qix_engines.sh $MIRA_URL
+#      - run:
+#          name: Helm delete
+#          command: sudo helm delete test --debug
+#      - run:
+#          name: Delete service account for cluster-admin role (Helm)
+#          command: sudo kubectl delete -f ./examples/kubernetes/helm/rbac/rbac-config.yaml
+#      - run:
+#          name: Give default service account view access to Kubernetes API
+#          command: sudo kubectl create -f ./examples/kubernetes/plain/rbac/rbac-config.yaml
+#      - run:
+#          name: Accept EULA
+#          command: grep -rl AcceptEULA ./examples/kubernetes/plain/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
+#      - run:
+#          name: Kubernetes plain mira
+#          command: |
+#            VER=$(cat /tmp/workspace/version.txt)
+#            sudo kubectl create -f ./examples/kubernetes/plain
+#            sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
+#      - run:
+#          name: Check health of services
+#          command: |
+#            # Check mira health
+#            MIRA_URL=$(sudo minikube service mira --url)
+#            curl -fs "$MIRA_URL/health"
+#      - run:
+#          name: Verify number of QIX Engines found
+#          command: |
+#            MIRA_URL=$(sudo minikube service mira --url)
+#            ./.circleci/verify_qix_engines.sh $MIRA_URL
+#
+#  # Job for testing Mira in dns mode
   dns:
     machine: true
     environment:
