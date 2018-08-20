@@ -10,8 +10,8 @@ jobs:
       DOCKER_REPO: qlikcore/mira
     steps:
       - checkout
-      #- restore_cache:
-      #    key: npm-dependency-cache-{{ checksum "package.json" }}
+      - restore_cache:
+          key: npm-dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Generate version.json
           command: ./generate_version_file.sh

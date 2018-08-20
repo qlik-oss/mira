@@ -4,7 +4,7 @@ image:
   repository: qlikcore/mira
   tag: 0.1.0
   pullPolicy: IfNotPresent
-sideCartContainerName: kubectl1
+sideCartContainerName: kubectl
 sideCartContainerArgs: "[ \"proxy\", \"-p\", \"8001\" ]"
 sideCartContainerImage: lachlanevenson/k8s-kubectl:v1.9.10
 service:

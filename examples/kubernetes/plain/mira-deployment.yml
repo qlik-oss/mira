@@ -21,6 +21,6 @@ spec:
         - name: MIRA_MODE
           value: kubernetes
       - name: kubectl
-        image: gcr.io/google_containers/kubectl:v0.18.0-350-gfb3305edcf6c1a
+        image: lachlanevenson/k8s-kubectl:v1.9.10
         args: [ "proxy", "-p", "8001" ]
         imagePullPolicy: IfNotPresent
