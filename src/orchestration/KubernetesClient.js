@@ -47,7 +47,7 @@ class KubernetesClient {
         replicaMap.set(item.metadata.uid, item);
       });
     } catch (error) {
-      logger.warn('Could not retrive replicaset information, verify your RBAC settings');
+      // Do nothing.
     }
 
     const deploymentMap = new Map();
@@ -57,9 +57,8 @@ class KubernetesClient {
         deploymentMap.set(item.metadata.uid, item);
       });
     } catch (error) {
-      logger.warn('Could not retrive deployment information, verify your RBAC settings');
+      // Do nothing.
     }
-
 
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
     const runningPods = pods.items.filter((pod) => {
