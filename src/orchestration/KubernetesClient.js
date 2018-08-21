@@ -40,19 +40,25 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    const replicaSets = await kubeHttpGet('/apis/apps/v1/replicasets');
-
     const replicaMap = new Map();
-    replicaSets.items.forEach((item) => {
-      replicaMap.set(item.metadata.uid, item);
-    });
-
-    const deployments = await kubeHttpGet('/apis/apps/v1/deployments');
+    try {
+      const replicaSets = await kubeHttpGet('/apis/apps/v1/replicasets');
+      replicaSets.items.forEach((item) => {
+        replicaMap.set(item.metadata.uid, item);
+      });
+    } catch (error) {
+      logger.warning('Could not retrive replicaset information, verify your RBAC settings');
+    }
 
     const deploymentMap = new Map();
-    deployments.items.forEach((item) => {
-      deploymentMap.set(item.metadata.uid, item);
-    });
+    try {
+      const deployments = await kubeHttpGet('/apis/apps/v1/deployments');
+      deployments.items.forEach((item) => {
+        deploymentMap.set(item.metadata.uid, item);
+      });
+    } catch (error) {
+      logger.warning('Could not retrive deployment information, verify your RBAC settings');
+    }
 
 
     const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
