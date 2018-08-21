@@ -47,7 +47,7 @@ class KubernetesClient {
         replicaMap.set(item.metadata.uid, item);
       });
     } catch (error) {
-      logger.warning('Could not retrive replicaset information, verify your RBAC settings');
+      logger.warn('Could not retrive replicaset information, verify your RBAC settings');
     }
 
     const deploymentMap = new Map();
@@ -57,7 +57,7 @@ class KubernetesClient {
         deploymentMap.set(item.metadata.uid, item);
       });
     } catch (error) {
-      logger.warning('Could not retrive deployment information, verify your RBAC settings');
+      logger.warn('Could not retrive deployment information, verify your RBAC settings');
     }
 
 
