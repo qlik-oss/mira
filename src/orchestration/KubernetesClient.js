@@ -40,9 +40,13 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
+    const replicaPromise = kubeHttpGet('/apis/apps/v1/replicasets');
+    const deploymentPromise = kubeHttpGet('/apis/apps/v1/deployments');
+    const podPromise = kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
+
     const replicaMap = new Map();
     try {
-      const replicaSets = await kubeHttpGet('/apis/apps/v1/replicasets');
+      const replicaSets = await replicaPromise;
       replicaSets.items.forEach((item) => {
         replicaMap.set(item.metadata.uid, item);
       });
@@ -52,7 +56,7 @@ class KubernetesClient {
 
     const deploymentMap = new Map();
     try {
-      const deployments = await kubeHttpGet('/apis/apps/v1/deployments');
+      const deployments = await deploymentPromise;
       deployments.items.forEach((item) => {
         deploymentMap.set(item.metadata.uid, item);
       });
@@ -60,7 +64,7 @@ class KubernetesClient {
       // Do nothing.
     }
 
-    const pods = await kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
+    const pods = await podPromise;
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
         logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
