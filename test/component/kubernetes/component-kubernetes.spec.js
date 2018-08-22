@@ -13,8 +13,8 @@ describe('Mira in kubernetes mode', () => {
 
   before(async () => {
     nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').times(10).reply(200, specData.endpointsResponse);
-    nock('http://localhost:8001').get('/apis/apps/v1/replicasets').reply(200, replicaSetSpecData.endpointsResponse);
-    nock('http://localhost:8001').get('/apis/apps/v1/deployments').reply(200, deploymentSpecData.endpointsResponse);
+    nock('http://localhost:8001').get('/apis/apps/v1/replicasets').times(10).reply(200, replicaSetSpecData.endpointsResponse);
+    nock('http://localhost:8001').get('/apis/apps/v1/deployments').times(10).reply(200, deploymentSpecData.endpointsResponse);
     // Engine healthcheck mocks
     nock(`http://${specData.miraOutput[0].engine.ip}:${specData.miraOutput[0].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
     nock(`http://${specData.miraOutput[1].engine.ip}:${specData.miraOutput[1].engine.port}`).get('/healthcheck').times(10).reply(200, { health: 'health is ok' });
