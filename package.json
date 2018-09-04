@@ -39,7 +39,8 @@
     "rollbar": "2.4.5",
     "swagger2": "1.0.1",
     "swagger2-koa": "1.0.2",
-    "winston": "3.0.0"
+    "winston": "3.0.0",
+    "@kubernetes/client-node": "0.5.3"
   },
   "devDependencies": {
     "after-work.js": "4.3.2",
