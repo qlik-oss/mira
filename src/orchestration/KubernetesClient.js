@@ -35,7 +35,8 @@ class KubernetesClient {
     const deploymentMap = new Map();
     try {
       const deploymentResponse = await deploymentPromise;
-      deploymentResponse.body.deployments.items.forEach((item) => {
+      logger.info("deployment" + deploymentResponse.body);
+      deploymentResponse.body.items.forEach((item) => {
         deploymentMap.set(item.metadata.uid, item);
       });
     } catch (error) {
