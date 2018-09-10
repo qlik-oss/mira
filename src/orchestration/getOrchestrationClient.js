@@ -11,11 +11,11 @@ const DnsClient = require('./DnsClient');
 function getOrchestrationClient(mode) {
   switch (mode) {
     case 'local':
-      return LocalDockerClient();
+      return LocalDockerClient;
     case 'swarm':
-      return SwarmDockerClient();
+      return SwarmDockerClient;
     case 'kubernetes':
-      return KubernetesClient();
+      return new KubernetesClient();
     case 'dns':
       return DnsClient;
     case 'none':

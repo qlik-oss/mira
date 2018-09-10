@@ -17,7 +17,7 @@ class KubernetesClient {
    * Lists engines.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
-  static async listEngines() {
+  async listEngines() {
     const replicaPromise = this.k8sAppsApi.listReplicaSetForAllNamespaces();
     const deploymentPromise = this.k8sAppsApi.listDeploymentForAllNamespaces();
     const podPromise = this.k8sCoreApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
