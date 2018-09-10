@@ -15,10 +15,11 @@ class KubernetesClient {
     kc.loadFromCluster();
 
     const k8sApi = kc.makeApiClient(k8s.Apps_v1Api);
+    const k8sApi2 = kc.makeApiClient(k8s.Core_v1Api);
 
     const replicaPromise = k8sApi.listReplicaSetForAllNamespaces();
     const deploymentPromise = k8sApi.listDeploymentForAllNamespaces();
-    const podPromise = k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
+    const podPromise = k8sApi2.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
 
     const replicaMap = new Map();
     try {
