@@ -79,7 +79,7 @@ class KubernetesClient {
     logger.info("engine poddar");
     logger.info(k8sResponse.body);
 
-    const pods = JSON.parse(k8sResponse);
+    const pods = JSON.parse(k8sResponse.body);
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
         logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
