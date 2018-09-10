@@ -100,18 +100,18 @@ jobs:
               echo "Services did not start up properly"
               exit 1
             fi
-      - run:
-          name: Build and execute integration tests
-          command: |
-            # Find IP address of gateway
-            CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
-            TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
+#      - run:
+#          name: Build and execute integration tests
+#          command: |
+#            # Find IP address of gateway
+#            CONTAINER_ID=$(docker ps -aqf "name=mira_mira")
+#            TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
             # Build docker image for test.
             # To be able to interact with services running in a remote docker environment, the tests must be executed from a container in the remote docker as well.
             # For more info see https://circleci.com/docs/2.0/building-docker-images/#separation-of-environments
-            docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
+#            docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-integration -f ./test/integration/Dockerfile .
             # Execute tests
-            docker run --rm test/test-integration
+#            docker run --rm test/test-integration
       # Persist to workspace so other jobs in the workflow can reuse artifacts
       - persist_to_workspace:
           root: workspace
