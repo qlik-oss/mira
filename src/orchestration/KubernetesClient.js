@@ -6,20 +6,22 @@ const Config = require('../Config');
  * Class providing a Kubernetes client implementation that collects information on engines.
  */
 class KubernetesClient {
+
+  constructor() {
+    const kc = new k8s.KubeConfig();
+    kc.loadFromCluster();
+    this.k8sAppsApi = kc.makeApiClient(k8s.Apps_v1Api);
+    this.k8sCoreApi = kc.makeApiClient(k8s.Core_v1Api);
+  }
+
   /**
    * Lists engines.
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    const kc = new k8s.KubeConfig();
-    kc.loadFromCluster();
-
-    const k8sApi = kc.makeApiClient(k8s.Apps_v1Api);
-    const k8sApi2 = kc.makeApiClient(k8s.Core_v1Api);
-
-    const replicaPromise = k8sApi.listReplicaSetForAllNamespaces();
-    const deploymentPromise = k8sApi.listDeploymentForAllNamespaces();
-    const podPromise = k8sApi2.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
+    const replicaPromise = this.k8sAppsApi.listReplicaSetForAllNamespaces();
+    const deploymentPromise = this.k8sAppsApi.listDeploymentForAllNamespaces();
+    const podPromise = this.k8sCoreApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
 
     const replicaMap = new Map();
     try {
@@ -29,19 +31,16 @@ class KubernetesClient {
       });
     } catch (error) {
       // Do nothing.
-      logger.info("error" + error);
     }
 
     const deploymentMap = new Map();
     try {
       const deploymentResponse = await deploymentPromise;
-      logger.info("deployment" + deploymentResponse.body);
       deploymentResponse.body.items.forEach((item) => {
         deploymentMap.set(item.metadata.uid, item);
       });
     } catch (error) {
       // Do nothing.
-      logger.info("error" + error);
     }
 
     const podResponse = await podPromise;
@@ -77,4 +76,4 @@ class KubernetesClient {
   }
 }
 
-module.exports = KubernetesClient;
+module.exports = new KubernetesClient();
