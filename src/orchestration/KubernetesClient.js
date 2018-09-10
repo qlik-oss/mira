@@ -78,8 +78,15 @@ class KubernetesClient {
     const k8sResponse = await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
     logger.info("engine poddar");
     logger.info(k8sResponse.body);
-
-    const pods = JSON.parse(k8sResponse.body);
+    let pods;
+    try {
+      pods = JSON.parse(k8sResponse.body);
+      logger.info("parsed pods");
+      logger.info(pods);
+    } catch (err) {
+      logger.info("failed to parse pods");
+      logger.info(err);
+    }
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
         logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
