@@ -83,10 +83,12 @@ class KubernetesClient {
       pods = JSON.parse(k8sResponse.body);
       logger.info("parsed pods");
       logger.info(pods);
-    } catch (err) {
-      logger.info("failed to parse pods");
-      logger.info(err);
+    } catch (e) {
+      logger.info("failed to parse pods" + e);
+      logger.info(e);
     }
+    pods = k8sResponse.body;
+
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
         logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
