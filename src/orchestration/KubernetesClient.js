@@ -14,7 +14,7 @@ class KubernetesClient {
     const kc = new k8s.KubeConfig();
     kc.loadFromCluster();
 
-    const k8sApi = kc.makeApiClient(k8s.Core_v1Api);
+    const k8sApi = kc.makeApiClient(k8s.Apps_v1Api);
 
     const replicaPromise = k8sApi.listReplicaSetForAllNamespaces();
     const deploymentPromise = k8sApi.listDeploymentForAllNamespaces();
