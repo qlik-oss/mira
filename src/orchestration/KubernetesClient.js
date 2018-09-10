@@ -49,17 +49,6 @@ class KubernetesClient {
 
     const k8sApi = kc.makeApiClient(k8s.Core_v1Api);
 
-
-    k8sApi.listNamespacedPod('default')
-      .then((res) => {
-        logger.info("all pods");
-        logger.info(res.body);
-      })
-      .catch((err) => {
-        logger.info("error!");
-        logger.info(err);
-      });
-
     //named parameters?
     //await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
 
@@ -72,6 +61,7 @@ class KubernetesClient {
     // } catch (error) {
     //   // Do nothing.
     // }
+    const replicaMap = new Map();
 
     // const deploymentMap = new Map();
     // try {
@@ -82,38 +72,40 @@ class KubernetesClient {
     // } catch (error) {
     //   // Do nothing.
     // }
+    const deploymentMap = new Map();
 
     // const pods = await podPromise;
     const k8sResponse = await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
     logger.info("engine poddar");
     logger.info(k8sResponse.body);
-    return [];
-    // const runningPods = pods.items.filter((pod) => {
-    //   if (pod.status.phase.toLowerCase() === 'running') {
-    //     logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
-    //     return true;
-    //   }
-    //   logger.debug(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
-    //   return false;
-    // });
-    // const engineInfoEntries = runningPods.map((pod) => {
-    //   const { labels } = pod.metadata;
-    //   const ip = pod.status.podIP;
-    //   const engine = { networks: [{ ip }], labels };
-    //   const key = pod.metadata.uid;
-    //   const replicaSet = replicaMap.get(pod.metadata.ownerReferences[0].uid);
-    //   const deployment = replicaSet ? deploymentMap.get(replicaSet.metadata.ownerReferences[0].uid) : undefined;
-    //   const kubernetes = {
-    //     pod,
-    //     replicaSet,
-    //     deployment,
-    //   };
-    //   return {
-    //     key, engine, kubernetes, statusIp: ip,
-    //   };
-    // });
 
-    // return engineInfoEntries;
+    const pods = JSON.parse(k8sResponse);
+    const runningPods = pods.items.filter((pod) => {
+      if (pod.status.phase.toLowerCase() === 'running') {
+        logger.debug(`Valid engine pod info received: ${JSON.stringify(pod)}`);
+        return true;
+      }
+      logger.debug(`Discarding non-running engine pod: ${JSON.stringify(pod)}`);
+      return false;
+    });
+    const engineInfoEntries = runningPods.map((pod) => {
+      const { labels } = pod.metadata;
+      const ip = pod.status.podIP;
+      const engine = { networks: [{ ip }], labels };
+      const key = pod.metadata.uid;
+      const replicaSet = replicaMap.get(pod.metadata.ownerReferences[0].uid);
+      const deployment = replicaSet ? deploymentMap.get(replicaSet.metadata.ownerReferences[0].uid) : undefined;
+      const kubernetes = {
+        pod,
+        replicaSet,
+        deployment,
+      };
+      return {
+        key, engine, kubernetes, statusIp: ip,
+      };
+    });
+
+    return engineInfoEntries;
   }
 }
 
