@@ -77,6 +77,7 @@ class KubernetesClient {
     // const pods = await podPromise;
     const k8sResponse = await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
     logger.info("engine poddar");
+    logger.info(typeof k8sResponse.body);
     logger.info(k8sResponse.body);
     let pods;
     try {
