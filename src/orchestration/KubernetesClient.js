@@ -2,35 +2,6 @@ const k8s = require('@kubernetes/client-node');
 const logger = require('../logger/Logger').get();
 const Config = require('../Config');
 
-// function kubeHttpGet(path) {
-//   return new Promise((resolve, reject) => {
-//     const host = 'localhost';
-//     http.get({
-//       host,
-//       port: Config.kubernetesProxyPort,
-//       path,
-//     }, (response) => {
-//       let body = '';
-//       response.on('data', (d) => {
-//         body += d;
-//       });
-//       response.on('error', (d) => {
-//         response.resume();
-//         reject(new Error(`Kubernetes ${path} returned HTTP error (response.on): ${d}`));
-//       });
-//       response.on('end', () => {
-//         try {
-//           resolve(JSON.parse(body));
-//         } catch (err) {
-//           reject(err);
-//         }
-//       });
-//     }).on('error', (d) => {
-//       reject(new Error(`Kubernetes ${path} returned HTTP error (get.on): ${d}`));
-//     });
-//   });
-// }
-
 /**
  * Class providing a Kubernetes client implementation that collects information on engines.
  */
@@ -57,6 +28,7 @@ class KubernetesClient {
       });
     } catch (error) {
       // Do nothing.
+      logger.info("error" + error);
     }
 
     const deploymentMap = new Map();
@@ -67,10 +39,12 @@ class KubernetesClient {
       });
     } catch (error) {
       // Do nothing.
+      logger.info("error" + error);
     }
 
     const podResponse = await podPromise;
     const pods = podResponse.body;
+    logger.info(`pods: ${JSON.stringify(pods)}`);
 
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
