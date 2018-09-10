@@ -40,55 +40,37 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   static async listEngines() {
-    // const replicaPromise = kubeHttpGet('/apis/apps/v1/replicasets');
-    // const deploymentPromise = kubeHttpGet('/apis/apps/v1/deployments');
-    // const podPromise = kubeHttpGet(`/api/v1/pods?labelSelector=${Config.discoveryLabel}`);
-
     const kc = new k8s.KubeConfig();
     kc.loadFromCluster();
 
     const k8sApi = kc.makeApiClient(k8s.Core_v1Api);
 
-    //named parameters?
-    //await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
+    const replicaPromise = k8sApi.listReplicaSetForAllNamespaces();
+    const deploymentPromise = k8sApi.listDeploymentForAllNamespaces();
+    const podPromise = k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
 
-    // const replicaMap = new Map();
-    // try {
-    //   const replicaSets = await replicaPromise;
-    //   replicaSets.items.forEach((item) => {
-    //     replicaMap.set(item.metadata.uid, item);
-    //   });
-    // } catch (error) {
-    //   // Do nothing.
-    // }
     const replicaMap = new Map();
-
-    // const deploymentMap = new Map();
-    // try {
-    //   const deployments = await deploymentPromise;
-    //   deployments.items.forEach((item) => {
-    //     deploymentMap.set(item.metadata.uid, item);
-    //   });
-    // } catch (error) {
-    //   // Do nothing.
-    // }
-    const deploymentMap = new Map();
-
-    // const pods = await podPromise;
-    const k8sResponse = await k8sApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
-    logger.info("engine poddar");
-    logger.info(typeof k8sResponse.body);
-    logger.info(k8sResponse.body);
-    let pods;
     try {
-      pods = JSON.parse(k8sResponse.body);
-      logger.info("parsed pods");
-      logger.info(pods);
-    } catch (e) {
-      logger.info("failed to parse pods" + e);
-      logger.info(e);
+      const replicaResponse = await replicaPromise;
+      replicaResponse.body.items.forEach((item) => {
+        replicaMap.set(item.metadata.uid, item);
+      });
+    } catch (error) {
+      // Do nothing.
     }
-    pods = k8sResponse.body;
+
+    const deploymentMap = new Map();
+    try {
+      const deploymentResponse = await deploymentPromise;
+      deploymentResponse.body.deployments.items.forEach((item) => {
+        deploymentMap.set(item.metadata.uid, item);
+      });
+    } catch (error) {
+      // Do nothing.
+    }
+
+    const podResponse = await podPromise;
+    const pods = podResponse.body;
 
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
