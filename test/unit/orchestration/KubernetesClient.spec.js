@@ -1,13 +1,17 @@
 const nock = require('nock');
-const KubernetesClient = require('../../../src/orchestration/KubernetesClient');
+const KubernetesClientClass = require('../../../src/orchestration/KubernetesClient');
 const podSpecData = require('./../../test-data/KubernetesClient.spec.data.json');
 const replicaSetSpecData = require('./../../test-data/Replicaset.spec.data.json');
 const deploymentSpecData = require('./../../test-data/Deployment.spec.data.json');
 const Config = require('../../../src/Config');
 
+let KubernetesClient;
+
 before(() => {
   Config.init();
+  KubernetesClient = new KubernetesClientClass();
 });
+
 
 describe('KubernetesClient', () => {
   describe('#listEngines', async () => {

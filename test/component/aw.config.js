@@ -10,4 +10,10 @@ module.exports = {
     bail: false,
     timeout: 5000,
   },
+  mocks: [
+    ['**/node_modules/@kubernetes/client-node/dist/index.js', './test/test-utils/kubeMock.js'],
+  ],
+  babel: {
+    enable: false,
+  },
 };
