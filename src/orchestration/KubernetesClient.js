@@ -6,8 +6,8 @@ const Config = require('../Config');
  * Class providing a Kubernetes client implementation that collects information on engines.
  */
 class KubernetesClient {
-  constructor() {
-    const kc = new k8s.KubeConfig();
+  constructor(kubeConfig) {
+    const kc = kubeConfig || new k8s.KubeConfig();
     kc.loadFromCluster();
     this.k8sAppsApi = kc.makeApiClient(k8s.Apps_v1Api);
     this.k8sCoreApi = kc.makeApiClient(k8s.Core_v1Api);
