@@ -333,9 +333,9 @@ workflows:
       - swarm:
           requires:
             - build
-       - kubernetes:
-           requires:
-             - build
+      - kubernetes:
+          requires:
+            - build
       - dns:
           requires:
             - build
