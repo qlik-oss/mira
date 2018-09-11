@@ -7,9 +7,6 @@ module.exports = {
     babel: false,
     exclude: ['**/coverage/**', '**/test/**'],
   },
-  babel: {
-    enable: false,
-  },
   mocha: {
     bail: false,
   },

@@ -13,7 +13,4 @@ module.exports = {
   mocks: [
     ['**/node_modules/@kubernetes/client-node/dist/index.js', './test/test-utils/kubeMock.js'],
   ],
-  babel: {
-    enable: false,
-  },
 };
