@@ -12,7 +12,6 @@ before(() => {
   KubernetesClient = new KubernetesClientClass();
 });
 
-
 describe('KubernetesClient', () => {
   describe('#listEngines', async () => {
     it('should translate the kubernetes endpoints list to a mira engine list', async () => {

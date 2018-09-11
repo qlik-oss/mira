@@ -43,7 +43,6 @@ class KubernetesClient {
 
     const podResponse = await podPromise;
     const pods = podResponse.body;
-    logger.info(`pods: ${JSON.stringify(pods)}`);
 
     const runningPods = pods.items.filter((pod) => {
       if (pod.status.phase.toLowerCase() === 'running') {
