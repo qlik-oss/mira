@@ -43,7 +43,8 @@
     "@kubernetes/client-node": "0.5.3"
   },
   "devDependencies": {
-    "@after-work.js/aw": "5.0.1",
+    "@after-work.js/cli": "5.0.1",
+    "@after-work.js/node": "5.0.1",
     "babel-core": "6.26.3",
     "babel-plugin-istanbul": "5.0.1",
     "cross-env": "5.2.0",
