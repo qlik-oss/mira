@@ -10,4 +10,7 @@ module.exports = {
   mocha: {
     bail: false,
   },
+  mocks: [
+    ['**/node_modules/@kubernetes/client-node/dist/index.js', './test/test-utils/kubeMock.js'],
+  ],
 };

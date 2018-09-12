@@ -15,7 +15,7 @@ function getOrchestrationClient(mode) {
     case 'swarm':
       return SwarmDockerClient;
     case 'kubernetes':
-      return KubernetesClient;
+      return new KubernetesClient();
     case 'dns':
       return DnsClient;
     case 'none':
