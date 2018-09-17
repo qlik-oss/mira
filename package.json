@@ -54,7 +54,7 @@
     "eslint-plugin-import": "2.14.0",
     "hooks": "0.3.2",
     "mock-require": "3.0.2",
-    "nock": "9.6.1",
+    "nock": "10.0.0",
     "superagent": "3.8.3",
     "supertest": "3.3.0",
     "swagger-jsdoc": "3.0.3"
