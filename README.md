@@ -12,7 +12,7 @@ Mira provides Qlik Associative Engine discovery in a Docker containerized enviro
 
 The documentation in this repository is primarily intended for contributors to Mira development and for those who want to improve Mira by submitting issues.
 
-For Mira's end-user documentation, see [Qlik Core](https://qlikcore.com/services/mira/) documentation site.
+For Mira's end-user documentation, see [Qlik Core](https://core.qlik.com/services/mira/) documentation site.
 
 ## Contributing
 
@@ -89,7 +89,7 @@ $ npm run test:component
 
 These tests run Mira in isolation and does not depend on any external components.
 
-Integration tests depend on external components. Before they can run, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the `ACCEPT_EULA` environment variable, you start the services by using the [docker-compose.yml](./docker-compose.yml) file:
+Integration tests depend on external components. Before they can run, you must accept the [Qlik Core EULA](https://core.qlik.com/eula/) by setting the `ACCEPT_EULA` environment variable, you start the services by using the [docker-compose.yml](./docker-compose.yml) file:
 
 ```sh
 $ ACCEPT_EULA=yes docker-compose up -d
