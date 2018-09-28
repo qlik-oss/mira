@@ -137,6 +137,7 @@ describe('EngineDiscovery', () => {
         .resolves(engines1)
         .onSecondCall()
         .throws(new Error('Orchestration not responding'))
+        .onThirdCall()
         .resolves(engines2);
 
       engineDiscovery = new EngineDiscovery(FakeDockerClient, 20, 100000);
