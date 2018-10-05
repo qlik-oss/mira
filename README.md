@@ -3,7 +3,7 @@
 **NOTE: This repository is under heavy development**
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/mira.svg?style=shield)](https://circleci.com/gh/qlik-oss/mira)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&identifier=91325889)](https://dependabot.com)
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![Coverage Status](https://coveralls.io/repos/github/qlik-oss/mira/badge.svg?branch=enableCoveralls)](https://coveralls.io/github/qlik-oss/mira?branch=enableCoveralls)
 
 ## Overview
