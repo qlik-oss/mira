@@ -13,7 +13,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   qix-engine:
-    image: qlikcore/engine:12.260.0
+    image: qlikcore/engine:12.268.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - 9076:9076
