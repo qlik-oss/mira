@@ -36,7 +36,7 @@
     "koa": "2.6.2",
     "koa-connect": "2.0.1",
     "koa-router": "7.4.0",
-    "rollbar": "2.5.0",
+    "rollbar": "2.5.1",
     "swagger2": "1.0.4",
     "swagger2-koa": "1.0.3",
     "winston": "3.1.0",
@@ -57,7 +57,7 @@
     "nock": "10.0.2",
     "superagent": "4.0.0",
     "supertest": "3.3.0",
-    "swagger-jsdoc": "3.2.4"
+    "swagger-jsdoc": "3.2.6"
   },
   "engines": {
     "node": ">=8.9.3"
