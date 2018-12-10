@@ -1,6 +1,6 @@
 info:
   title: A Qlik Associative Engine discovery service
-  version: 0.3.0
+  version: 0.3.1
   description: >-
     REST API for discovering Qlik Associative Engines running in Docker
     containers.
@@ -68,7 +68,8 @@ definitions:
       networks:
         description: List of networks for the Qlik Associative Engine
         type: array
-        $ref: '#/definitions/containerNetwork'
+        items:
+          $ref: '#/definitions/containerNetwork'
       port:
         description: Port to use when communicating with the Qlik Associative Engine API.
         type: number

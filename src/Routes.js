@@ -104,7 +104,8 @@ router.get(`/${apiVersion}/${enginesEndpoint}`, async (ctx) => {
  *       networks:
  *         description: List of networks for the Qlik Associative Engine
  *         type: array
- *         $ref: '#/definitions/containerNetwork'
+ *         items:
+ *           $ref: '#/definitions/containerNetwork'
  *       port:
  *         description: Port to use when communicating with the Qlik Associative Engine API.
  *         type: number
