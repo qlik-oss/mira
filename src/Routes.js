@@ -52,6 +52,8 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
  *         description: successful operation
  *         schema:
  *           type: array
+ *           items:
+ *             type: object
  *           description: Default prometheus client metrics
  */
 
