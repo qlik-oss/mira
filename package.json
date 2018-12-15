@@ -48,7 +48,7 @@
     "babel-core": "6.26.3",
     "babel-plugin-istanbul": "5.1.0",
     "cross-env": "5.2.0",
-    "dredd": "5.3.0",
+    "dredd": "5.3.2",
     "eslint": "5.10.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
