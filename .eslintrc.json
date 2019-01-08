@@ -2,7 +2,8 @@
     "extends": "airbnb-base",
     "rules": {
         "no-console": "error",
-        "max-len": "off"
+        "max-len": "off",
+        "import/no-unresolved": ["error", { "commonjs": true, "caseSensitive": false }]
     },
     "env": { 
       "node": true
