@@ -1,4 +1,4 @@
-const Dredd = require('dredd');
+const Dredd = require('dredd/lib/Dredd');
 
 const testHost = process.env.TEST_HOST || 'localhost';
 
