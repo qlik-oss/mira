@@ -1,5 +1,4 @@
-//const Dredd = require('Dredd');
-import Dredd from 'Dredd';
+const Dredd = require('Dredd');
 
 const testHost = process.env.TEST_HOST || 'localhost';
 
