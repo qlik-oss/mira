@@ -1,145 +1,145 @@
+openapi: 3.0.0
 info:
   title: A Qlik Associative Engine discovery service
-  version: 0.3.1
+  version: 1.0.0
   description: >-
     REST API for discovering Qlik Associative Engines running in Docker
     containers.
-host: 'localhost:9100'
-schemes:
-  - http
 x-qlik-visibility: public
 x-qlik-stability: experimental
-swagger: '2.0'
+servers:
+  - url: 'http://localhost:9100'
 paths:
   /health:
     get:
       description: Returns health status of the Mira service
-      produces:
-        - application/json; charset=utf-8
       responses:
         '200':
           description: successful operation
-          schema:
-            type: object
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
   /metrics:
     get:
       description: Returns metrics of the Mira service
-      produces:
-        - application/json
-        - text/plain; charset=utf-8
       responses:
         '200':
           description: successful operation
-          schema:
-            type: array
-            items:
-              type: object
-            description: Default prometheus client metrics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                description: Default prometheus client metrics
+            text/plain; charset=utf-8:
+              schema:
+                description: Default prometheus client metrics
   /v1/engines:
     get:
       description: Lists available Qlik Associative Engines.
-      produces:
-        - application/json; charset=utf-8
       parameters:
         - name: format
           in: query
           description: If result should be in full or condensed format.
           required: false
-          type: string
-          default: full
+          schema:
+            type: string
+            default: full
       responses:
         '200':
           description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/containerInfo'
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/containerInfo'
         '503':
           description: Service Unavailable
-definitions:
-  engineInfo:
-    type: object
-    required:
-      - networks
-      - port
-      - metricsPort
-      - status
-    properties:
-      networks:
-        description: List of networks for the Qlik Associative Engine
-        type: array
-        items:
-          $ref: '#/definitions/containerNetwork'
-      port:
-        description: Port to use when communicating with the Qlik Associative Engine API.
-        type: number
-      metricsPort:
-        description: Port to use when retrieving the Qlik Associative Engine metrics.
-        type: number
-      status:
-        $ref: '#/definitions/containerStatus'
-      health:
-        description: Last health endpoint response of the Qlik Associative Engine.
-        type: object
-      metrics:
-        description: Last metrics endpoint response of the Qlik Associative Engine.
-      labels:
-        description: Container labels
-        type: object
-  containerInfo:
-    type: object
-    required:
-      - engine
-    properties:
-      engine:
-        $ref: '#/definitions/engineInfo'
-      local:
-        type: object
-        description: >-
-          Container information in verbatim format as returned by the Docker
-          Engine Remote API.
-      swarm:
-        type: object
-        description: >-
-          Task information in verbatim format as returned by the Docker Engine
-          Remote API.
-      kubernetes:
-        type: object
-        properties:
-          pod:
-            type: object
-            description: >-
-              Pod information in verbatim format as returned by the Kubernetes
-              API.
-          replicaSet:
-            type: object
-            description: >-
-              Replicaset information in verbatim format as returned by the
-              Kubernetes API.
-          deployment:
-            type: object
-            description: >-
-              Deployment information in verbatim format as returned by the
-              Kubernetes API.
-  containerStatus:
-    type: string
-    description: Status of the Qlik Associative Engine.
-    enum:
-      - OK
-      - UNHEALTHY
-      - NO_METRICS
-  containerNetwork:
-    type: object
-    required:
-      - ip
-    properties:
-      ip:
-        description: IP address of the Qlik Associative Engine on a specific network
-        type: string
-      name:
-        description: Docker network name
-        type: string
-responses: {}
-parameters: {}
-securityDefinitions: {}
+components:
+  schemas:
+    engineInfo:
+      type: object
+      required:
+        - networks
+        - port
+        - metricsPort
+        - status
+      properties:
+        networks:
+          description: List of networks for the Qlik Associative Engine
+          type: array
+          items:
+            $ref: '#/components/schemas/containerNetwork'
+        port:
+          description: Port to use when communicating with the Qlik Associative Engine API.
+          type: number
+        metricsPort:
+          description: Port to use when retrieving the Qlik Associative Engine metrics.
+          type: number
+        status:
+          $ref: '#/components/schemas/containerStatus'
+        health:
+          description: Last health endpoint response of the Qlik Associative Engine.
+          type: object
+        metrics:
+          description: Last metrics endpoint response of the Qlik Associative Engine.
+        labels:
+          description: Container labels
+          type: object
+    containerInfo:
+      type: object
+      required:
+        - engine
+      properties:
+        engine:
+          $ref: '#/components/schemas/engineInfo'
+        local:
+          type: object
+          description: >-
+            Container information in verbatim format as returned by the Docker
+            Engine Remote API.
+        swarm:
+          type: object
+          description: >-
+            Task information in verbatim format as returned by the Docker Engine
+            Remote API.
+        kubernetes:
+          type: object
+          properties:
+            pod:
+              type: object
+              description: >-
+                Pod information in verbatim format as returned by the Kubernetes
+                API.
+            replicaSet:
+              type: object
+              description: >-
+                Replicaset information in verbatim format as returned by the
+                Kubernetes API.
+            deployment:
+              type: object
+              description: >-
+                Deployment information in verbatim format as returned by the
+                Kubernetes API.
+    containerStatus:
+      type: string
+      description: Status of the Qlik Associative Engine.
+      enum:
+        - OK
+        - UNHEALTHY
+        - NO_METRICS
+    containerNetwork:
+      type: object
+      required:
+        - ip
+      properties:
+        ip:
+          description: IP address of the Qlik Associative Engine on a specific network
+          type: string
+        name:
+          description: Docker network name
+          type: string
 tags: []
