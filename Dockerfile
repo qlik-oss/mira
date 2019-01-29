@@ -29,9 +29,7 @@ EXPOSE $MIRA_API_PORT
 ENV MIRA_CONTAINERIZED true
 
 # Run as non-root user for secure systems
-RUN mkdir -p /home/63000 && chown 63000:63000 /home/63000
 USER 63000:63000
-RUN echo "if [ -e /var/run/docker.sock ]; then sudo chown 63000:63000 /var/run/docker.sock; fi" >> /home/63000/.bashrc
 
 ENTRYPOINT ["./docker-entrypoint.sh", "node", "./src/index.js"]
 

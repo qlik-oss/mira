@@ -6,9 +6,10 @@ services:
     ports:
       - "9100:9100"
     environment:
-     - MIRA_MODE=local
+      - MIRA_MODE=local
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    user: root
 
   engine1:
     image: qlikcore/engine:12.311.0
