@@ -7,6 +7,6 @@ module.exports = {
     description: 'REST API for discovering Qlik Associative Engines running in Docker containers.',
   },
   'x-qlik-visibility': 'public',
-  'x-qlik-stability': 'experimental',
+  'x-qlik-stability': 'stable',
   servers: [{ url: 'http://localhost:9100' }],
 };
