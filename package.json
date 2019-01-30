@@ -15,9 +15,7 @@
     "test:component:swarm": "cross-env MIRA_MODE=swarm aw node -c ./test/component/aw.config.js --glob ./test/component/swarm/*.spec.js --exit",
     "test:component:kubernetes": "cross-env MIRA_MODE=kubernetes aw node -c ./test/component/aw.config.js --glob ./test/component/kubernetes/*.spec.js --exit",
     "test:component:none": "cross-env MIRA_MODE=none aw node -c ./test/component/aw.config.js --glob ./test/component/none/*.spec.js --exit",
-    "test:integration": "npm run test:integration:local && npm run test:integration:dredd",
-    "test:integration:local": "aw node --glob ./test/integration/integration-local.spec.js",
-    "test:integration:dredd": "aw node --glob ./test/integration/integration-dredd.spec.js",
+    "test:integration": "aw node --glob ./test/integration/integration-local.spec.js",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "generate-openapi": "swagger-jsdoc ./src/Routes.js -d SwaggerDef.js -o ./doc/api-doc.yml"
@@ -48,7 +46,6 @@
     "babel-core": "6.26.3",
     "babel-plugin-istanbul": "5.1.0",
     "cross-env": "5.2.0",
-    "dredd": "7.1.0",
     "eslint": "5.12.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.15.0",
