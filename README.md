@@ -50,12 +50,6 @@ Once the repo has been cloned, in the repo root, run:
 $ npm install
 ```
 
-If errors on _node-gyp_ are encoutered on Windows it is due to the [C++ compilation step for Dredd](https://dredd.readthedocs.io/en/latest/installation.html#why-i-m-seeing-node-gyp-errors). This can be avoided by instead using precompiled binaries by running:
-
-```sh
-$ npm install --no-optional
-```
-
 ### Generating version file
 
 Mira will in run-time make use of build information e.g. commit SHA and version number.
