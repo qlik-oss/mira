@@ -28,4 +28,8 @@ EXPOSE $MIRA_API_PORT
 
 ENV MIRA_CONTAINERIZED true
 
+# Run as non-root user for secure systems
+USER 63000:63000
+
 ENTRYPOINT ["./docker-entrypoint.sh", "node", "./src/index.js"]
+
