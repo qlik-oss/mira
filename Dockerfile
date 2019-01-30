@@ -1,5 +1,5 @@
 # Do the npm install on the full image
-FROM node:8.15.0 AS builder
+FROM node:8.15.0-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=builder /app .
 RUN chmod +x ./docker-entrypoint.sh
 
-RUN apk update && apk add bash && apk add curl && rm -rf /var/cache/apk/*
+RUN apk add --no-cache bash curl
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK CMD curl -fs http://localhost:$MIRA_API_PORT/health || exit 1
