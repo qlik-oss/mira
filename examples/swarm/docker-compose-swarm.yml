@@ -11,6 +11,7 @@ services:
         constraints: [node.role == manager]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    user: root
 
   qix-engine:
     image: qlikcore/engine:12.311.0

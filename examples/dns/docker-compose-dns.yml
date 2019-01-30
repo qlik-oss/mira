@@ -12,6 +12,7 @@ services:
       mode: global
       placement:
         constraints: [node.role == manager]
+    user: root
 
   qix-engine:
     image: qlikcore/engine:12.311.0
