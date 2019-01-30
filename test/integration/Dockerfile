@@ -15,4 +15,4 @@ COPY node_modules ./node_modules/
 COPY test/integration ./test/integration/
 
 # Execute tests
-CMD [ "npm", "run", "test:integration" ]
+CMD [ "npm", "run", "test:integration:local" ]
