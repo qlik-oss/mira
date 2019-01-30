@@ -18,9 +18,19 @@ class KubernetesClient {
    * @returns {Promise<EngineContainerSpec[]>} A promise to a list of engine container specs.
    */
   async listEngines() {
-    const replicaPromise = this.k8sAppsApi.listReplicaSetForAllNamespaces();
-    const deploymentPromise = this.k8sAppsApi.listDeploymentForAllNamespaces();
-    const podPromise = this.k8sCoreApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
+    let replicaPromise;
+    let deploymentPromise;
+    let podPromise;
+    if (Config.kubernetesTargetNamespace === null) {
+      replicaPromise = this.k8sAppsApi.listReplicaSetForAllNamespaces();
+      deploymentPromise = this.k8sAppsApi.listDeploymentForAllNamespaces();
+      podPromise = this.k8sCoreApi.listPodForAllNamespaces(undefined, undefined, undefined, Config.discoveryLabel);
+    } else {
+      replicaPromise = this.k8sAppsApi.listNamespacedReplicaSet(Config.kubernetesTargetNamespace);
+      deploymentPromise = this.k8sAppsApi.listNamespacedDeployment(Config.kubernetesTargetNamespace);
+      podPromise = this.k8sCoreApi.listNamespacedPod(Config.kubernetesTargetNamespace, false, undefined, undefined, undefined, Config.discoveryLabel);
+    }
+
     const replicaMap = new Map();
     try {
       const replicaResponse = await replicaPromise;

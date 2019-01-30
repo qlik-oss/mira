@@ -106,6 +106,12 @@ class Config {
     }
 
     /**
+     * @prop {string} kubernetesTargetNamespace - The namespace to target when looking for engines
+     * @static
+     */
+    Config.kubernetesTargetNamespace = process.env.MIRA_KUBERNETES_TARGET_NAMESPACE.trim() || null;
+
+    /**
      * @prop {boolean} containerized - If mira is running inside a docker container or not.
      * @static
      */

@@ -155,4 +155,20 @@ describe('Config', () => {
       expect(Config.engineNetworks).to.equal(undefined);
     });
   });
+
+  describe('#KUBERNETES_TARGET_NAMESPACE', () => {
+    afterEach(() => {
+      delete process.env.MIRA_KUBERNETES_TARGET_NAMESPACE;
+    });
+
+    it('should have correct default value', () => {
+      expect(Config.kubernetesTargetNamespace).to.equal(null);
+    });
+
+    it('should have value as set by MIRA_KUBERNETES_TARGET_NAMESPACE env var', () => {
+      process.env.MIRA_KUBERNETES_TARGET_NAMESPACE = '  my-namespace     ';
+      Config.init();
+      expect(Config.kubernetesTargetNamespace).to.equal('my-namespace');
+    });
+  });
 });
