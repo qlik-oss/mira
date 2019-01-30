@@ -15,6 +15,9 @@ before(() => {
 describe('KubernetesClient', () => {
   describe('#listEngines', async () => {
     describe('#allNamespaces', async () => {
+      beforeEach(() => {
+        Config.kubernetesTargetNamespace = null;
+      });
       it('should translate the kubernetes endpoints list to a mira engine list', async () => {
         nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
         const engines = await KubernetesClient.listEngines();
@@ -67,7 +70,7 @@ describe('KubernetesClient', () => {
     });
 
     describe('#namespaced', async () => {
-      before(() => {
+      beforeEach(() => {
         Config.kubernetesTargetNamespace = 'my-namespace';
       });
 
