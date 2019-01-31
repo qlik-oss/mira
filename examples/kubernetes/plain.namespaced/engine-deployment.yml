@@ -15,6 +15,7 @@ spec:
         service: engine
         qix-engine: ""
     spec:
+      serviceAccount: mira
       containers:
       - name: engine
         image: "qlikcore/engine:12.311.0"

@@ -263,7 +263,7 @@ jobs:
       - run:
           name: Cleanup services
           command: |
-            sudo kubectl delete -f ./examples/kubernetes/plain -recursive=true
+            sudo kubectl delete -f ./examples/kubernetes/plain --recursive
       - run:
           name: Give default service account view access to Kubernetes API only within the namespace
           command: sudo kubectl create -f ./examples/kubernetes/plain.namespaced/rbac/rbac-config.yaml
