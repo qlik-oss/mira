@@ -23,7 +23,7 @@ module.exports = {
             return { body: res.body };
           },
           listNamespacedDeployment: async () => {
-            const res = await request('http://localhost:8001').get('/apis/apps/v1/deployments');
+            const res = await request('http://localhost:8001').get('/apis/apps/v1/namespaces/my-namespace/deployments');
             return { body: res.body };
           },
         };
