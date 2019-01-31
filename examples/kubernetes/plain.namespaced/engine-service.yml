@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: engine
+  labels:
+    app: engine
+spec:
+  type: NodePort
+  ports:
+    - port: 9076
+      targetPort: 9076
+      protocol: TCP
+      name: qix
+  selector:
+    app: engine
