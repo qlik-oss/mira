@@ -265,6 +265,9 @@ jobs:
           command: |
             sudo kubectl delete -f ./examples/kubernetes/plain
       - run:
+          name: Give default service account view access to Kubernetes API only within the namespace
+          command: sudo kubectl create -f ./examples/kubernetes/plain.namespaced/rbac/rbac-config.yaml
+      - run:
           name: Kubernetes plain namespaced mira
           command: |
             VER=$(cat /tmp/workspace/version.txt)
