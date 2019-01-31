@@ -10,7 +10,7 @@ file_env() {
   local def="${2:-}"
   local val="$def"
 
-#Defaults to enviroment without _FILE if set, else to *_FILE enviroment
+  #Defaults to enviroment without _FILE if set, else to *_FILE enviroment
   if [ "${!var:-}" ]; then
     val="${!var}"
   elif [ "${!fileVar:-}" ]; then
