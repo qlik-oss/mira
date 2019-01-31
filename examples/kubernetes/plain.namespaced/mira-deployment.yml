@@ -11,6 +11,7 @@ spec:
       labels:
         app: mira
     spec:
+      serviceAccount: mira
       containers:
       - name: mira
         image: "qlikcore/mira:1.0.0"
