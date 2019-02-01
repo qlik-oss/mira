@@ -241,13 +241,37 @@ jobs:
           name: Give default service account view access to Kubernetes API
           command: sudo kubectl create -f ./examples/kubernetes/plain/rbac/rbac-config.yaml
       - run:
-          name: Accept EULA
-          command: grep -rl AcceptEULA ./examples/kubernetes/plain/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
+          name: Accept EULA for plain and plain namespaced.
+          command: grep -rl AcceptEULA ./examples/kubernetes/plain*/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
       - run:
           name: Kubernetes plain mira
           command: |
             VER=$(cat /tmp/workspace/version.txt)
             sudo kubectl create -f ./examples/kubernetes/plain
+            sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
+      - run:
+          name: Check health of services
+          command: |
+            # Check mira health
+            MIRA_URL=$(sudo minikube service mira --url)
+            curl -fs "$MIRA_URL/health"
+      - run:
+          name: Verify number of QIX Engines found
+          command: |
+            MIRA_URL=$(sudo minikube service mira --url)
+            ./.circleci/verify_qix_engines.sh $MIRA_URL
+      - run:
+          name: Cleanup services
+          command: |
+            sudo kubectl delete -f ./examples/kubernetes/plain --recursive
+      - run:
+          name: Give default service account view access to Kubernetes API only within the namespace
+          command: sudo kubectl create -f ./examples/kubernetes/plain.namespaced/rbac/rbac-config.yaml
+      - run:
+          name: Kubernetes plain namespaced mira
+          command: |
+            VER=$(cat /tmp/workspace/version.txt)
+            sudo kubectl create -f ./examples/kubernetes/plain.namespaced
             sudo kubectl set image deployment/mira mira="$DOCKER_REPO:$VER"
       - run:
           name: Check health of services
