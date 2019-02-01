@@ -241,8 +241,8 @@ jobs:
           name: Give default service account view access to Kubernetes API
           command: sudo kubectl create -f ./examples/kubernetes/plain/rbac/rbac-config.yaml
       - run:
-          name: Accept EULA
-          command: grep -rl AcceptEULA ./examples/kubernetes/plain/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
+          name: Accept EULA for plain and plain namespaced.
+          command: grep -rl AcceptEULA ./examples/kubernetes/plain*/ | xargs sed -i 's/AcceptEULA=no/AcceptEULA=yes/g'
       - run:
           name: Kubernetes plain mira
           command: |
