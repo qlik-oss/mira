@@ -382,7 +382,7 @@ jobs:
             helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
             helm repo add qlik https://qliktech.jfrog.io/qliktech/qlikhelm --username $RT_USERNAME --password $RT_APIKEY
 
-            helm package $dir/chart/mira -d ~/charts
+            helm package $dir/charts/mira -d ~/charts
       - persist_to_workspace:
           root: ~/
           paths:
