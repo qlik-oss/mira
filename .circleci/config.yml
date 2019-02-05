@@ -370,7 +370,6 @@ jobs:
           command: yamllint -c .yamllint.yml charts/mira/values.yaml
 
   package:
-    working_directory: ~/mira
     docker:
       - image: lachlanevenson/k8s-helm
     steps:
