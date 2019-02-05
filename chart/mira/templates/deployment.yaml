@@ -1,0 +1,66 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "mira.fullname" . }}
+  labels:
+    app: {{ template "mira.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "mira.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      {{- if .Values.serviceAccount.name }}
+      serviceAccount: {{ .Values.serviceAccount.name }}
+      {{- else }}
+      {{- if .Values.rbac.create }}
+      serviceAccount: {{ template "mira.fullname" . }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "mira.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- if .Values.resources }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
+          env:
+            - name: MIRA_MODE
+              value: {{ .Values.mode }}
+            - name: MIRA_KUBERNETES_TARGET_NAMESPACE
+              value: {{ .Release.Namespace }}
+{{ if eq .Values.rollbar.enabled true }}
+            - name: MIRA_ROLLBAR_ACCESS_TOKEN_FILE
+              value: /run/secrets/rollbar-token/rollbar-token
+{{ end }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.port }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.port }}
+{{ if eq .Values.rollbar.enabled true }}
+          volumeMounts:
+            - mountPath: /run/secrets/rollbar-token
+              name: rollbar-token
+              readOnly: true
+{{ end }}
+{{ if eq .Values.rollbar.enabled true }}
+      volumes:
+        - name: rollbar-token
+          secret:
+            secretName: rollbar-token
+            items:
+            - key: rollbar-token
+              path: rollbar-token
+{{ end }}

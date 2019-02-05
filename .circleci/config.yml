@@ -349,6 +349,67 @@ jobs:
           command: |
             docker push $DOCKER_REPO
 
+  # jobs for building chart          
+  helm-lint:
+    docker:
+      - image: lachlanevenson/k8s-helm
+    steps:
+      - checkout
+      - run:
+          name: Helm Lint
+          command: |
+            helm lint charts/mira
+
+  yaml-lint:
+    docker:
+      - image: sdesbure/yamllint
+    steps:
+      - checkout
+      - run:
+          name: YAML Lint
+          command: yamllint -c .yamllint.yml charts/mira/values.yaml
+
+  package:
+    working_directory: ~/mira
+    docker:
+      - image: lachlanevenson/k8s-helm
+    steps:
+      - checkout
+      - run:
+          name: Package
+          command: |
+            helm init --client-only
+            helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+            helm repo add qlik https://qliktech.jfrog.io/qliktech/qlikhelm --username $RT_USERNAME --password $RT_APIKEY
+
+            helm package $dir/chart/mira -d ~/charts
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - charts
+
+  push:
+    environment:
+      JFROG_CLI_LOG_LEVEL: "ERROR"
+      JFROG_CLI_OFFER_CONFIG: "false"
+    working_directory: ~/charts
+    docker:
+      - image: qlikcore/mira
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Push
+          command: |
+            #Get name of chart
+            new_tgz="$(ls mira*.tgz)"
+
+            #Deploy chart to artifactory
+            curl -X PUT -u $RT_USERNAME:$RT_APIKEY -T $new_tgz "https://qliktech.jfrog.io/qliktech/charts-oss/$new_tgz"
+
 workflows:
   version: 2
   build_test_and_publish:
@@ -369,3 +430,14 @@ workflows:
             - swarm
             - kubernetes
             - dns
+  build_and_publish_chart:
+    jobs:
+     - helm-lint
+     - yaml-lint
+     - package
+     - push:
+        requires:
+          - package
+        filters:
+          branches:
+            only: master

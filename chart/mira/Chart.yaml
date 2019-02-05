@@ -1,0 +1,8 @@
+apiVersion: v1
+description: A service for discovering QIX Engine instances in an orchestration.
+name: mira
+version: 0.5.0
+keywords: [mira]
+home: https://github.com/qlik-oss/mira
+sources:
+  - https://github.com/qlik-oss/mira
