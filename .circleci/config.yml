@@ -409,14 +409,22 @@ jobs:
 
             if [ "$result" == "True" ]; then
               echo "Chart has been updated"
+              
+              #Get chart verion
+              version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
+
               cd ~/charts
 
-              #Get name of chart
+              #Get the filename of the packaged chart
               new_tgz="$(ls mira*.tgz)"
 
-              echo "Uploading chart to artifactory"
               #Deploy chart to artifactory
+              echo "Uploading chart to artifactory"
               curl -X PUT -u $RT_USERNAME:$RT_APIKEY -T $new_tgz "https://qliktech.jfrog.io/qliktech/charts-oss/$new_tgz"
+
+              #Upload to Bintray and publish
+              curl -X PUT -u $BT_USERNAME:$BT_APIKEY -T $new_tgz "https://api.bintray.com/content/qlik/osscharts/$new_tgz;bt_package=mira;bt_version=$version;publish=1;override=1;explode=0"
+
               echo "Chart uploaded!"
             else
               echo "Chart has not been updated"
