@@ -393,7 +393,7 @@ jobs:
       JFROG_CLI_LOG_LEVEL: "ERROR"
       JFROG_CLI_OFFER_CONFIG: "false"
     docker:
-      - image: qlikcore/mira
+      - image: circleci/python:2.7
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD
@@ -404,9 +404,6 @@ jobs:
       - run:
           name: Push
           command: |
-            #install python
-            sudo apt-get install python
-
             #Check if the chart has been updated
             result=$(python charts/check_git_py.py -c charts/mira)
 
