@@ -392,7 +392,6 @@ jobs:
     environment:
       JFROG_CLI_LOG_LEVEL: "ERROR"
       JFROG_CLI_OFFER_CONFIG: "false"
-    working_directory: ~/charts
     docker:
       - image: qlikcore/mira
         auth:
@@ -401,14 +400,25 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - checkout
       - run:
           name: Push
           command: |
-            #Get name of chart
-            new_tgz="$(ls mira*.tgz)"
+            #install python
+            sudo apt-get install python
 
-            #Deploy chart to artifactory
-            curl -X PUT -u $RT_USERNAME:$RT_APIKEY -T $new_tgz "https://qliktech.jfrog.io/qliktech/charts-oss/$new_tgz"
+            #Check if the chart has been updated
+            result=$(python charts/check_git_py.py -c charts/mira)
+
+            if [ "$result" == "True" ]; then
+              cd ~/charts
+
+              #Get name of chart
+              new_tgz="$(ls mira*.tgz)"
+
+              #Deploy chart to artifactory
+              curl -X PUT -u $RT_USERNAME:$RT_APIKEY -T $new_tgz "https://qliktech.jfrog.io/qliktech/charts-oss/$new_tgz"
+            fi
 
 workflows:
   version: 2
