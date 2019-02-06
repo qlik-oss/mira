@@ -407,14 +407,19 @@ jobs:
             #Check if the chart has been updated
             result=$(python charts/check_git_py.py -c charts/mira)
 
-            if [ "$result" == "True" ]; then
+            if [ "$result" != "True" ]; then
+              echo "Chart has been updated"
               cd ~/charts
 
               #Get name of chart
               new_tgz="$(ls mira*.tgz)"
 
+              echo "Uploading chart to artifactory"
               #Deploy chart to artifactory
               curl -X PUT -u $RT_USERNAME:$RT_APIKEY -T $new_tgz "https://qliktech.jfrog.io/qliktech/charts-oss/$new_tgz"
+              echo "Chart uploaded!"
+            else
+              echo "Chart has not been updated"
             fi
 
 workflows:
