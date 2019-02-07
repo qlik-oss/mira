@@ -1,13 +1,13 @@
-# mira
+# Mira
 
-[mira](https://github.com/qlik-oss/mira) is the service that discovers QIX Engines in an orchestration.
+[Mira](https://github.com/qlik-oss/mira) is the service that discovers QIX Engines in an orchestration.
 
 ## Introduction
 
-This chart bootstraps a mira service on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Mira service on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-If Kubernetes is using RBAC Authorization then mira will need to be configured with a service account that has view access to the Kubernetes API.
-At least pod access is needed, more information from kubernetes will be provided if mira gets view access to the ReplicaSet and Deployment APIs as well.
+If Kubernetes is using RBAC Authorization then Mira will need to be configured with a service account that has view access to the Kubernetes API.
+At least pod access is needed, more information from kubernetes will be provided if Mira gets view access to the ReplicaSet and Deployment APIs as well.
 For more information see [here](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
 ## Installing the Chart
@@ -37,16 +37,16 @@ The following tables lists the configurable parameters of the chart and their de
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `image.repository` | Image name | `qlikcore/mira`|
-| `image.tag` | Image version | `0.3.1` |
+| `image.tag` | Image version | `2.0.0` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `replicaCount` | Number of replicas |  `1` |
 | `service.type` | Service type | `ClusterIP` |
-| `service.port` | External port for mira | `9100` |
+| `service.port` | External port for Mira | `9100` |
 | `metrics.prometheus.enabled` | Prometheus metrics enablement | `true` |
 | `rollbar.enabled` | Rollbar logging enablement | `false` |
-| `mode` | Operation mode for mira | `kubernetes` |
+| `mode` | Operation mode for Mira | `kubernetes` |
 | `rbac.create` | Create RBAC service account (if serviceAccount above not specified) | `false` |
-| `serviceAccount.name` | Name of service account mira should use | `default` |
+| `serviceAccount.name` | Name of service account Mira should use | `default` |
 | `serviceAccount.create` | Create RBAC service account (if serviceAccount.name not specified) | `false` |
 | `resources.requests.cpu` | CPU resource request | `0.1` |
 | `resources.requests.memory` | Memory resource request | `70Mi` |
