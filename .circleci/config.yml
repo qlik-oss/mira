@@ -407,7 +407,7 @@ jobs:
             #Check if the chart has been updated
             result=$(python charts/check_git_py.py -c charts/mira)
 
-            if [ "$result" == "True" ]; then
+            if [ "$result" != "True" ]; then
               echo "Chart has been updated"
 
               helm init --client-only
