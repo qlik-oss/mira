@@ -419,23 +419,23 @@ jobs:
               new_tgz="$(ls mira*.tgz)"
 
               #Get Jfrog cli
-              curl -Lo /usr/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386
-              chmod a+x /usr/bin/jfrog
+              curl -Lo jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386
+              chmod a+x ./jfrog
 
 
               #Deploy chart to artifactory
               echo "Uploading chart to artifactory"
-              jfrog rt u $new_tgz charts-oss --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
+              ./jfrog rt u $new_tgz charts-oss --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
 
               #Get index file and modify for Bintray
-              jfrog rt dl "charts-oss/index.yaml" --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
+              ./jfrog rt dl "charts-oss/index.yaml" --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
               awk '{gsub("local://", ""); print}' index.yaml >> tmp && mv tmp index.yaml
               
               #Upload to Bintray and publish
               echo "Publishing chart to Bintray"
-              jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=false --override=true --explode=false $new_tgz "qlik/osscharts/mira/$version"
+              ./jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=false --override=true --explode=false $new_tgz "qlik/osscharts/mira/$version"
               #Upload updated index.yaml file
-              jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=false --override=true --explode=false index.yaml "qlik/osscharts/idx/index"
+              ./jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=false --override=true --explode=false index.yaml "qlik/osscharts/idx/index"
 
               echo "Chart uploaded!"
             else
