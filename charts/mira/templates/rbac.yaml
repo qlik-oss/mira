@@ -1,0 +1,39 @@
+{{- if .Values.serviceAccount.create }}
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: {{ template "mira.fullname" . }}
+{{- end }}
+---
+{{- if .Values.rbac.create }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {{ template "mira.fullname" . }}
+rules:
+  - apiGroups:
+      - ""
+      - extensions
+      - apps
+    resources:
+      - pods
+      - replicasets
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {{ template "mira.fullname" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "mira.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "mira.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}

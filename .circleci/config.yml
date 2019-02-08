@@ -349,6 +349,111 @@ jobs:
           command: |
             docker push $DOCKER_REPO
 
+  # jobs for building chart          
+  helm-lint:
+    docker:
+      - image: lachlanevenson/k8s-helm
+    steps:
+      - checkout
+      - run:
+          name: Helm Lint
+          command: |
+            helm lint charts/mira
+
+  yaml-lint:
+    docker:
+      - image: sdesbure/yamllint
+    steps:
+      - checkout
+      - run:
+          name: YAML Lint
+          command: yamllint -c .yamllint.yml charts/mira/values.yaml
+
+  package:
+    working_directory: ~/charts
+    docker:
+      - image: lachlanevenson/k8s-helm
+    steps:
+      - checkout
+      - run:
+          name: Package
+          command: |
+            helm init --client-only
+            helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+            helm repo add qlik https://qliktech.jfrog.io/qliktech/qlikhelm --username $RT_USERNAME --password $RT_APIKEY
+
+            helm package charts/mira -d ~/charts
+
+            #Get new chart verion
+            version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
+
+            #Check if new chart version is already in help repo and save to file used in "push" job
+            helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}' >> searchVerFile
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - charts
+
+  push:
+    environment:
+      JFROG_CLI_LOG_LEVEL: "ERROR"
+      JFROG_CLI_OFFER_CONFIG: "false"
+    docker:
+      - image: circleci/python:2.7
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+    steps:
+      - attach_workspace:
+          at: ~/
+      - checkout
+      - run:
+          name: Push
+          command: |
+            #Check if the chart has been updated
+            result=$(python charts/check_git_py.py -c charts/mira)
+
+            if [ "$result" == "True" ]; then
+              echo "Chart has been updated"
+
+              #Get new chart verion
+              version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
+
+              cd ~/charts
+
+              searchVer=$(<searchVerFile)
+              #Kill push job if chart version has not been updated
+              if [ "$version" == "$searchVer" ]; then
+                echo "The chart version needs to be updated to a new version as there was a change to the chart!"
+                exit 1
+              else
+                #Get the filename of the packaged chart
+                new_tgz="$(ls mira*.tgz)"
+
+                #Get Jfrog cli
+                curl -Lo jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386
+                chmod a+x ./jfrog
+
+                #Deploy chart to artifactory
+                echo "Uploading chart to artifactory"
+                ./jfrog rt u $new_tgz charts-oss --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
+
+                #Get index file and modify for Bintray by stripping out "local://"
+                ./jfrog rt dl "charts-oss/index.yaml" --url https://qliktech.jfrog.io/qliktech --apikey $RT_APIKEY
+                awk '{gsub("local://", ""); print}' index.yaml >> tmp && mv tmp index.yaml
+                
+                #Upload to Bintray and publish
+                echo "Publishing chart to Bintray"
+                ./jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=true --override=true --explode=false $new_tgz "qlik/osscharts/mira/$version"
+                #Upload updated index.yaml file
+                ./jfrog bt u --user=$BT_USERNAME --key=$BT_APIKEY --publish=true --override=true --explode=false index.yaml "qlik/osscharts/idx/index"
+
+                echo "Chart uploaded!"
+              fi
+            else
+              echo "Chart has not been updated"
+            fi
+
 workflows:
   version: 2
   build_test_and_publish:
@@ -369,3 +474,14 @@ workflows:
             - swarm
             - kubernetes
             - dns
+  package_and_publish_chart:
+    jobs:
+     - helm-lint
+     - yaml-lint
+     - package
+     - push:
+        requires:
+          - package
+        filters:
+          branches:
+            only: master
