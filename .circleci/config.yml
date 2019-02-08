@@ -482,6 +482,6 @@ workflows:
      - push:
         requires:
           - package
-        #filters:
-          #branches:
-            #only: master
+        filters:
+          branches:
+            only: master
