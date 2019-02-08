@@ -390,7 +390,7 @@ jobs:
 
             echo "Check version"
             #Check if chart version is already in help repo and save to file used in "push" job
-            helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}' >> ~/charts/searchVerFile
+            helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}' >> searchVerFile
       - persist_to_workspace:
           root: ~/
           paths:
