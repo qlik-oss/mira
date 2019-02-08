@@ -384,12 +384,10 @@ jobs:
 
             helm package charts/mira -d ~/charts
 
-            echo "Get version"
             #Get new chart verion
             version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
 
-            echo "Check version"
-            #Check if chart version is already in help repo and save to file used in "push" job
+            #Check if new chart version is already in help repo and save to file used in "push" job
             helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}' >> searchVerFile
       - persist_to_workspace:
           root: ~/
@@ -415,7 +413,7 @@ jobs:
             #Check if the chart has been updated
             result=$(python charts/check_git_py.py -c charts/mira)
 
-            if [ "$result" != "True" ]; then
+            if [ "$result" == "True" ]; then
               echo "Chart has been updated"
 
               #Get new chart verion
@@ -424,7 +422,7 @@ jobs:
               cd ~/charts
 
               searchVer=$(<searchVerFile)
-
+              #Kill push job if chart version has not been updated
               if [ "$version" == "$searchVer" ]; then
                 echo "The chart version needs to be updated to a new version as there was a change to the chart!"
                 exit 1
