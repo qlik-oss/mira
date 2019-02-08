@@ -412,14 +412,13 @@ jobs:
 
               helm init --client-only
               helm repo add qlik https://qliktech.jfrog.io/qliktech/qlikhelm --username $RT_USERNAME --password $RT_APIKEY
-
-              #Get current chart version
-              searchVer=$(helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}')
               
               #Get new chart verion
               version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
 
-              #Check if chart version has been updated
+              #Check if chart version has been updated to a new version
+              searchVer=$(helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}')
+
               if [ "$version" == "$searchVer" ]; then
                 echo "The chart version needs to be updated to a new version as there was a change to the chart!"
                 exit 1
