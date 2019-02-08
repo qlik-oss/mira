@@ -384,9 +384,11 @@ jobs:
 
             helm package charts/mira -d ~/charts
 
+            echo "Get version"
             #Get new chart verion
             version=$(grep version charts/mira/Chart.yaml | awk '{print $2}')
 
+            echo "Check version"
             #Check if chart version is already in help repo and save to file used in "push" job
             helm search qlik/mira -v $version | grep qlik/mira | awk '{print $2}' >> ~/charts/searchVerFile
       - persist_to_workspace:
