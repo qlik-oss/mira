@@ -419,7 +419,9 @@ jobs:
               new_tgz="$(ls mira*.tgz)"
 
               #Get Jfrog cli
-              curl -fL https://getcli.jfrog.io | sh
+              curl -Lo /usr/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386
+              chmod a+x /usr/bin/jfrog
+
 
               #Deploy chart to artifactory
               echo "Uploading chart to artifactory"
