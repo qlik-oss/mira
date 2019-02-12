@@ -181,7 +181,6 @@ jobs:
       - run:
           name: Lint charts
           command: |
-            helm lint ./examples/kubernetes/helm/charts/mira
             helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
       - run:
           name: Install Kubectl
@@ -218,6 +217,7 @@ jobs:
           name: Helm install charts
           command: |
             VER=$(cat /tmp/workspace/version.txt)
+            cp -r ./charts/mira ./examples/kubernetes/helm/charts
             sudo helm dependency build ./examples/kubernetes/helm/
             sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
       - run:
@@ -482,6 +482,7 @@ workflows:
      - push:
         requires:
           - package
+          - kubernetes
         filters:
           branches:
             only: master
