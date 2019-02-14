@@ -217,7 +217,6 @@ jobs:
           name: Helm install charts
           command: |
             VER=$(cat /tmp/workspace/version.txt)
-            cp -r ./charts/mira ./examples/kubernetes/helm/charts
             sudo helm dependency build ./examples/kubernetes/helm/
             sudo helm install ./examples/kubernetes/helm/ --set mira.service.type=NodePort,mira.image.repository=$DOCKER_REPO,mira.image.tag=$VER,engine.acceptEULA=yes --name test --debug
       - run:

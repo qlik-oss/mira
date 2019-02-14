@@ -1,0 +1,4 @@
+dependencies:
+- name: mira
+  version: "2.0.0"
+  repository: "file://../../../charts/mira"
