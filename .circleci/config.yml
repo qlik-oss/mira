@@ -181,7 +181,6 @@ jobs:
       - run:
           name: Lint charts
           command: |
-            helm lint ./examples/kubernetes/helm/charts/mira
             helm lint ./examples/kubernetes/helm/charts/engine --set acceptEULA=yes
       - run:
           name: Install Kubectl
@@ -482,6 +481,7 @@ workflows:
      - push:
         requires:
           - package
+          - kubernetes
         filters:
           branches:
             only: master
