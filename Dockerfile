@@ -1,5 +1,5 @@
 # Do the npm install on the full image
-FROM node:8.15.0-alpine AS builder
+FROM node:8.15.1-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
