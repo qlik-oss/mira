@@ -11,7 +11,7 @@ COPY version.json ./
 COPY docker-entrypoint.sh ./
 
 # Only copy needed pieces from the build step
-FROM node:8.15.0-alpine
+FROM node:8.15.1-alpine
 
 WORKDIR /app
 COPY --from=builder /app .
