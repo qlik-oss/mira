@@ -85,7 +85,7 @@ router.get(`/${healthEndpoint}`, async (ctx) => {
  *         description: Service Unavailable
  */
 router.get(`/${apiVersion}/${enginesEndpoint}`, async (ctx) => {
-  logger.info(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
+  logger.debug(`GET /${apiVersion}/${enginesEndpoint}${ctx.querystring ? `?${ctx.querystring}` : ''}`);
   try {
     ctx.body = await engineDiscovery.list(ctx.query);
   } catch (err) {
