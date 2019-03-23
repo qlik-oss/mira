@@ -46,7 +46,7 @@
     "babel-core": "6.26.3",
     "babel-plugin-istanbul": "5.1.1",
     "cross-env": "5.2.0",
-    "eslint": "5.15.2",
+    "eslint": "5.15.3",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.16.0",
     "hooks": "0.3.2",
@@ -54,7 +54,7 @@
     "nock": "10.0.6",
     "superagent": "4.1.0",
     "supertest": "4.0.2",
-    "swagger-jsdoc": "3.2.7"
+    "swagger-jsdoc": "3.2.8"
   },
   "engines": {
     "node": ">=8.9.3"
