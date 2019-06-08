@@ -38,10 +38,10 @@
     "swagger2": "1.0.4",
     "swagger2-koa": "1.0.3",
     "winston": "3.2.1",
-    "@kubernetes/client-node": "0.8.2"
+    "@kubernetes/client-node": "0.9.2"
   },
   "devDependencies": {
-    "@after-work.js/node-cli": "6.0.3",
+    "@after-work.js/node-cli": "6.0.5",
     "@babel/core": "7.4.5",
     "babel-plugin-istanbul": "5.1.4",
     "cross-env": "5.2.0",
@@ -51,7 +51,7 @@
     "hooks": "0.3.2",
     "mock-require": "3.0.3",
     "nock": "10.0.6",
-    "superagent": "5.0.5",
+    "superagent": "5.0.6",
     "supertest": "4.0.2",
     "swagger-jsdoc": "3.2.9"
   },
