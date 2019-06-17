@@ -9,8 +9,8 @@ class KubernetesClient {
   constructor() {
     const kc = new k8s.KubeConfig();
     kc.loadFromCluster();
-    this.k8sAppsApi = kc.makeApiClient(k8s.Apps_v1Api);
-    this.k8sCoreApi = kc.makeApiClient(k8s.Core_v1Api);
+    this.k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
+    this.k8sCoreApi = kc.makeApiClient(k8s.CoreV1Api);
   }
 
   /**
