@@ -3,7 +3,7 @@ const winston = require('winston');
 /**
  * Formatting the log according to the service contract
  */
-const formatter = winston.format(info => (
+const formatter = winston.format((info) => (
   {
     logseverity: info.level.toUpperCase(),
     timestamp: new Date(Date.now()).toISOString(),

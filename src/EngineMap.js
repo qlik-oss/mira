@@ -16,7 +16,7 @@ class EngineMap {
    * @returns The list of engines.
    */
   all() {
-    return Object.keys(this.entries).map(key => this.entries[key]);
+    return Object.keys(this.entries).map((key) => this.entries[key]);
   }
 
   /**
@@ -65,7 +65,7 @@ class EngineMap {
    *                     supplied set of keys.
    */
   difference(keys) {
-    return Object.keys(this.entries).filter(key => !keys.includes(key));
+    return Object.keys(this.entries).filter((key) => !keys.includes(key));
   }
 
   /**

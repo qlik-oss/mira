@@ -16,7 +16,7 @@ describe('DnsClient', () => {
         address: '192.168.0.2',
       }]));
       const engines = await DnsClient.listEngines('engine.service.consul');
-      const rawEngines = engines.map(engine => ({
+      const rawEngines = engines.map((engine) => ({
         engine: engine.engine,
       }));
       expect(listDnsRecordsStub).to.have.been.calledOnce;
@@ -28,7 +28,7 @@ describe('DnsClient', () => {
         code: dns.NOTFOUND,
       }, undefined));
       const engines = await DnsClient.listEngines();
-      const rawEngines = engines.map(engine => ({
+      const rawEngines = engines.map((engine) => ({
         engine: engine.engine,
       }));
       expect(listDnsRecordsStub).to.have.been.calledOnce;

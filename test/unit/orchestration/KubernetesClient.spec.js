@@ -21,7 +21,7 @@ describe('KubernetesClient', () => {
       it('should translate the kubernetes endpoints list to a mira engine list', async () => {
         nock('http://localhost:8001').get('/api/v1/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
         const engines = await KubernetesClient.listEngines();
-        const rawEngines = engines.map(pod => ({
+        const rawEngines = engines.map((pod) => ({
           engine: pod.engine,
         }));
         expect(rawEngines.length).to.deep.equal(2);
@@ -78,7 +78,7 @@ describe('KubernetesClient', () => {
       it('should translate the kubernetes endpoints list to a mira engine list', async () => {
         nock('http://localhost:8001').get('/api/v1/namespaces/my-namespace/pods?labelSelector=qix-engine').reply(200, podSpecData.endpointsResponse);
         const engines = await KubernetesClient.listEngines();
-        const rawEngines = engines.map(pod => ({
+        const rawEngines = engines.map((pod) => ({
           engine: pod.engine,
         }));
         expect(rawEngines.length).to.deep.equal(2);
