@@ -5,12 +5,12 @@ const Config = require('../Config');
 let dockerode = new Docker();
 
 function getLabels(task) {
-  return Object.assign({}, task.Spec.ContainerSpec.Labels);
+  return { ...task.Spec.ContainerSpec.Labels };
 }
 
 function getIpAddresses(task) {
   const addresses = task.NetworksAttachments
-    .filter(network => !network.Network.Spec.Ingress)
+    .filter((network) => !network.Network.Spec.Ingress)
     .map((network) => {
       const fullIpAddr = network.Addresses[0];
       const slashPos = fullIpAddr.indexOf('/');
@@ -40,7 +40,7 @@ function findStatusIp(task, networks) {
     return undefined;
   }
 
-  const statusNetworks = networks.filter(network => Config.engineNetworks.includes(network.name));
+  const statusNetworks = networks.filter((network) => Config.engineNetworks.includes(network.name));
 
   if (!statusNetworks || statusNetworks.length === 0) {
     logger.warn(`No docker network found matching name in ${Config.engineNetworks} for task ${JSON.stringify(task)}`);
@@ -56,7 +56,7 @@ function getTasks(docker, discoveryLabel) {
       if (!err) {
         // We do filtering on the discovery label here, but this should be possible to do by
         // specifying the filter in the listTasks() call above.
-        const labeledTasks = tasks.filter(task => discoveryLabel in task.Spec.ContainerSpec.Labels);
+        const labeledTasks = tasks.filter((task) => discoveryLabel in task.Spec.ContainerSpec.Labels);
         const runningTasks = labeledTasks.filter((task) => {
           if (task.Status.State.toLowerCase() === 'running') {
             logger.debug(`Valid engine container task received: ${JSON.stringify(task)}`);
@@ -114,7 +114,7 @@ class SwarmDockerClient {
         statusIp,
       };
     });
-    return engineInfoEntries.filter(entry => entry.statusIp);
+    return engineInfoEntries.filter((entry) => entry.statusIp);
   }
 }
 

@@ -22,7 +22,7 @@ describe('SwarmDockerClient', () => {
       listTasksStub = sinon.stub(docker, 'listTasks').callsFake((opts, callback) => callback(undefined, specData.endpointsResponse));
       DockerClient.docker = docker;
       const engines = await DockerClient.listEngines();
-      const rawEngines = engines.map(item => ({
+      const rawEngines = engines.map((item) => ({
         engine: item.engine,
       }));
       expect(listTasksStub).to.have.been.calledOnce;

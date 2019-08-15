@@ -20,7 +20,7 @@ const logger = require('./logger/Logger').get();
 async function discover() {
   try {
     const engines = await this.OrchestrationClient.listEngines();
-    const keys = engines.map(engine => engine.key);
+    const keys = engines.map((engine) => engine.key);
     const keysToDelete = this.engineMap.difference(keys);
     keysToDelete.forEach((key) => {
       logger.info(`Engine removed: ${key}`);
@@ -96,7 +96,7 @@ class EngineDiscovery {
     const engines = this.engineMap.all();
 
     if (query.format === 'condensed') {
-      return engines.map(item => ({
+      return engines.map((item) => ({
         engine: {
           networks: item.properties.engine.networks,
           port: item.properties.engine.port,
@@ -106,7 +106,7 @@ class EngineDiscovery {
       }));
     }
 
-    return engines.map(item => ({
+    return engines.map((item) => ({
       engine: item.properties.engine,
       local: item.properties.local,
       swarm: item.properties.swarm,

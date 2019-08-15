@@ -16,7 +16,7 @@ describe('LocalDockerClient', () => {
       listContainersStub = sinon.stub(docker, 'listContainers').callsFake((opts, callback) => callback(undefined, specData.endpointsResponse));
       DockerClient.docker = docker;
       const engines = await DockerClient.listEngines();
-      const rawEngines = engines.map(engine => ({
+      const rawEngines = engines.map((engine) => ({
         engine: engine.engine,
       }));
       expect(listContainersStub).to.have.been.calledOnce;
