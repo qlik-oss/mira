@@ -12,7 +12,7 @@ services:
     user: root
 
   engine1:
-    image: qlikcore/engine:12.424.0
+    image: qlikcore/engine:12.429.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9176:9076"
@@ -20,7 +20,7 @@ services:
       qix-engine: ""
 
   engine2:
-    image: qlikcore/engine:12.424.0
+    image: qlikcore/engine:12.429.0
     command: -S AcceptEULA=${ACCEPT_EULA}
     ports:
       - "9276:9076"
