@@ -36,7 +36,7 @@
     "koa-router": "7.4.0",
     "rollbar": "2.13.0",
     "swagger2": "2.0.0",
-    "swagger2-koa": "1.0.4",
+    "swagger2-koa": "2.0.0",
     "winston": "3.2.1",
     "@kubernetes/client-node": "0.10.3"
   },
