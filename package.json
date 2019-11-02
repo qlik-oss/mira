@@ -31,17 +31,17 @@
   "dependencies": {
     "dockerode": "3.0.2",
     "http-metrics-middleware": "1.1.6",
-    "koa": "2.10.0",
+    "koa": "2.11.0",
     "koa-connect": "2.0.1",
     "koa-router": "7.4.0",
-    "rollbar": "2.13.0",
+    "rollbar": "2.14.0",
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
     "winston": "3.2.1",
     "@kubernetes/client-node": "0.11.0"
   },
   "devDependencies": {
-    "@after-work.js/node-cli": "6.0.8",
+    "@after-work.js/node-cli": "6.0.10",
     "@babel/core": "7.6.4",
     "babel-plugin-istanbul": "5.2.0",
     "cross-env": "6.0.3",
@@ -50,7 +50,7 @@
     "eslint-plugin-import": "2.18.2",
     "hooks": "0.3.2",
     "mock-require": "3.0.3",
-    "nock": "11.6.0",
+    "nock": "11.7.0",
     "superagent": "5.1.0",
     "supertest": "4.0.2",
     "swagger-jsdoc": "3.4.0"
