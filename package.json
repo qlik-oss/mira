@@ -34,7 +34,7 @@
     "koa": "2.11.0",
     "koa-connect": "2.0.1",
     "koa-router": "7.4.0",
-    "rollbar": "2.14.3",
+    "rollbar": "2.14.4",
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
     "winston": "3.2.1",
