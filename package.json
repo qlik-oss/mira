@@ -51,7 +51,7 @@
     "hooks": "0.3.2",
     "mock-require": "3.0.3",
     "nock": "11.7.0",
-    "superagent": "5.1.1",
+    "superagent": "5.1.2",
     "supertest": "4.0.2",
     "swagger-jsdoc": "3.4.0"
   },
