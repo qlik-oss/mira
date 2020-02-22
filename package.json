@@ -30,7 +30,7 @@
   "homepage": "https://github.com/qlik-oss/mira#readme",
   "dependencies": {
     "dockerode": "3.1.0",
-    "http-metrics-middleware": "1.1.6",
+    "http-metrics-middleware": "1.2.0",
     "koa": "2.11.0",
     "koa-connect": "2.0.1",
     "koa-router": "8.0.8",
