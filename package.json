@@ -41,12 +41,12 @@
     "@kubernetes/client-node": "0.11.1"
   },
   "devDependencies": {
-    "@after-work.js/node-cli": "6.0.11",
+    "@after-work.js/node-cli": "6.0.13",
     "@babel/core": "7.8.7",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.2",
     "eslint": "6.8.0",
-    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.20.1",
     "hooks": "0.3.2",
     "mock-require": "3.0.3",

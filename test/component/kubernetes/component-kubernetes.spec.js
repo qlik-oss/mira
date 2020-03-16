@@ -1,8 +1,8 @@
 const nock = require('nock');
 const request = require('supertest');
 const specData = require('../../test-data/KubernetesClient.spec.data.json');
-const replicaSetSpecData = require('./../../test-data/Replicaset.spec.data.json');
-const deploymentSpecData = require('./../../test-data/Deployment.spec.data.json');
+const replicaSetSpecData = require('../../test-data/Replicaset.spec.data.json');
+const deploymentSpecData = require('../../test-data/Deployment.spec.data.json');
 const sleep = require('../../test-utils/sleep');
 
 process.env.MIRA_ENGINE_DISCOVERY_INTERVAL = 1000;
