@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 const DockerClient = require('../../../src/orchestration/SwarmDockerClient');
-const specData = require('./../../test-data/SwarmDockerClient.spec.data.json');
-const specDataMultipleNetworks = require('./../../test-data/SwarmMultipleNetworks.spec.data.json');
+const specData = require('../../test-data/SwarmDockerClient.spec.data.json');
+const specDataMultipleNetworks = require('../../test-data/SwarmMultipleNetworks.spec.data.json');
 const Config = require('../../../src/Config');
 
 const docker = new Docker();

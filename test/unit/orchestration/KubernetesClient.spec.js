@@ -1,8 +1,8 @@
 const nock = require('nock');
 const KubernetesClientClass = require('../../../src/orchestration/KubernetesClient');
-const podSpecData = require('./../../test-data/KubernetesClient.spec.data.json');
-const replicaSetSpecData = require('./../../test-data/Replicaset.spec.data.json');
-const deploymentSpecData = require('./../../test-data/Deployment.spec.data.json');
+const podSpecData = require('../../test-data/KubernetesClient.spec.data.json');
+const replicaSetSpecData = require('../../test-data/Replicaset.spec.data.json');
+const deploymentSpecData = require('../../test-data/Deployment.spec.data.json');
 const Config = require('../../../src/Config');
 
 let KubernetesClient;
