@@ -1,3 +1,4 @@
 coverage/
 jsdoc/
 node_modules/
+src/bundled/
