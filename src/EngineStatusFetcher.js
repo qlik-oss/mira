@@ -43,7 +43,7 @@ class EngineStatusFetcher {
         response.on('end', () => {
           try {
             // If body starts with # treat it as Prometheus format else JSON
-            if (body.charAt(0) == '#') {
+            if (body.charAt(0) === '#') {
               resolve(parsePrometheusTextFormat(body));
             }
             resolve(JSON.parse(body));
