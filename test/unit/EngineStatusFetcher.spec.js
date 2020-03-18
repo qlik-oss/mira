@@ -17,11 +17,45 @@ describe('EngineStatusFetcher', () => {
   });
 
   describe('#fetch()', () => {
-    it('should resolve and receive health status properly on success', async () => {
+    it('should resolve and receive health status properly on success - JSON', async () => {
       nock('http://10.0.0.1:7777').get('/healthz').reply(200, { healthy: true });
       const statusFetcher = new EngineStatusFetcher(myHttp);
       const health = await statusFetcher.fetch('10.0.0.1', 7777, '/healthz');
       expect(health.healthy).to.be.true;
+    });
+
+    it('should resolve and receive health status properly on success- PROM', async () => {
+      const promText = `# HELP qix_build_info Engine version info
+      # TYPE qix_build_info counter
+      qix_build_info{revision="12.612.0"} 1.000000
+      qix_build_info{version="12.612.0.0"} 1.000000
+      qix_build_info{os="linux"} 1.000000`;
+      const promJSON = [
+        {
+          name: 'qix_build_info',
+          help: 'Engine version info',
+          type: 'COUNTER',
+          metrics: [
+            {
+              value: '1.000000',
+              labels: {
+                revision: '12.612.0',
+              },
+            },
+            {
+              value: '1.000000',
+              labels: {
+                version: '12.612.0.0',
+              },
+            },
+          ],
+        },
+      ];
+      nock('http://10.0.0.1:7777').get('/metrics').reply(200, promText);
+      const statusFetcher = new EngineStatusFetcher(myHttp);
+      const metrics = await statusFetcher.fetch('10.0.0.1', 7777, '/metrics');
+      console.log(JSON.stringify(metrics));
+      expect(metrics).to.deep.equal(promJSON);
     });
 
     it('should be rejected when health check returns error response', () => {

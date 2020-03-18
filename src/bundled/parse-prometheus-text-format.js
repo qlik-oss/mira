@@ -1,5 +1,5 @@
+// LICENSE - Apache License 2.0 (https://github.com/yunyu/parse-prometheus-text-format/blob/master/LICENSE)
 // parse-prometheus-text-format is bundled from https://github.com/yunyu/parse-prometheus-text-format awaiting a fix (https://github.com/yunyu/parse-prometheus-text-format/pull/9)
-
 
 const shallowEqual = require('shallow-equal');
 
