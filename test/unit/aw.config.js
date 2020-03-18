@@ -5,7 +5,7 @@ module.exports = {
   src: ['./src/**/*(!index).js'],
   nyc: {
     babel: false,
-    exclude: ['**/coverage/**', '**/test/**'],
+    exclude: ['**/coverage/**', '**/test/**', '**/src/bundled/**'],
   },
   mocha: {
     bail: false,
