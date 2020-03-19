@@ -42,12 +42,14 @@ class EngineStatusFetcher {
         });
         response.on('end', () => {
           try {
+            let resp;
             // If body starts with # treat it as Prometheus format else JSON
             if (body.charAt(0) === '#') {
-              resolve(parsePrometheusTextFormat(body));
+              resp = parsePrometheusTextFormat(body);
             } else {
-              resolve(JSON.parse(body));
+              resp = JSON.parse(body);
             }
+            resolve(resp);
           } catch (err) {
             logger.warn(`Engine health check returned invalid response: ${err}`);
             reject(err);
