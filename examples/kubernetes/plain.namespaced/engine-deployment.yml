@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: engine
-        image: "qlikcore/engine:12.556.0"
+        image: "qlikcore/engine:12.612.0"
         imagePullPolicy: IfNotPresent
         args: ["-S", "AcceptEULA=no"]
         ports:

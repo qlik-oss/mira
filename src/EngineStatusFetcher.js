@@ -1,4 +1,5 @@
 const defaultHttp = require('http');
+const parsePrometheusTextFormat = require('./bundled/parse-prometheus-text-format');
 const logger = require('./logger/Logger').get();
 
 /**
@@ -41,9 +42,13 @@ class EngineStatusFetcher {
         });
         response.on('end', () => {
           try {
+            // If body starts with # treat it as Prometheus format else JSON
+            if (body.charAt(0) === '#') {
+              resolve(parsePrometheusTextFormat(body));
+            }
             resolve(JSON.parse(body));
           } catch (err) {
-            logger.warn(`Engine health check returned invalid JSON: ${err}`);
+            logger.warn(`Engine health check returned invalid response: ${err}`);
             reject(err);
           }
         });
