@@ -45,8 +45,9 @@ class EngineStatusFetcher {
             // If body starts with # treat it as Prometheus format else JSON
             if (body.charAt(0) === '#') {
               resolve(parsePrometheusTextFormat(body));
+            } else {
+              resolve(JSON.parse(body));
             }
-            resolve(JSON.parse(body));
           } catch (err) {
             logger.warn(`Engine health check returned invalid response: ${err}`);
             reject(err);
