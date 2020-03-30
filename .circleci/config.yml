@@ -164,6 +164,7 @@ jobs:
     environment:
       CHANGE_MINIKUBE_NONE_USER: true
       DOCKER_REPO: qlikcore/mira
+      DESIRED_VERSION: v2.16.3 # Specify helm version
     working_directory: ~/mira
     steps:
       - attach_workspace:
