@@ -1,5 +1,5 @@
 # Do the npm install on the full image
-FROM node:12.16.2-alpine AS builder
+FROM node:12.16.3-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -11,7 +11,7 @@ COPY version.json ./
 COPY docker-entrypoint.sh ./
 
 # Only copy needed pieces from the build step
-FROM node:12.16.2-alpine
+FROM node:12.16.3-alpine
 
 WORKDIR /app
 COPY --from=builder /app .
