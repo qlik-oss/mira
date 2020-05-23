@@ -34,19 +34,19 @@
     "koa": "2.12.0",
     "koa-connect": "2.0.1",
     "koa-router": "8.0.8",
-    "rollbar": "2.16.1",
+    "rollbar": "2.16.2",
     "shallow-equal": "1.2.1",
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
     "winston": "3.2.1",
-    "@kubernetes/client-node": "0.11.2"
+    "@kubernetes/client-node": "0.12.0"
   },
   "devDependencies": {
     "@after-work.js/node-cli": "6.0.13",
     "@babel/core": "7.9.6",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.2",
-    "eslint": "7.0.0",
+    "eslint": "7.1.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.20.2",
     "hooks": "0.3.2",
