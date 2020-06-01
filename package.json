@@ -33,7 +33,7 @@
     "http-metrics-middleware": "1.2.0",
     "koa": "2.12.0",
     "koa-connect": "2.0.1",
-    "koa-router": "8.0.8",
+    "koa-router": "9.0.1",
     "rollbar": "2.16.2",
     "shallow-equal": "1.2.1",
     "swagger2": "2.0.0",
