@@ -4,7 +4,6 @@ const getOrchestrationClient = require('./orchestration/getOrchestrationClient')
 const Config = require('./Config');
 const logger = require('./logger/Logger').get();
 
-
 const apiVersion = 'v1';
 const router = new Router({});
 
