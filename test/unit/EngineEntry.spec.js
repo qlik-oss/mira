@@ -178,7 +178,6 @@ describe('EngineEntry', () => {
     });
   });
 
-
   afterEach(() => {
     fetchStub.reset();
   });

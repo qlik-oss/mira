@@ -118,7 +118,6 @@ class Config {
      */
     Config.containerized = process.env.MIRA_CONTAINERIZED && process.env.MIRA_CONTAINERIZED.toLowerCase() === 'true';
 
-
     /**
      * @prop {string} discoveryHostname - The hostname mira will use for querying engines in dns mode
      * @static
