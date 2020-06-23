@@ -38,7 +38,7 @@
     "shallow-equal": "1.2.1",
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
-    "winston": "3.3.1",
+    "winston": "3.2.1",
     "@kubernetes/client-node": "0.12.0"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "@babel/core": "7.10.3",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.2",
-    "eslint": "7.2.0",
+    "eslint": "7.3.1",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.21.2",
     "hooks": "0.3.2",
