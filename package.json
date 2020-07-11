@@ -34,7 +34,7 @@
     "koa": "2.13.0",
     "koa-connect": "2.1.0",
     "koa-router": "9.1.0",
-    "rollbar": "2.17.0",
+    "rollbar": "2.18.0",
     "shallow-equal": "1.2.1",
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
