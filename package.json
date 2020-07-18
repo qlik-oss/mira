@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@after-work.js/node-cli": "6.0.13",
-    "@babel/core": "7.10.4",
+    "@babel/core": "7.10.5",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.2",
     "eslint": "7.4.0",
