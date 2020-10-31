@@ -54,7 +54,7 @@
     "nock": "13.0.4",
     "superagent": "6.1.0",
     "supertest": "5.0.0",
-    "swagger-jsdoc": "4.3.2"
+    "swagger-jsdoc": "5.0.0"
   },
   "engines": {
     "node": ">=8.9.3"
