@@ -39,7 +39,7 @@
     "swagger2": "2.0.0",
     "swagger2-koa": "2.0.0",
     "winston": "3.3.3",
-    "@kubernetes/client-node": "0.12.3"
+    "@kubernetes/client-node": "0.13.0"
   },
   "devDependencies": {
     "@after-work.js/node-cli": "6.0.14",
@@ -47,13 +47,13 @@
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.2",
     "eslint": "7.12.1",
-    "eslint-config-airbnb-base": "14.2.0",
+    "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
     "hooks": "0.3.2",
     "mock-require": "3.0.3",
     "nock": "13.0.4",
     "superagent": "6.1.0",
-    "supertest": "6.0.0",
+    "supertest": "6.0.1",
     "swagger-jsdoc": "5.0.0"
   },
   "engines": {
