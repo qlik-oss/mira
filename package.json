@@ -45,7 +45,7 @@
     "@after-work.js/node-cli": "6.0.14",
     "@babel/core": "7.12.9",
     "babel-plugin-istanbul": "6.0.0",
-    "cross-env": "7.0.2",
+    "cross-env": "7.0.3",
     "eslint": "7.14.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
