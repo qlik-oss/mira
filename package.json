@@ -31,7 +31,7 @@
   "dependencies": {
     "dockerode": "3.2.1",
     "http-metrics-middleware": "1.2.0",
-    "koa": "2.13.0",
+    "koa": "2.13.1",
     "koa-connect": "2.1.0",
     "koa-router": "10.0.0",
     "rollbar": "2.19.4",
@@ -46,7 +46,7 @@
     "@babel/core": "7.12.10",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.3",
-    "eslint": "7.16.0",
+    "eslint": "7.17.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
     "hooks": "0.3.2",
