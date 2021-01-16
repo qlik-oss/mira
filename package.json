@@ -46,14 +46,14 @@
     "@babel/core": "7.12.10",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.3",
-    "eslint": "7.17.0",
+    "eslint": "7.18.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
     "hooks": "0.3.2",
     "mock-require": "3.0.3",
     "nock": "13.0.5",
     "superagent": "6.1.0",
-    "supertest": "6.0.1",
+    "supertest": "6.1.1",
     "swagger-jsdoc": "6.0.1"
   },
   "engines": {
