@@ -39,11 +39,11 @@
     "swagger2": "3.0.0",
     "swagger2-koa": "3.0.0",
     "winston": "3.3.3",
-    "@kubernetes/client-node": "0.14.0"
+    "@kubernetes/client-node": "0.14.1"
   },
   "devDependencies": {
     "@after-work.js/node-cli": "6.0.14",
-    "@babel/core": "7.13.13",
+    "@babel/core": "7.13.14",
     "babel-plugin-istanbul": "6.0.0",
     "cross-env": "7.0.3",
     "eslint": "7.23.0",
