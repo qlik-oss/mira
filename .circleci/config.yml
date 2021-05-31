@@ -4,7 +4,7 @@ jobs:
   # Job for build src, run unit & component test and build docker image
   build:
     docker:
-      - image: circleci/node:15.14.0
+      - image: circleci/node:16.2.0
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikcore/mira
@@ -329,7 +329,7 @@ jobs:
   # Job for publishing Docker image to Docker hub
   publish:
     docker:
-    - image: circleci/node:15.14.0
+    - image: circleci/node:16.2.0
     working_directory: ~/mira
     environment:
       DOCKER_REPO: qlikcore/mira
